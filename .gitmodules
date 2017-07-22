@@ -1,0 +1,9 @@
+[submodule "contrib/civetweb"]
+	path = contrib/civetweb
+	url = https://github.com/civetweb/civetweb
+[submodule "contrib/protobuf"]
+	path = contrib/protobuf
+	url = https://github.com/google/protobuf
+[submodule "contrib/SDL-mirror"]
+	path = contrib/SDL-mirror
+	url = https://github.com/spurious/SDL-mirror

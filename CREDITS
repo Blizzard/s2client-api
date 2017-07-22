@@ -1,0 +1,11 @@
+Third party libraries used by this project:
+
+Civetweb
+    https://github.com/civetweb/civetweb
+Protobuf
+    https://github.com/google/protobuf
+SDL 2.0
+    https://www.libsdl.org/index.php
+    https://github.com/spurious/SDL-mirror
+Dirent
+    https://github.com/tronkko/dirent/

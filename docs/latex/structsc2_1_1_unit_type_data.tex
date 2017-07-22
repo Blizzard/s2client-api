@@ -1,0 +1,77 @@
+\hypertarget{structsc2_1_1_unit_type_data}{}\section{sc2\+:\+:Unit\+Type\+Data Struct Reference}
+\label{structsc2_1_1_unit_type_data}\index{sc2\+::\+Unit\+Type\+Data@{sc2\+::\+Unit\+Type\+Data}}
+
+
+Data about a unit type. This data is derived from the catalog (xml) data of the game and upgrades.  
+
+
+
+
+{\ttfamily \#include $<$sc2\+\_\+data.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a69b29058353cf665ed27c32c1976f98b}\label{structsc2_1_1_unit_type_data_a69b29058353cf665ed27c32c1976f98b}} 
+\hyperlink{structsc2_1_1_unit_type_data_a69b29058353cf665ed27c32c1976f98b}{Unit\+Type\+Data} ()
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \hyperlink{structsc2_1_1_unit_type_data_a4d05b07420d5c202b9f397968428254d}{Read\+From\+Proto} (const S\+C2\+A\+P\+I\+Protocol\+::\+Unit\+Type\+Data \&unit\+\_\+data)
+\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a815413cf7f47aa41f20c3399b7d6f58c}\label{structsc2_1_1_unit_type_data_a815413cf7f47aa41f20c3399b7d6f58c}} 
+std\+::string \hyperlink{structsc2_1_1_unit_type_data_a815413cf7f47aa41f20c3399b7d6f58c}{Log} () const
+\begin{DoxyCompactList}\small\item\em Serialize this unit type to a string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a43563832b7287316ce6d1ff909dda831}\label{structsc2_1_1_unit_type_data_a43563832b7287316ce6d1ff909dda831}} 
+\hyperlink{classsc2_1_1_s_c2_type}{Unit\+Type\+ID} \hyperlink{structsc2_1_1_unit_type_data_a43563832b7287316ce6d1ff909dda831}{unit\+\_\+type\+\_\+id}
+\begin{DoxyCompactList}\small\item\em Stable ID. This ID will not change between patches. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_aefb802f470411fdba19e6b4ecb503427}\label{structsc2_1_1_unit_type_data_aefb802f470411fdba19e6b4ecb503427}} 
+std\+::string \hyperlink{structsc2_1_1_unit_type_data_aefb802f470411fdba19e6b4ecb503427}{name}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classsc2_1_1_unit}{Unit} type name, corresponds to the game\textquotesingle{}s catalog. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a9269cf7ef9d4907c467b5367e5a6f210}\label{structsc2_1_1_unit_type_data_a9269cf7ef9d4907c467b5367e5a6f210}} 
+bool \hyperlink{structsc2_1_1_unit_type_data_a9269cf7ef9d4907c467b5367e5a6f210}{available}
+\begin{DoxyCompactList}\small\item\em If true, the unit is available to the current mods/map. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a13ab317cd91246aa40c928f48b801b38}\label{structsc2_1_1_unit_type_data_a13ab317cd91246aa40c928f48b801b38}} 
+uint32\+\_\+t \hyperlink{structsc2_1_1_unit_type_data_a13ab317cd91246aa40c928f48b801b38}{cargo\+\_\+size}
+\begin{DoxyCompactList}\small\item\em Number of cargo slots they occupy in a transport. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a50b767a68415cb1acbf246ee7f52ddcb}\label{structsc2_1_1_unit_type_data_a50b767a68415cb1acbf246ee7f52ddcb}} 
+int \hyperlink{structsc2_1_1_unit_type_data_a50b767a68415cb1acbf246ee7f52ddcb}{mineral\+\_\+cost}
+\begin{DoxyCompactList}\small\item\em Cost in minerals to build this unit type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_af596e50795f2b903b633cc7a72d43ae5}\label{structsc2_1_1_unit_type_data_af596e50795f2b903b633cc7a72d43ae5}} 
+int \hyperlink{structsc2_1_1_unit_type_data_af596e50795f2b903b633cc7a72d43ae5}{vespene\+\_\+cost}
+\begin{DoxyCompactList}\small\item\em Cost in vespene to build this unit type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a1a07aba0d860ed9439104895ef2fc1f9}\label{structsc2_1_1_unit_type_data_a1a07aba0d860ed9439104895ef2fc1f9}} 
+std\+::vector$<$ Attribute $>$ \hyperlink{structsc2_1_1_unit_type_data_a1a07aba0d860ed9439104895ef2fc1f9}{attributes}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classsc2_1_1_unit}{Unit} attributes, may change based on upgrades. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_ac26ad858a8101e13d323c4111df9700b}\label{structsc2_1_1_unit_type_data_ac26ad858a8101e13d323c4111df9700b}} 
+float \hyperlink{structsc2_1_1_unit_type_data_ac26ad858a8101e13d323c4111df9700b}{movement\+\_\+speed}
+\begin{DoxyCompactList}\small\item\em Movement speed of unit type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_afadeb2efc945bac24492cd4efd0dba28}\label{structsc2_1_1_unit_type_data_afadeb2efc945bac24492cd4efd0dba28}} 
+float \hyperlink{structsc2_1_1_unit_type_data_afadeb2efc945bac24492cd4efd0dba28}{armor}
+\begin{DoxyCompactList}\small\item\em Armor of unit type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_aad375db4df763eafc47589a1b20c8553}\label{structsc2_1_1_unit_type_data_aad375db4df763eafc47589a1b20c8553}} 
+std\+::vector$<$ \hyperlink{structsc2_1_1_weapon}{Weapon} $>$ \hyperlink{structsc2_1_1_unit_type_data_aad375db4df763eafc47589a1b20c8553}{weapons}
+\begin{DoxyCompactList}\small\item\em Weapons on this unit type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Data about a unit type. This data is derived from the catalog (xml) data of the game and upgrades. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structsc2_1_1_unit_type_data_a4d05b07420d5c202b9f397968428254d}\label{structsc2_1_1_unit_type_data_a4d05b07420d5c202b9f397968428254d}} 
+\index{sc2\+::\+Unit\+Type\+Data@{sc2\+::\+Unit\+Type\+Data}!Read\+From\+Proto@{Read\+From\+Proto}}
+\index{Read\+From\+Proto@{Read\+From\+Proto}!sc2\+::\+Unit\+Type\+Data@{sc2\+::\+Unit\+Type\+Data}}
+\subsubsection{\texorpdfstring{Read\+From\+Proto()}{ReadFromProto()}}
+{\footnotesize\ttfamily void sc2\+::\+Unit\+Type\+Data\+::\+Read\+From\+Proto (\begin{DoxyParamCaption}\item[{const S\+C2\+A\+P\+I\+Protocol\+::\+Unit\+Type\+Data \&}]{unit\+\_\+data }\end{DoxyParamCaption})}
+
+Serialize this ability entry from the .proto file (used internally). 
+\begin{DoxyParams}{Parameters}
+{\em unit\+\_\+data} & The proto entry for this ability. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/sc2api/sc2\+\_\+data.\+h\end{DoxyCompactItemize}
