@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['buffdata',['BuffData',['../structsc2_1_1_buff_data.html',1,'sc2']]],
+  ['buffidtoname',['BuffIDToName',['../sc2__typeenums_8h.html#a55eb257cce9dedb9035b0ca2fc16d9d2',1,'sc2']]],
+  ['buffs',['buffs',['../classsc2_1_1_unit.html#a34f17705c61114ad78c192ed7b06a9af',1,'sc2::Unit']]],
+  ['build_5fprogress',['build_progress',['../classsc2_1_1_unit.html#abb3c46774c4d5dab4d641a4abcf68aba',1,'sc2::Unit']]],
+  ['button_5fname',['button_name',['../structsc2_1_1_ability_data.html#a866b35972f5337e031215963d5fca922',1,'sc2::AbilityData']]]
+];
