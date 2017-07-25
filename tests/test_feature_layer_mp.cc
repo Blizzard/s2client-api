@@ -83,6 +83,58 @@ public:
     }
 };
 
+//
+// TestFLTargetMap
+//
+
+class TestFLTargetMap : public TestSequence {
+public:
+    uint32_t start_game_loop;
+
+    void OnTestStart() override {
+        const ObservationInterface* obs = agent_->Observation();
+        start_game_loop = obs->GetGameLoop();
+        wait_game_loops_ = 80;
+    }
+
+    void OnStep() override {
+        const ObservationInterface* obs = agent_->Observation();
+        DebugInterface* debug = agent_->Debug();
+        ActionFeatureLayerInterface* act = agent_->ActionsFeatureLayer();
+        const GameInfo& game_info = obs->GetGameInfo();
+
+        uint32_t loop = obs->GetGameLoop() - start_game_loop;
+        if (loop == 5) {
+            Point2D target = obs->GetStartLocation();
+            Point2DI target_minimap = ConvertWorldToMinimap(game_info, target);
+            act->CameraMove(target_minimap);
+        }
+        else if (loop == 10) {
+            Point2D target = obs->GetStartLocation() + Point2D(3.0f, 3.0f);
+            Point2DI target_minimap = ConvertWorldToMinimap(game_info, target);
+            debug->DebugCreateUnit(UNIT_TYPEID::PROTOSS_PROBE, target, agent_->Observation()->GetPlayerID(), 1);
+            debug->DebugIgnoreMineral();
+            debug->SendDebug();
+        }
+        else if (loop == 15) {
+            Point2D target = obs->GetStartLocation() + Point2D(3.0f, 3.0f);
+            Point2DI target_camera = ConvertWorldToCamera(game_info, obs->GetCameraPos(), target);
+            act->Select(target_camera, PointSelectionType::PtSelect);
+        }
+        else if (loop == 20) {
+            Point2D target = obs->GetStartLocation() + Point2D(3.0f, 3.0f);
+            Point2DI target_camera = ConvertWorldToCamera(game_info, obs->GetCameraPos(), target);
+            act->UnitCommand(ABILITY_ID::BUILD_PYLON, target_camera);
+        }
+    }
+
+    void OnTestFinish() override {
+        const ObservationInterface* obs = agent_->Observation();
+        Units pylons = obs->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::PROTOSS_PYLON));
+        if (pylons.size() == 0)
+            ReportError("Failed to build pylon");
+    }
+};
 
 //
 // FeatureLayerMPTestBot
@@ -101,6 +153,7 @@ FeatureLayerMPTestBot::FeatureLayerMPTestBot() :
     UnitTestBot() {
     // Sequences.
     Add(TestLayerUpdate());
+    Add(TestFLTargetMap());
 }
 
 void FeatureLayerMPTestBot::OnTestsBegin() {
