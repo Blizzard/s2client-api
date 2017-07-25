@@ -563,12 +563,12 @@ bool ObservationImp::UpdateObservation() {
 
     // Remap ability ids.
     {
-        for (ActionRaw& action : raw_actions_) {
-            action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
-        }
-        for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
-            spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
-        }
+        //for (ActionRaw& action : raw_actions_) {
+            //action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
+        //}
+        //for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
+            //spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+        //}
     }
 
     // Get units.

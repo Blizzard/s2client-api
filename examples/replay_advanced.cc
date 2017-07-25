@@ -955,7 +955,7 @@ int main(int argc, char* argv[]) {
 
     // Note that the LoadReplayList step will allow processing to be stopped and resumed.
     if (!coordinator.LoadReplayList(ReplayListFile)) {
-        if (!coordinator.SetReplayPath("E:/Replays/")) {
+        if (!coordinator.SetReplayPath("C:/folder2/")) {
             std::cout << "Unable to find replays." << std::endl;
             return 1;
         }
@@ -975,19 +975,19 @@ int main(int argc, char* argv[]) {
     Replay obs2(gather_events);
     Replay obs3(gather_events);
     Replay obs4(gather_events);
-    Replay obs5(gather_events);
+    /*Replay obs5(gather_events);
     Replay obs6(gather_events);
     Replay obs7(gather_events);
-    Replay obs8(gather_events);
+    Replay obs8(gather_events);*/
 
     coordinator.AddReplayObserver(&obs1);
     coordinator.AddReplayObserver(&obs2);
     coordinator.AddReplayObserver(&obs3);
     coordinator.AddReplayObserver(&obs4);
-    coordinator.AddReplayObserver(&obs5);
+    /*coordinator.AddReplayObserver(&obs5);
     coordinator.AddReplayObserver(&obs6);
     coordinator.AddReplayObserver(&obs7);
-    coordinator.AddReplayObserver(&obs8);
+    coordinator.AddReplayObserver(&obs8);*/
 
     while (coordinator.Update()) {
         if (sc2::PollKeyPress()) {
