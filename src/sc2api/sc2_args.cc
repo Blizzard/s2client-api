@@ -124,6 +124,7 @@ bool ParseSettings(int argc, char* argv[], ProcessSettings& process_settings, Ga
 
     arg_parser.Get("executable", process_settings.process_path);
     if (process_settings.process_path.length() < 2) {
+        std::cerr << "Unable to find executable." << std::endl;
         return false;
     }
 

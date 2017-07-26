@@ -17,7 +17,6 @@ static const bool UseRealtime = true;
 int main(int argc, char* argv[]) {
     sc2::Coordinator coordinator;
     if (!coordinator.LoadSettings(argc, argv)) {
-        std::cout << "Unable to find or parse settings." << std::endl;
         return 1;
     }
 
