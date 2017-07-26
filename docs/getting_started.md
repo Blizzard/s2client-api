@@ -15,23 +15,14 @@ Running The Examples
 
 The code for examples can be found in examples/ and provide some basic code on how to utilize various parts of the api.
 
-All the examples, at a minimum, require the path to Starcraft in order to run. You have three options for specifying
-that path. A settings file, a command line argument or in code.
+All the examples, at a minimum, require the path to Starcraft in order to run.
 
-Open bot_mp.cc, for example. You'll see the first lines in main are the following -
+On Windows and Mac, running the game manually once will automatically configure this path.
+On Linux, you will need to provide the path on the command line.
 
-```C++
-sc2::GameSettings game_settings;
-if (!ParseSettings(argc, argv, game_settings)) {
-    std::cout << "No settings found." << std::endl;
-    return 1;
-}
-```
+All other options can be configured either on the command line or in code on the "sc2::Coordinator" object.
 
-The ParseSettings function attempts to load, first, from command line, then file, the required arguments for
-running. You can view the arguments it's trying to load by specifying --help to the bot_mp executable.
-
-With a console, navigate to to the location of the executable (in build/bin if you followed building.mp) and run.
+You can view available command line arguments with the "--help" option.
 
 ```bash
 bot_mp.exe --help
@@ -44,40 +35,23 @@ Options -
   -r, --realtime Whether to run Starcraft 2 in  real time or not.
   -m, --map Which map to run.
   -t, --timeout Timeout for how long the library will block for a response.
-No settings found.
 ```
 
-As you can see, bot_mp is trying to tell us it needs the executable to run. Run it again with a valid executable path.
-
-For example, the following path on my machine would run the example with a debug build of sc2.
-
-```bash
-bot_mp.exe -e "C:\...\Bin\Versions\Base00000\SC2_x64.exe"
-```
-
-The other option we provide is loading the executable path from a file. Once again, in a console, navigate to the
-bot_mp binary (verify there isn't a game_settings.ini file in that directory) and run the following.
-
-```bash
-bot_mp.exe
-Command Line Usage: bot_mp.exe -e [executable]
-
-For more options: bot_mp.exe --help
 
 Running The Unit Tests
 ----------------------
 
-This repo comes with unit tests. The best unit tests. Nobody knows more about unit testing than us.
+This repo comes with a set of units tests. They are located in the "all_tests" project inside of the "tests" folder.
 
-[Paul add instructions here]
+Simply building and running this project will run through all of the tests. Any errors will be output to standard error.
 
 
 Finding The Documentation
 -------------------------
 
-Hopefully all the headers are documented.
+You can find documentation for the api in docs/html, open index.html to view it in your browser.
 
-We should also provide a site for documentation.
+Each of the examples are also documented. All examples are implemented in a single .cc file with the same name as the project. These files contain comments at the top of each of these file describing the functionality of each of the examples.
 
 
 Building Your Own Bot
