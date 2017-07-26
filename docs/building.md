@@ -28,10 +28,11 @@ To build on windows generate a solution file with CMake.
 5. Build with visual studio.
 
 ```bash
-git clone --recursive (git repo url)
+git clone --recursive git@github.com:Blizzard/s2client-api.git
 cd s2client-api
-mkdir build & cd build
-cmake ..\ -G "Visual Studio 14 Win64"  
+mkdir build
+cd build
+cmake ../ -G "Visual Studio 14 Win64"
 start s2client-api.sln
 ```
 
@@ -47,9 +48,10 @@ To build on Mac generate na Xcode project with CMake.
 5. Build with Xcode.
 
 ```bash
-git clone --recursive (git repo url)
+git clone --recursive git@github.com:Blizzard/s2client-api.git
 cd s2client-api
-mkdir build & cd build
+mkdir build
+cd build
 cmake ../ -G "Xcode"
 open s2client-api.xcodeproj/
 ```
@@ -66,10 +68,10 @@ To build on Linux generate makefiles with CMake.
 5. Build with make
 
 ```bash
-git clone --recursive (git repo url)
+git clone --recursive git@github.com:Blizzard/s2client-api.git
 cd s2client-api
 mkdir build
-cd build  
+cd build
 cmake ../
 make
 ```
