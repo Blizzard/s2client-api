@@ -6,7 +6,7 @@ file(GLOB sources_renderer "sc2renderer/*.cc" "sc2renderer/*.h" "../include/sc2r
 
 # Gather the protos.
 file(GLOB proto_files
-    "../protocol/*.proto"
+    "../protocol/s2clientprotocol/*.proto"
 )
 
 # Create the output directory for generated protos.
@@ -68,7 +68,7 @@ foreach (proto ${proto_files})
 
     add_custom_command(
         DEPENDS protoc
-        COMMAND ${PROJECT_BINARY_DIR}/bin/protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/../protocol --cpp_out=${PROJECT_BINARY_DIR}/generated ${proto}
+        COMMAND ${PROJECT_BINARY_DIR}/bin/protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/../protocol/s2clientprotocol --cpp_out=${PROJECT_BINARY_DIR}/generated ${proto}
         OUTPUT ${PROJECT_BINARY_DIR}/generated/${proto_name_we}.pb.cc ${output}
     )
 
