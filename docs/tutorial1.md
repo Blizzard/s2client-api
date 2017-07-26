@@ -67,20 +67,19 @@ coordinator.SetParticipants({
     CreateComputer(Race::Zerg)
 });
 
-// Be sure to specify the path to the sc2 executable on your machine.
 coordinator.LaunchStarcraft();
-coordinator.StartGame(GetMapPath(Map::DaybreakLE));
+coordinator.StartGame(GetMapPath(Map::BelShirVestigeLE));
 
 ```
 
 > If you have started the retail binary LoadSettings should automatically load necessary settings.
-> Otherwise you can provide them as a command line argument file in the working directory.
+> Otherwise you can provide the path to the game on the command line.
 > Invoke the binary with --help to see more detailed instructions.
 
 In a future tutorial we will cover how you can specify settings as arguments via command
-line or a key/value settings file.
+line.
 
-At this point you should be able to build and run. The game should start on DaybreakLE with
+At this point you should be able to build and run. The game should start on BelShirVestigeLE with
 you controlling the Terran against an AI zerg. You should see 'Hello World' print in the
 console when the game starts and then it will instantly shut down. 
 
@@ -90,7 +89,7 @@ manually.
 Running The Simulation
 ----------------------
 
-Now you are ready to run the Starcraft 2 simulation.  Overwrite the OnStep function in your bot. 
+Now you are ready to run the Starcraft 2 simulation. Overwrite the OnStep function in your bot. 
 For now we will simply print the game loop.
 
 Add to your bot the following function.
@@ -155,7 +154,7 @@ int main(int argc, char* argv[]) {
     });
 
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(GetMapPath(Map::DaybreakLE));
+    coordinator.StartGame(GetMapPath(Map::BelShirVestigeLE));
 
     while (coordinator.Update()) {
     }
