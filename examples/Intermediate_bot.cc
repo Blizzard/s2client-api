@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     bool do_break = false;
 
     for (; !do_break;) {
-        coordinator.StartGame(sc2::GetMapPath(sc2::Map::AbyssalReefLE));
+        coordinator.StartGame(sc2::kMapBelShirVestigeLE);
         //bot1.air_build_ = !bot1.air_build_;
         bot1.air_build_ = false;
         bot2.mutalisk_build_ = false;

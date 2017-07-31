@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
     // Step forward the game simulation.
     bool do_break = false;
     while (!do_break) {
-        coordinator.StartGame(sc2::GetMapPath(sc2::Map::BelShirVestigeLE));
+        coordinator.StartGame(sc2::kMapBelShirVestigeLE);
         while (coordinator.Update() && !do_break) {
             if (sc2::PollKeyPress()) {
                 do_break = true;

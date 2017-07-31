@@ -391,17 +391,17 @@ bool TestFeatureLayers(int argc, char** argv) {
     sc2::FeatureLayerSettings sizeLong(24.0f, 80, 60, 80, 60);
     sc2::FeatureLayerSettings sizeTall(24.0f, 60, 80, 60, 80);
 
-    success = TestFeatureLayers(argc, argv, "Test/Empty.SC2Map", sizeSquare) && success;
-    success = TestFeatureLayers(argc, argv, "Test/Empty.SC2Map", sizeLong) && success;
-    success = TestFeatureLayers(argc, argv, "Test/Empty.SC2Map", sizeTall) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmpty, sizeSquare) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmpty, sizeLong) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmpty, sizeTall) && success;
 
-    success = TestFeatureLayers(argc, argv, "Test/EmptyLong.SC2Map", sizeSquare) && success;
-    success = TestFeatureLayers(argc, argv, "Test/EmptyLong.SC2Map", sizeLong) && success;
-    success = TestFeatureLayers(argc, argv, "Test/EmptyLong.SC2Map", sizeTall) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmptyLong, sizeSquare) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmptyLong, sizeLong) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmptyLong, sizeTall) && success;
 
-    success = TestFeatureLayers(argc, argv, "Test/EmptyTall.SC2Map", sizeSquare) && success;
-    success = TestFeatureLayers(argc, argv, "Test/EmptyTall.SC2Map", sizeLong) && success;
-    success = TestFeatureLayers(argc, argv, "Test/EmptyTall.SC2Map", sizeTall) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmptyTall, sizeSquare) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmptyTall, sizeLong) && success;
+    success = TestFeatureLayers(argc, argv, sc2::kMapEmptyTall, sizeTall) && success;
 
     return success;
 }

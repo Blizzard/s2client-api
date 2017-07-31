@@ -125,7 +125,7 @@ bool TestMovementCombat(int argc, char** argv) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame("Test/Empty.SC2Map");
+    coordinator.StartGame(sc2::kMapEmpty);
 
     // Step forward the game simulation.
     while (!bot.IsFinished()) {

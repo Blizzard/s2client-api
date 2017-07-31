@@ -78,7 +78,7 @@ bool TestMultiplayer(int argc, char** argv) {
     // Start the game.
     coordinator.LaunchStarcraft();
 
-    if (!RemoteSaveMap(coordinator, GetMapPath(Map::BelShirVestigeLE), remote_path))
+    if (!RemoteSaveMap(coordinator, sc2::kMapBelShirVestigeLE, remote_path))
         return false;
 
     coordinator.StartGame(remote_path);

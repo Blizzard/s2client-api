@@ -188,7 +188,7 @@ bool TestFeatureLayersMP(int argc, char** argv) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(GetMapPath(Map::BelShirVestigeLE));
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
     // Step forward the game simulation.
     while (!bot1.IsFinished() && !bot2.IsFinished()) {
