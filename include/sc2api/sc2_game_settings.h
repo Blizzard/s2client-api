@@ -109,19 +109,12 @@ enum class AppState {
 };
 
 //! Known maps.
-enum class Map {
-    AbyssalReefLE,
-    BelShirVestigeLE,
-    NewkirkPrecinctTE,
-    PaladinoTerminalLE,
-    ProximaStationLE,
-    CactusValleyLE,
-    HonorgroundsLE
-};
-
-//! Returns the relative file path to the given map.
-// \param map The map.
-//!< \return The map path.
-std::string GetMapPath(Map map);
+//! These are the maps that come with the repo.
+//! See documentation for how to download and install additional map packs.
+extern const char* kMapBelShirVestigeLE;
+extern const char* kMapEmpty;
+extern const char* kMapEmptyLong;
+extern const char* kMapEmptyTall;
+extern const char* kMapMarineMicro;
 
 }

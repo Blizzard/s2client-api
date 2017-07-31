@@ -103,7 +103,7 @@ bool TestHang(int argc, char** argv) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame("Test/Empty.SC2Map");
+    coordinator.StartGame(sc2::kMapEmpty);
 
     // Step forward the game simulation.
     while (!bot1.IsFinished()) {
@@ -128,7 +128,7 @@ bool TestCrash(int argc, char** argv) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame("Test/Empty.SC2Map");
+    coordinator.StartGame(sc2::kMapEmpty);
 
     // Step forward the game simulation.
     while (!bot1.IsFinished()) {

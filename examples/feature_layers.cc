@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(sc2::GetMapPath(sc2::Map::BelShirVestigeLE));
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
     while (coordinator.Update()) {
         if (sc2::PollKeyPress()) {

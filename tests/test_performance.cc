@@ -239,7 +239,7 @@ void TestPerformance(int argc, char** argv, int feature_layer_width, int feature
 
     performance_tests.PreGamePing();
 
-    coordinator.StartGame("Test/Empty.SC2Map");
+    coordinator.StartGame(sc2::kMapEmpty);
 
     // Step forward the game simulation.
     while (!performance_tests.IsFinished()) {

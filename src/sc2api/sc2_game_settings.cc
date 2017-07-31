@@ -35,18 +35,10 @@ ReplaySettings::ReplaySettings() :
     player_id(1) {
 }
 
-std::string GetMapPath(Map map) {
-    switch (map) {
-        // Path relative to maps directory.
-        case Map::AbyssalReefLE: return "Ladder/2017Season1/(2)AbyssalReefLE.SC2Map";
-        case Map::BelShirVestigeLE: return "Ladder/2017Season1/(2)Bel'ShirVestigeLE (Void).SC2Map";
-        case Map::NewkirkPrecinctTE: return "Ladder/2017Season1/(2)NewkirkPrecinctTE (Void).SC2Map";
-        case Map::PaladinoTerminalLE: return "Ladder/2017Season1/(2)PaladinoTerminalLE.SC2Map";
-        case Map::ProximaStationLE: return "Ladder/2017Season1/(2)ProximaStationLE.SC2Map";
-        case Map::CactusValleyLE: return "Ladder/2017Season1/(4)CactusValleyLE (Void).SC2Map";
-        case Map::HonorgroundsLE: return "Ladder/2017Season1/(4)HonorgroundsLE.SC2Map";
-        default: return "";
-    }
-}
+const char* kMapBelShirVestigeLE = "Ladder/(2)Bel'ShirVestigeLE (Void).SC2Map";
+const char* kMapEmpty            = "Test/Empty.SC2Map";
+const char* kMapEmptyLong        = "Test/EmptyLong.SC2Map";
+const char* kMapEmptyTall        = "Test/EmptyTall.SC2Map";
+const char* kMapMarineMicro      = "Example/MarineMicro.SC2Map";
 
 }

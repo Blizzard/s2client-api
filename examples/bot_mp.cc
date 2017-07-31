@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 
     bool do_break = false;
     while (!do_break) {
-        if (!coordinator.StartGame(sc2::GetMapPath(sc2::Map::BelShirVestigeLE))) {
+        if (!coordinator.StartGame(sc2::kMapBelShirVestigeLE)) {
             break;
         }
         while (coordinator.Update() && !do_break) {

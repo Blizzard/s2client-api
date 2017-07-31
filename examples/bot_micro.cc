@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
-    coordinator.StartGame("MarineMicro.SC2Map");
+    coordinator.StartGame(sc2::kMapMarineMicro);
 
     while (coordinator.Update()) {
         if (sc2::PollKeyPress()) {
