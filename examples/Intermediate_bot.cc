@@ -12,19 +12,14 @@ int main(int argc, char* argv[]) {
     }
 
     coordinator.SetMultithreaded(true);
-    coordinator.SetRealtime(true);
     // Add the custom bot, it will control the players.
     sc2::ProtossMultiplayerBot bot1;
     sc2::ZergMultiplayerBot bot2;
     sc2::TerranMultiplayerBot bot3;
 
     coordinator.SetParticipants({
-        CreateParticipant(sc2::Race::Terran, &bot3),
-        //CreateParticipant(sc2::Race::Terran, &bot4)
         CreateParticipant(sc2::Race::Protoss, &bot1),
-        //CreateParticipant(sc2::Race::Zerg, &bot2),
-        //CreateComputer(sc2::Race::Terran,sc2::Difficulty::Hard)
-
+        CreateComputer(sc2::Race::Terran,sc2::Difficulty::Hard)
     });
 
     // Start the game.

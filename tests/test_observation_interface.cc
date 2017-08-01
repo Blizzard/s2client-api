@@ -12,13 +12,13 @@ namespace sc2 {
     class TestGetAbilityData : public TestSequence{
     void OnTestFinish() {
         const ObservationInterface* obs = agent_->Observation();
-        AbilityData ability = obs->GetAbilityData().at(static_cast<int>(ABILITY_ID::EFFECT_BLINK));
+        AbilityData ability = obs->GetAbilityData().at(static_cast<int>(ABILITY_ID::EFFECT_BLINK_STALKER));
         if (ability.link_name != "Blink") {
             std::string errorString = "Wrong Ability is pulled from function EFFECT_Blink is " + ability.link_name;
             ReportError(errorString.c_str());
         }
 
-        if (ability.ability_id != ABILITY_ID::EFFECT_BLINK) {
+        if (ability.ability_id != ABILITY_ID::EFFECT_BLINK_STALKER) {
             ReportError("Wrong AbilityID");
         }
 

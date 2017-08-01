@@ -315,6 +315,7 @@ public:
     }
 
     void OnTestFinish() override {
+        KillAllUnits();
     }
 };
 
@@ -335,13 +336,13 @@ FeatureLayerTestBot::FeatureLayerTestBot() :
     UnitTestBot() {
     // Sequences.
     for (int i = 0; i < 10; ++i)
-       Add(UnitCommandsFeatureLayer());
-   for (int i = 0; i < 10; ++i)
-       Add(TestCoordinateSystemMinimap());
-   for (int i = 0; i < 10; ++i)
-       Add(TestCoordinateSystemMap());
-   for (int i = 0; i < 10; ++i)
-       Add(TestCameraMove());
+        Add(TestCoordinateSystemMinimap());
+    for (int i = 0; i < 10; ++i)
+        Add(TestCoordinateSystemMap());
+    for (int i = 0; i < 10; ++i)
+        Add(TestCameraMove());
+
+    Add(UnitCommandsFeatureLayer());
 }
 
 void FeatureLayerTestBot::OnTestsBegin() {
