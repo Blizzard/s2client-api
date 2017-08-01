@@ -68,7 +68,7 @@ coordinator.SetParticipants({
 });
 
 coordinator.LaunchStarcraft();
-coordinator.StartGame(GetMapPath(Map::BelShirVestigeLE));
+coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
 ```
 
@@ -154,7 +154,7 @@ int main(int argc, char* argv[]) {
     });
 
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(GetMapPath(Map::BelShirVestigeLE));
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
     while (coordinator.Update()) {
     }

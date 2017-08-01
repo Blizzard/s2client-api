@@ -34,18 +34,15 @@ only build one for this this tutorial so lets create a helper function for count
 TryBuildBarracks in order to determine if we should build one or not.
 
 ```C++
-size_t CountUnitType(uint32_t unit_type) {
-    return Observation()->GetUnits(Unit::Alliance::Self, 
-        [unit_type](const Unit& unit, const ObservationInterface*) {
-            return unit.unit_type_ == unit_type;
-        }
-    ).size();
+size_t CountUnitType(UNIT_TYPEID unit_type) {
+    return Observation()->GetUnits(Unit::Alliance::Self, IsUnit(unit_type)).size();
 }
 ```
 
-That function looks a little complicated if you're not use to lambda syntax but all it's doing is counting the number
-of a certain unit type the player owns. GetUnits takes a Filter parameter that allows you to remove units that meet
-a certain condition. In this case that condition is that the unit_type does not match our query type.
+That function is counting the number of a certain unit type the player owns. GetUnits takes a Filter parameter that 
+allows you to remove units that don't meet a certain condition. In this case that condition is that the units are of 
+the desired unit_type.
+
 
 We now have the necessary helper functions to implement TryBuildBarracks.
 
@@ -53,11 +50,11 @@ We now have the necessary helper functions to implement TryBuildBarracks.
 bool TryBuildBarracks() {
     const ObservationInterface* observation = Observation();
 
-    if (CountUnitType((uint32_t)UNIT_TYPEID::SUPPLYDEPOT) < 1) {
+    if (CountUnitType(UNIT_TYPEID::TERRAN_SUPPLYDEPOT) < 1) {
         return false;
     }
 
-    if (CountUnitType((uint32_t)UNIT_TYPEID::BARRACKS) > 0) {
+    if (CountUnitType(UNIT_TYPEID::TERRAN_BARRACKS) > 0) {
         return false;
     }
 
@@ -73,31 +70,33 @@ Building Marines
 ----------------
 
 Similar to how we construct SCVs we can now produce marines. Add the following code to the switch case in OnUnitIdle.
-The entire function should look like the following, the new code is the UNIT_TYPE::BARRACKS case:
+The entire function should look like the following, the new code is the UNIT_TYPE::TERRAN_BARRACKS case:
 
 ```C++
 virtual void OnUnitIdle(const Unit& unit) final {
-    switch (static_cast<UNIT_TYPEID>(unit.unit_type_)) {
-        case UNIT_TYPEID::COMMANDCENTER: {
+    switch (unit.unit_type.ToType()) {
+        case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
             break;
         }
-        case UNIT_TYPEID::SCV: {
+        case UNIT_TYPEID::TERRAN_SCV: {
             uint64_t mineral_target;
-            if (!FindNearestMineralPatch(unit.pos_, mineral_target)) {
+            if (!FindNearestMineralPatch(unit.pos, mineral_target)) {
                 break;
             }
             Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
             break;
         }
-        case UNIT_TYPEID::BARRACKS: {
+        case UNIT_TYPEID::TERRAN_BARRACKS: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_MARINE);
+            break;
         }
         default: {
             break;
         }
     }
 }
+
 ```
 
 Notice how easy that is! In general, OnUnitIdle is an excellent function to add code to to control unit production and orders.
@@ -115,9 +114,9 @@ walk to their demise.
 In your OnUnitIdle add the following code to your switch case -
 
 ```C++
-case UNIT_TYPEID::MARINE: {
+case UNIT_TYPEID::TERRAN_MARINE: {
     const GameInfo& game_info = Observation()->GetGameInfo();
-    Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, game_info.enemy_start_locations_.front());
+    Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, game_info.enemy_start_locations.front());
     break;
 }
 ```
@@ -135,7 +134,6 @@ Full Source Code
 ----------------
 
 ```C++
-
 #include "sc2api/sc2_api.h"
 
 #include <iostream>
@@ -155,26 +153,26 @@ public:
     }
 
     virtual void OnUnitIdle(const Unit& unit) final {
-        switch (static_cast<UNIT_TYPEID>(unit.unit_type_)) {
-            case UNIT_TYPEID::COMMANDCENTER: {
+        switch (unit.unit_type.ToType()) {
+            case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
                 Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
                 break;
             }
-            case UNIT_TYPEID::SCV: {
+            case UNIT_TYPEID::TERRAN_SCV: {
                 uint64_t mineral_target;
-                if (!FindNearestMineralPatch(unit.pos_, mineral_target)) {
+                if (!FindNearestMineralPatch(unit.pos, mineral_target)) {
                     break;
                 }
                 Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
                 break;
             }
-            case UNIT_TYPEID::BARRACKS: {
+            case UNIT_TYPEID::TERRAN_BARRACKS: {
                 Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_MARINE);
+                break;
             }
-
-            case UNIT_TYPEID::MARINE: {
+            case UNIT_TYPEID::TERRAN_MARINE: {
                 const GameInfo& game_info = Observation()->GetGameInfo();
-                Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, game_info.enemy_start_locations_.front());
+                Actions()->UnitCommand(unit, ABILITY_ID::ATTACK_ATTACK, game_info.enemy_start_locations.front());
                 break;
             }
             default: {
@@ -183,15 +181,11 @@ public:
         }
     }
 private:
-    size_t CountUnitType(uint32_t unit_type) {
-        return Observation()->GetUnits(Unit::Alliance::Self,
-            [unit_type](const Unit& unit, const ObservationInterface*) {
-                return unit.unit_type_ == unit_type;
-            }
-        ).size();
+    size_t CountUnitType(UNIT_TYPEID unit_type) {
+        return Observation()->GetUnits(Unit::Alliance::Self, IsUnit(unit_type)).size();
     }
 
-    bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_type = UNIT_TYPEID::SCV) {
+    bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_type = UNIT_TYPEID::TERRAN_SCV) {
         const ObservationInterface* observation = Observation();
 
         // If a unit already is building a supply structure of this type, do nothing.
@@ -199,13 +193,13 @@ private:
         Unit unit_to_build;
         Units units = observation->GetUnits(Unit::Alliance::Self);
         for (const auto& unit : units) {
-            for (const auto& order : unit.orders_) {
-                if (order.ability_id_ == ability_type_for_structure) {
+            for (const auto& order : unit.orders) {
+                if (order.ability_id == ability_type_for_structure) {
                     return false;
                 }
             }
 
-            if (unit.unit_type_ == unit_type) {
+            if (unit.unit_type == unit_type) {
                 unit_to_build = unit;
             }
         }
@@ -215,7 +209,7 @@ private:
 
         Actions()->UnitCommand(unit_to_build,
             ability_type_for_structure,
-            Point2D(unit_to_build.pos_.x_ + rx * 15.0f, unit_to_build.pos_.y_ + ry * 15.0f));
+            Point2D(unit_to_build.pos.x + rx * 15.0f, unit_to_build.pos.y + ry * 15.0f));
 
         return true;
     }
@@ -234,11 +228,11 @@ private:
     bool TryBuildBarracks() {
         const ObservationInterface* observation = Observation();
 
-        if (CountUnitType((uint32_t)UNIT_TYPEID::SUPPLYDEPOT) < 1) {
+        if (CountUnitType(UNIT_TYPEID::TERRAN_SUPPLYDEPOT) < 1) {
             return false;
         }
 
-        if (CountUnitType((uint32_t)UNIT_TYPEID::BARRACKS) > 0) {
+        if (CountUnitType(UNIT_TYPEID::TERRAN_BARRACKS) > 0) {
             return false;
         }
 
@@ -249,11 +243,11 @@ private:
         Units units = Observation()->GetUnits(Unit::Alliance::Neutral);
         float distance = std::numeric_limits<float>::max();
         for (const auto& u : units) {
-            if (u.unit_type_ == UNIT_TYPEID::MINERALFIELD) {
-                float d = DistanceSquared2D(u.pos_, start);
+            if (u.unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+                float d = DistanceSquared2D(u.pos, start);
                 if (d < distance) {
                     distance = d;
-                    target = u.tag_;
+                    target = u.tag;
                 }
             }
         }
@@ -277,10 +271,9 @@ int main(int argc, char* argv[]) {
     });
 
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(GetMapPath(Map::DaybreakLE));
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
-    while (!coordinator.AllGamesEnded()) {
-        coordinator.Update();
+    while (coordinator.Update()) {
     }
 
     return 0;
