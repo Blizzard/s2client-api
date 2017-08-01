@@ -638,14 +638,6 @@ void MultiplayerBot::OnNuclearLaunchDetected() {
     const ObservationInterface* observation = Observation();
     nuke_detected = true;
     nuke_detected_frame = observation->GetGameLoop();
-    Units nuke = observation->GetUnits(Unit::Neutral, IsUnit(UNIT_TYPEID::TERRAN_NUKE));
-    Units nuke1 = observation->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::TERRAN_NUKE));
-    Units nuke2 = observation->GetUnits(Unit::Enemy, IsUnit(UNIT_TYPEID::TERRAN_NUKE));
-    Units nuke3 = observation->GetUnits(Unit::Ally, IsUnit(UNIT_TYPEID::TERRAN_NUKE));
-    Units units = observation->GetUnits(Unit::Self, IsArmy(observation));
-    if (nuke.size() + nuke1.size() + nuke2.size() + nuke3.size() > 0) {
-        std::cout << "found it" << std::endl;
-    }
 }
 //Manages attack and retreat patterns, as well as unit micro
 void ProtossMultiplayerBot::ManageArmy() {
