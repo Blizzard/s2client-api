@@ -160,7 +160,7 @@ float GetRandomFraction() {
 }
 
 int GetRandomInteger(int min, int max) {
-    static std::uniform_int_distribution<int> dist(min, max);
+    std::uniform_int_distribution<int> dist(min, max);
     return dist(GetGenerator());
 }
 

@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     });
 
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(GetMapPath(Map::DaybreakLE));
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
     while (coordinator.Update()) {
     }
