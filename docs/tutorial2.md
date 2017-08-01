@@ -25,7 +25,7 @@ Add the following code to your Bot class.
 ```C++
 // In your bot class.
 virtual void OnUnitIdle(const Unit& unit) final {
-    switch (static_cast<UNIT_TYPEID>(unit.unit_type_)) {
+    switch (unit.unit_type.ToType()) {
         case UNIT_TYPEID::COMMANDCENTER: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
             break;
@@ -37,11 +37,10 @@ virtual void OnUnitIdle(const Unit& unit) final {
 }
 ```
 
-As you can we are going to try to build an SCV with the idle unit if it is a Command Center.
+As you can see we are going to try to build an SCV with the idle unit if it is a Command Center.
 
-> The UNIT_TYPE enum holds the ids of common units you are likely to find in 1v1 matches.
-> We cast to it so we can see named units in each case instead of their ids. Feel free to look
-> at sc2_typeenums.h to see a list of units and their corresponding id.
+> The UNIT_TYPEID enum holds the ids of common units you are likely to find in 1v1 matches.
+> Feel free to look at sc2_typeenums.h to see a list of units and their corresponding id.
 
 Building Supply Depots
 ----------------------
@@ -59,7 +58,7 @@ virtual void OnStep() {
 Implement TryBuildSupplyDepot and TryBuildStructure as functions of our bot class.
 
 ```C++
-bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_type = UNIT_TYPEID::SCV) {
+bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_type = UNIT_TYPEID::TERRAN_SCV) {
     const ObservationInterface* observation = Observation();
 
     // If a unit already is building a supply structure of this type, do nothing.
@@ -67,13 +66,13 @@ bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_t
     Unit unit_to_build;
     Units units = observation->GetUnits(Unit::Alliance::Self);
     for (const auto& unit : units) {
-        for (const auto& order : unit.orders_) {
-            if (order.ability_id_ == ability_type_for_structure) {
+        for (const auto& order : unit.orders) {
+            if (order.ability_id == ability_type_for_structure) {
                 return false;
             }
         }
 
-        if (unit.unit_type_ == unit_type) {
+        if (unit.unit_type == unit_type) {
             unit_to_build = unit;
         }
     }
@@ -83,7 +82,7 @@ bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_t
 
     Actions()->UnitCommand(unit_to_build,
         ability_type_for_structure,
-        Point2D(unit_to_build.pos_.x_ + rx * 15.0f, unit_to_build.pos_.y_ + ry * 15.0f));
+        Point2D(unit_to_build.pos.x + rx * 15.0f, unit_to_build.pos.y + ry * 15.0f));
 
     return true;
 }
@@ -111,14 +110,14 @@ Refactor your OnUnitIdle function with the following.
 
 ```C++
 virtual void OnUnitIdle(const Unit& unit) final {
-    switch (static_cast<UNIT_TYPEID>(unit.unit_type_)) {
-        case UNIT_TYPEID::COMMANDCENTER: {
+    switch (unit.unit_type.ToType()) {
+        case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
             break;
         }
-        case UNIT_TYPEID::SCV: {
+        case UNIT_TYPEID::TERRAN_SCV: {
             uint64_t mineral_target;
-            if (!FindNearestMineralPatch(unit.pos_, mineral_target)) {
+            if (!FindNearestMineralPatch(unit.pos, mineral_target)) {
                 break;
             }
             Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
@@ -140,11 +139,11 @@ bool FindNearestMineralPatch(const Point2D& start, uint64_t& target) {
     Units units = Observation()->GetUnits(Unit::Alliance::Neutral);
     float distance = std::numeric_limits<float>::max();
     for (const auto& u : units) {
-        if (u.unit_type_ == UNIT_TYPEID::MINERALFIELD) {
-            float d = DistanceSquared2D(u.pos_, start);
+        if (u.unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+            float d = DistanceSquared2D(u.pos, start);
             if (d < distance) {
                 distance = d;
-                target = u.tag_;
+                target = u.tag;
             }
         }
     }
@@ -174,7 +173,6 @@ Full Source Code
 ----------------
 
 ```C++
-
 #include "sc2api/sc2_api.h"
 
 #include <iostream>
@@ -192,14 +190,14 @@ public:
     }
 
     virtual void OnUnitIdle(const Unit& unit) final {
-        switch (static_cast<UNIT_TYPEID>(unit.unit_type_)) {
-            case UNIT_TYPEID::COMMANDCENTER: {
+        switch (unit.unit_type.ToType()) {
+            case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
                 Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
                 break;
             }
-            case UNIT_TYPEID::SCV: {
+            case UNIT_TYPEID::TERRAN_SCV: {
                 uint64_t mineral_target;
-                if (!FindNearestMineralPatch(unit.pos_, mineral_target)) {
+                if (!FindNearestMineralPatch(unit.pos, mineral_target)) {
                     break;
                 }
                 Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
@@ -211,7 +209,7 @@ public:
         }
     }
 private:
-    bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_type = UNIT_TYPEID::SCV) {
+    bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_type = UNIT_TYPEID::TERRAN_SCV) {
         const ObservationInterface* observation = Observation();
 
         // If a unit already is building a supply structure of this type, do nothing.
@@ -219,13 +217,13 @@ private:
         Unit unit_to_build;
         Units units = observation->GetUnits(Unit::Alliance::Self);
         for (const auto& unit : units) {
-            for (const auto& order : unit.orders_) {
-                if (order.ability_id_ == ability_type_for_structure) {
+            for (const auto& order : unit.orders) {
+                if (order.ability_id == ability_type_for_structure) {
                     return false;
                 }
             }
 
-            if (unit.unit_type_ == unit_type) {
+            if (unit.unit_type == unit_type) {
                 unit_to_build = unit;
             }
         }
@@ -235,7 +233,7 @@ private:
 
         Actions()->UnitCommand(unit_to_build,
             ability_type_for_structure,
-            Point2D(unit_to_build.pos_.x_ + rx * 15.0f, unit_to_build.pos_.y_ + ry * 15.0f));
+            Point2D(unit_to_build.pos.x + rx * 15.0f, unit_to_build.pos.y + ry * 15.0f));
 
         return true;
     }
@@ -255,11 +253,11 @@ private:
         Units units = Observation()->GetUnits(Unit::Alliance::Neutral);
         float distance = std::numeric_limits<float>::max();
         for (const auto& u : units) {
-            if (u.unit_type_ == UNIT_TYPEID::MINERALFIELD) {
-                float d = DistanceSquared2D(u.pos_, start);
+            if (u.unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+                float d = DistanceSquared2D(u.pos, start);
                 if (d < distance) {
                     distance = d;
-                    target = u.tag_;
+                    target = u.tag;
                 }
             }
         }
@@ -283,7 +281,7 @@ int main(int argc, char* argv[]) {
     });
 
     coordinator.LaunchStarcraft();
-    coordinator.StartGame(GetMapPath(Map::DaybreakLE));
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
     while (coordinator.Update()) {
     }
