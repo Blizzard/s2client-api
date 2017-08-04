@@ -7,7 +7,7 @@ include_directories(SYSTEM "${PROJECT_BINARY_DIR}/generated")
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/contrib/SDL-mirror/include")
 
 #bot_simple
-add_executable(bot_simple "bot_simple.cc" ${common_sources})
+add_executable(bot_simple "bot_simple.cc")
 set_target_properties(bot_simple PROPERTIES FOLDER examples)
 target_link_libraries(bot_simple sc2api sc2lib sc2utils)
 
@@ -47,9 +47,9 @@ set_target_properties(feature_layers PROPERTIES FOLDER examples)
 target_link_libraries(feature_layers sc2api sc2utils sc2renderer)
 
 #Intermediate bot
-add_executable(Intermediate_bot "Intermediate_bot.cc" ${common_sources})
-set_target_properties(Intermediate_bot PROPERTIES FOLDER examples)
-target_link_libraries(Intermediate_bot sc2api sc2lib sc2utils)
+add_executable(intermediate_bot "intermediate_bot.cc" ${common_sources})
+set_target_properties(intermediate_bot PROPERTIES FOLDER examples)
+target_link_libraries(intermediate_bot sc2api sc2lib sc2utils)
 
 #annoying_helper
 add_executable(annoying_helper "annoying_helper.cc")
