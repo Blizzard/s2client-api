@@ -61,16 +61,19 @@ if (WIN32)
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 endif (WIN32)
 
-# Run SDLs cmake.
-add_subdirectory("contrib/SDL-mirror")
+# Exclude SDL and related projects to work around linker issue.
+if (NOT APPLE)
+	# Run SDLs cmake.
+	add_subdirectory("contrib/SDL-mirror")
 
-set_target_properties(SDL2main PROPERTIES FOLDER contrib)
-set_target_properties(SDL2-static PROPERTIES FOLDER contrib)
+	set_target_properties(SDL2main PROPERTIES FOLDER contrib)
+	set_target_properties(SDL2-static PROPERTIES FOLDER contrib)
+
+	set_target_properties(sc2renderer PROPERTIES FOLDER utilities)
+	set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
+endif ()
 
 add_subdirectory("src")
-
-set_target_properties(sc2renderer PROPERTIES FOLDER utilities)
-set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
 
 if (BUILD_API_EXAMPLES)
     add_subdirectory("examples")
