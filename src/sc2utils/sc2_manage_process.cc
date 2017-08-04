@@ -419,6 +419,7 @@ uint64_t StartProcess(const std::string& process_path, const std::vector<std::st
         action.sa_handler = KillRunningProcesses;
         sigaction(SIGTERM, &action, NULL);
         sigaction(SIGSEGV, &action, NULL);
+        sigaction(SIGINT, &action, NULL);
         hook_sig = false;
     }
 
@@ -446,7 +447,7 @@ bool IsProcessRunning(uint64_t process_id) {
 }
 
 bool TerminateProcess(uint64_t process_id) {
-    if (kill(process_id, SIGTERM) == -1) {
+    if (kill(process_id, SIGKILL) == -1) {
         return false;
     }
     RemovePid(process_id);
