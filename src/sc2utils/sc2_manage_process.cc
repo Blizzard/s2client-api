@@ -337,6 +337,13 @@ static std::string GetExePath() {
 
 std::string GetLibraryMapsDirectory() {
     std::string result = GetExePath();
+
+    char* resolvedPath = realpath(result.c_str(), nullptr);
+    if (resolvedPath != nullptr) {
+        result = resolvedPath;
+        free(resolvedPath);
+    }
+
     result = result.substr(0, result.find_last_of("/"));
     result = result.substr(0, result.find_last_of("/"));
     result = result.substr(0, result.find_last_of("/"));
