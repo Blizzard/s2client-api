@@ -6,17 +6,8 @@
 #include <string>
 #include <random>
 #include "feature_layers_shared.h"
-#include "sc2renderer/sc2_renderer.h"
-
-#define VISUALIZE_TEST 0
 
 namespace sc2 {
-
-static void DrawFeatureLayer(const SC2APIProtocol::ImageData& image_data, int width, int height, int off_x, int off_y, int sz_x, int sz_y) {
-    assert(width);
-    assert(height);
-    sc2::renderer::Matrix8BPP(image_data.data().c_str(), off_x, off_y, sz_x, sz_y, width, height);
-}
 
 //
 // SnapshotTestBot
@@ -35,11 +26,9 @@ public:
         float d = Distance2D(a, b);
         return d < 0.5f;
     }
-
 private:
-    void OnTestsBegin() override;
-    void OnPostStep() override;
-    void OnTestsEnd() override;
+    void OnTestsBegin () final {};
+    void OnTestsEnd () final {};
 };
 
 class TestSnapshotBase : public TestSequence {
@@ -256,28 +245,6 @@ SnapshotTestBot::SnapshotTestBot() :
     Add(TestSnapshot5(this));    // Target the mineral field. TERRAN_SCV should move.
     Add(TestSnapshot6(this));
 }
-
-void SnapshotTestBot::OnTestsBegin() {
-#if VISUALIZE_TEST
-    renderer::Initialize("Feature layers", 50, 50, 640, 640);
-#endif
-};
-
-void SnapshotTestBot::OnPostStep() {
-#if VISUALIZE_TEST
-    const SC2APIProtocol::Observation* observation = Observation()->GetRawObservation();
-    const SC2APIProtocol::FeatureLayers& m = observation->feature_layer_data().renders();
-    DrawFeatureLayer(m.player_relative(), m.player_relative().size().x(), m.player_relative().size().y(), 0, 0, 10, 10);
-    renderer::Render();
-#endif
-}
-
-void SnapshotTestBot::OnTestsEnd() {
-#if VISUALIZE_TEST
-    renderer::Shutdown();
-#endif
-}
-
 
 //
 // TestFeatureLayers

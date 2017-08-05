@@ -26,24 +26,28 @@ add_library(sc2api ${sources_sc2})
 add_library(sc2lib ${sources_sc2_lib})
 add_library(sc2protocol ${proto_src} ${proto_files})
 add_library(sc2utils ${sources_utils})
-add_library(sc2renderer ${sources_renderer})
 
 set_target_properties(sc2api PROPERTIES DEBUG_POSTFIX "d")
 set_target_properties(sc2lib PROPERTIES DEBUG_POSTFIX "d")
 set_target_properties(sc2protocol PROPERTIES DEBUG_POSTFIX "d")
 set_target_properties(sc2utils PROPERTIES DEBUG_POSTFIX "d")
-set_target_properties(sc2renderer PROPERTIES DEBUG_POSTFIX "d")
 
 target_link_libraries(sc2protocol libprotobuf)
-target_link_libraries(sc2renderer SDL2-static)
 
 if (APPLE)
     target_link_libraries(sc2utils "-framework Carbon")
-endif (APPLE)
+endif ()
+
+# Exclude SDL and related projects to work around linker issue.
+if (NOT APPLE)
+    add_library(sc2renderer ${sources_renderer})
+    set_target_properties(sc2renderer PROPERTIES DEBUG_POSTFIX "d")
+    target_link_libraries(sc2renderer SDL2-static)
+    include_directories("../contrib/SDL-mirror/include")
+endif ()
 
 # It requires includes to civetweb and our own headers.
 include_directories("../contrib/civetweb/include")
-include_directories("../contrib/SDL-mirror/include")
 include_directories("../include")
 
 if(COMMAND cmake_policy)

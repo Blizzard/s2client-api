@@ -6,7 +6,6 @@
 #include <string>
 #include <random>
 #include "feature_layers_shared.h"
-#include "sc2renderer/sc2_renderer.h"
 
 namespace sc2 {
 

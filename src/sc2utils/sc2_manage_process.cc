@@ -337,6 +337,13 @@ static std::string GetExePath() {
 
 std::string GetLibraryMapsDirectory() {
     std::string result = GetExePath();
+
+    char* resolvedPath = realpath(result.c_str(), nullptr);
+    if (resolvedPath != nullptr) {
+        result = resolvedPath;
+        free(resolvedPath);
+    }
+
     result = result.substr(0, result.find_last_of("/"));
     result = result.substr(0, result.find_last_of("/"));
     result = result.substr(0, result.find_last_of("/"));
@@ -412,6 +419,7 @@ uint64_t StartProcess(const std::string& process_path, const std::vector<std::st
         action.sa_handler = KillRunningProcesses;
         sigaction(SIGTERM, &action, NULL);
         sigaction(SIGSEGV, &action, NULL);
+        sigaction(SIGINT, &action, NULL);
         hook_sig = false;
     }
 
@@ -439,7 +447,7 @@ bool IsProcessRunning(uint64_t process_id) {
 }
 
 bool TerminateProcess(uint64_t process_id) {
-    if (kill(process_id, SIGTERM) == -1) {
+    if (kill(process_id, SIGKILL) == -1) {
         return false;
     }
     RemovePid(process_id);
