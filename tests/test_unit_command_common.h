@@ -1,7 +1,6 @@
 #pragma once
 
 #include "test_framework.h"
-#include "test_common.h"
 #include "sc2api/sc2_coordinator.h"
 #include "sc2api/sc2_agent.h"
 #include "sc2api/sc2_typeenums.h"

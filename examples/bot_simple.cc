@@ -1,10 +1,10 @@
 #include "sc2api/sc2_api.h"
+#include "sc2lib/sc2_lib.h"
 #include "sc2utils/sc2_manage_process.h"
 
 #include <iostream>
 #include <string>
 #include <random>
-
 
 static const uint32_t ResetTarget = 100;
 
@@ -26,15 +26,6 @@ public:
         std::cout << "Starting a new game (" << std::to_string(restarts_) << " restarts)" << std::endl;
     };
 
-    sc2::Point2D FindRandomLocation() {
-        sc2::Point2D target_pos;
-        float playable_w =  game_info_.playable_max.x - game_info_.playable_min.x;
-        float playable_h =  game_info_.playable_max.y - game_info_.playable_min.y;
-        target_pos.x = playable_w * sc2::GetRandomFraction() + game_info_.playable_min.x;
-        target_pos.y = playable_h * sc2::GetRandomFraction() + game_info_.playable_min.y;
-        return target_pos;
-    }
-
     virtual void OnStep() final {
         const sc2::ObservationInterface* observation = Observation();
         game_loop = observation->GetGameLoop();
@@ -43,7 +34,7 @@ public:
             last_game_loop_ = game_loop;
             sc2::Units units = Observation()->GetUnits(sc2::Unit::Alliance::Self);
             for (auto& it_unit : units) {
-                Actions()->UnitCommand(it_unit, 1, FindRandomLocation());
+                Actions()->UnitCommand(it_unit, 1, sc2::FindRandomLocation(observation->GetGameInfo()));
             }
         }
     };

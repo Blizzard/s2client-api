@@ -1,6 +1,5 @@
 #include "test_framework.h"
 #include "test_movement_combat.h"
-#include "test_common.h"
 #include "sc2api/sc2_api.h"
 #include <iostream>
 #include <string>
