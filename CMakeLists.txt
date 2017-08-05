@@ -68,12 +68,15 @@ if (NOT APPLE)
 
 	set_target_properties(SDL2main PROPERTIES FOLDER contrib)
 	set_target_properties(SDL2-static PROPERTIES FOLDER contrib)
-
-	set_target_properties(sc2renderer PROPERTIES FOLDER utilities)
-	set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
 endif ()
 
 add_subdirectory("src")
+
+# Exclude SDL and related projects to work around linker issue.
+if (NOT APPLE)
+    set_target_properties(sc2renderer PROPERTIES FOLDER utilities)
+    set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
+endif ()
 
 if (BUILD_API_EXAMPLES)
     add_subdirectory("examples")
