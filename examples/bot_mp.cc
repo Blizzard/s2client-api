@@ -4,8 +4,6 @@
 #include "bot_examples.h"
 
 #include <iostream>
-#include <string>
-#include <algorithm>
 
 
 // Set this flag to true if you want to play against your bot.

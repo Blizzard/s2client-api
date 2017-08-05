@@ -5,14 +5,6 @@
 
 #include "bot_examples.h"
 
-#include <limits>
-#include <iostream>
-#include <unordered_map>
-#include <random>
-
-
-static const bool UseRealtime = true;
-
 //*************************************************************************************************
 int main(int argc, char* argv[]) {
     sc2::Coordinator coordinator;
