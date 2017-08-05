@@ -1,11 +1,12 @@
 #include "test_framework.h"
 #include "test_movement_combat.h"
-#include "test_common.h"
 #include "sc2api/sc2_api.h"
+#include "sc2lib/sc2_lib.h"
+#include "feature_layers_shared.h"
+
 #include <iostream>
 #include <string>
 #include <random>
-#include "feature_layers_shared.h"
 
 namespace sc2 {
 

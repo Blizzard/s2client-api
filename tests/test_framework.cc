@@ -1,5 +1,4 @@
 #include "test_framework.h"
-#include "test_common.h"
 #include "sc2api/sc2_api.h"
 
 #include <iostream>

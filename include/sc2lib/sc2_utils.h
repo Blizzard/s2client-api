@@ -1,11 +1,7 @@
 #pragma once
 
-#include "sc2api/sc2_map_info.h"
 #include "sc2api/sc2_common.h"
-
-#include <iostream>
-#include <string>
-#include <random>
+#include "sc2api/sc2_map_info.h"
 
 namespace sc2 {
 

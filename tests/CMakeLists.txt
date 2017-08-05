@@ -10,4 +10,4 @@ file(GLOB test_SRC
 #all_tests
 add_executable(all_tests ${test_SRC})
 set_target_properties(all_tests PROPERTIES FOLDER tests)
-target_link_libraries(all_tests sc2api sc2utils)
+target_link_libraries(all_tests sc2api sc2lib sc2utils)

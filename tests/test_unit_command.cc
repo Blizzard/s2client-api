@@ -1,5 +1,6 @@
 #include "test_unit_command_common.h"
 #include "sc2api/sc2_api.h"
+#include "sc2lib/sc2_lib.h"
 #include <iostream>
 #include <string>
 #include <random>
