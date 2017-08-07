@@ -479,6 +479,16 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
         game_info.enemy_start_locations.push_back(sc2::Point2D(pt.x(), pt.y()));
     }
 
+    for (const auto& player_info : response_game_info_ptr->player_info()) {
+        game_info.player_info.push_back(sc2::PlayerInfo(
+            static_cast<uint32_t>(player_info.player_id()),
+            ConvertPlayerTypeFromProto(player_info.type()),
+            ConvertRaceFromProto(player_info.race_requested()),
+            ConvertRaceFromProto(player_info.race_actual()),
+            ConvertDifficultyFromProto(player_info.difficulty())
+        ));
+    }
+
     if (!response_game_info_ptr->has_options()) {
         return false;
     }
@@ -524,6 +534,57 @@ GameResult ConvertGameResultFromProto(SC2APIProtocol::Result result) {
         }
     }
     return Undecided;
+}
+
+PlayerType ConvertPlayerTypeFromProto(SC2APIProtocol::PlayerType type) {
+    switch (type) {
+        case SC2APIProtocol::Participant: {
+            return Participant;
+        }
+        case SC2APIProtocol::Computer: {
+            return Computer;
+        }
+        case SC2APIProtocol::Observer: {
+            return Observer;
+        }
+    }
+    return Observer;
+}
+
+Difficulty ConvertDifficultyFromProto(SC2APIProtocol::Difficulty difficulty) {
+    switch (difficulty) {
+        case SC2APIProtocol::VeryEasy: {
+            return VeryEasy;
+        }
+        case SC2APIProtocol::Easy: {
+            return Easy;
+        }
+        case SC2APIProtocol::Medium: {
+            return Medium;
+        }
+        case SC2APIProtocol::MediumHard: {
+            return MediumHard;
+        }
+        case SC2APIProtocol::Hard: {
+            return Hard;
+        }
+        case SC2APIProtocol::Harder: {
+            return HardVeryHard;
+        }
+        case SC2APIProtocol::VeryHard: {
+            return VeryHard;
+        }
+        case SC2APIProtocol::CheatVision: {
+            return CheatVision;
+        }
+        case SC2APIProtocol::CheatMoney: {
+            return CheatMoney;
+        }
+        case SC2APIProtocol::CheatInsane: {
+            return CheatInsane;
+        }
+    }
+    return VeryEasy;
 }
 
 }

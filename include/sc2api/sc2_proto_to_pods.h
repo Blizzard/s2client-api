@@ -25,5 +25,7 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
 
 Race ConvertRaceFromProto(SC2APIProtocol::Race race);
 GameResult ConvertGameResultFromProto(SC2APIProtocol::Result result);
+PlayerType ConvertPlayerTypeFromProto(SC2APIProtocol::PlayerType type);
+Difficulty ConvertDifficultyFromProto(SC2APIProtocol::Difficulty difficulty);
 
 }
