@@ -74,3 +74,10 @@ To generate the documentation yourself.
 1. Download and install [doxygen](http://www.stack.nl/~dimitri/doxygen/download.html#srcbin)
 2. From the root of the project run: doxygen Doxyfile
 3. Commit and push the generated documentation files in a seperate commit that contains documentation changes only, no code changes.
+
+Precompiled Libs
+----------------
+
+If you are using Visual Studio 2017 and just want precompiled library files you can download the following package.
+
+[Precompiled Libs](http://blzdistsc2-a.akamaihd.net/PrecompiledLib.zip)
