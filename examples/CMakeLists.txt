@@ -26,11 +26,6 @@ add_executable(replay "replay.cc")
 set_target_properties(replay PROPERTIES FOLDER examples)
 target_link_libraries(replay sc2api sc2utils)
 
-#replay_advanced
-add_executable(replay_advanced "replay_advanced.cc")
-set_target_properties(replay_advanced PROPERTIES FOLDER examples)
-target_link_libraries(replay_advanced sc2api sc2utils)
-
 #Tutorial
 add_executable(tutorial "tutorial.cc")
 set_target_properties(tutorial PROPERTIES FOLDER examples)
