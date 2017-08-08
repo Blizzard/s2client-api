@@ -58,4 +58,4 @@ target_link_libraries(intermediate_bot sc2api sc2lib sc2utils)
 #annoying_helper
 add_executable(annoying_helper "annoying_helper.cc")
 set_target_properties(annoying_helper PROPERTIES FOLDER examples)
-target_link_libraries(annoying_helper sc2api sc2utils)
+target_link_libraries(annoying_helper sc2api sc2lib sc2utils)
