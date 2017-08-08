@@ -1,12 +1,10 @@
 #include "sc2api/sc2_api.h"
 
 #include "sc2utils/sc2_manage_process.h"
-#include "sc2utils/sc2_simple_serialization.h"
 
-#include <algorithm>
+#include <iostream>
 
-
-const char* ReplayFolder = "E:/Replays/";
+const char* kReplayFolder = "E:/Replays/";
 
 class Replay : public sc2::ReplayObserver {
 public:
@@ -14,12 +12,6 @@ public:
 
     Replay() :
         sc2::ReplayObserver() {
-    }
-
-    void ProcessObservation() {
-        if (!Control()->IsInGame())
-            return;
-
     }
 
     void OnGameStart() final {
@@ -59,7 +51,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if (!coordinator.SetReplayPath(ReplayFolder)) {
+    if (!coordinator.SetReplayPath(kReplayFolder)) {
         std::cout << "Unable to find replays." << std::endl;
         return 1;
     }
