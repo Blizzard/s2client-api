@@ -19,7 +19,7 @@ Building
 Windows
 -------
 
-To build on windows generate a solution file with CMake.
+To build on windows generate a Visual Studio 2017 solution file with CMake.
 
 1. Make sure a recursive clone of the project is done to download all submodules.
 2. Enter the working directory.
@@ -39,7 +39,7 @@ start s2client-api.sln
 Mac
 -------
 
-To build on Mac generate na Xcode project with CMake.
+To build on Mac generate an Xcode project with CMake.
 
 1. Make sure a recursive clone of the project is done to download all submodules.
 2. Enter the working directory.
@@ -52,7 +52,7 @@ git clone --recursive git@github.com:Blizzard/s2client-api.git
 cd s2client-api
 mkdir build
 cd build
-cmake ../ -G "Xcode"
+cmake ../ -G Xcode
 open s2client-api.xcodeproj/
 ```
 
