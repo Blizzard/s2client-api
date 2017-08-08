@@ -32,7 +32,7 @@ git clone --recursive git@github.com:Blizzard/s2client-api.git
 cd s2client-api
 mkdir build
 cd build
-cmake ../ -G "Visual Studio 14 Win64"
+cmake ../ -G "Visual Studio 15 Win64"
 start s2client-api.sln
 ```
 
