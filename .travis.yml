@@ -1,9 +1,0 @@
-language: c++
-dist: trusty
-sudo: false
-
-script:
-    - mkdir build
-    - cd build
-    - cmake ../
-    - make
