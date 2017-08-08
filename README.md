@@ -80,4 +80,4 @@ Precompiled Libs
 
 If you are using Visual Studio 2017 and just want precompiled library files you can download the following package.
 
-[Precompiled Libs](http://blzdistsc2-a.akamaihd.net/PrecompiledLib.zip)
+[Precompiled Libs](http://blzdistsc2-a.akamaihd.net/PrecompiledLibs.zip)
