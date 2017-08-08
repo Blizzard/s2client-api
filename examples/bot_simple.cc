@@ -25,7 +25,7 @@ public:
             sc2::Units units = Observation()->GetUnits(sc2::Unit::Alliance::Self);
             for (auto& it_unit : units) {
                 sc2::Point2D target = sc2::FindRandomLocation(Observation()->GetGameInfo());
-                Actions()->UnitCommand(it_unit, 1, target);
+                Actions()->UnitCommand(it_unit, sc2::ABILITY_ID::SMART, target);
             }
         }
     };
