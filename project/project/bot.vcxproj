@@ -93,7 +93,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>civetweb.lib;libprotobufd.lib;sc2libd.lib;sc2protocold.lib;sc2rendererd.lib;sc2utilsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>civetweb.lib;libprotobufd.lib;sc2libd.lib;sc2apid.lib;sc2protocold.lib;sc2rendererd.lib;sc2utilsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -123,7 +123,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>civetweb.lib;libprotobuf.lib;sc2lib.lib;sc2protocol.lib;sc2renderer.lib;sc2utils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>civetweb.lib;libprotobuf.lib;sc2lib.lib;sc2api.lib;sc2protocol.lib;sc2renderer.lib;sc2utils.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
