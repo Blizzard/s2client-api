@@ -75,9 +75,23 @@ To generate the documentation yourself.
 2. From the root of the project run: doxygen Doxyfile
 3. Commit and push the generated documentation files in a seperate commit that contains documentation changes only, no code changes.
 
-Precompiled Libs
+Additional Downloads
 ----------------
 
-If you are using Visual Studio 2017 and just want precompiled library files you can download the following package.
+### Maps and Replays
+
+This repository only comes with a few maps for testing.
+
+Additional maps and replays can be found [here](https://github.com/Blizzard/s2client-proto#downloads).
+
+### Precompiled Libs
+
+If you are using Visual Studio 2017 and just want precompiled library files you can download the following package:
 
 [Precompiled Libs](http://blzdistsc2-a.akamaihd.net/SC2API_Binary_vs2017.zip)
+
+### Other Libraries
+
+Additional community built AI libraries can be found [here](https://github.com/Blizzard/s2client-proto#community).
+
+If you are new to programming, the [CommandCenter](https://github.com/davechurchill/CommandCenter) framework may be a good starting point.
