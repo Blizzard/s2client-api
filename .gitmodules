@@ -1,6 +1,3 @@
-[submodule "contrib/civetweb"]
-	path = contrib/civetweb
-	url = https://github.com/civetweb/civetweb
 [submodule "contrib/protobuf"]
 	path = contrib/protobuf
 	url = https://github.com/google/protobuf
