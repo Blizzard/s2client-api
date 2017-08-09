@@ -4,9 +4,9 @@
 [submodule "contrib/SDL-mirror"]
 	path = contrib/SDL-mirror
 	url = https://github.com/spurious/SDL-mirror
-[submodule "protocol"]
-	path = protocol
-	url = https://github.com/Blizzard/s2client-proto
 [submodule "contrib/civetweb"]
 	path = contrib/civetweb
 	url = https://github.com/KevinCalderone/civetweb
+[submodule "protocol"]
+	path = protocol
+	url = https://github.com/Blizzard/s2client-proto
