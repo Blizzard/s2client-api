@@ -29,6 +29,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(CIVETWEB_ENABLE_WEBSOCKETS ON CACHE BOOL "" FORCE)
 
+# Don't build civetweb with sanitizers
+set(CIVETWEB_ENABLE_ASAN OFF CACHE BOOL "" FORCE)
+
 # Don't build protobuf tests.
 set(protobuf_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(protobuf_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
