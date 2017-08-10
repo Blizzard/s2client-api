@@ -30,7 +30,7 @@ class \hyperlink{classsc2_1_1_debug_interface}{sc2\+::\+Debug\+Interface}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef std\+::function$<$ bool(const Unit \&unit, const Observation\+Interface $\ast$observation)$>$ \hyperlink{sc2__interfaces_8h_af4abbeea3291e718cf2283e1390f3670}{sc2\+::\+Filter}
+typedef std\+::function$<$ bool(const Unit \&unit)$>$ \hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{sc2\+::\+Filter}
 \end{DoxyCompactItemize}
 \subsection*{Enumerations}
 \begin{DoxyCompactItemize}
@@ -50,11 +50,11 @@ A set of public facing interfaces used to query game state.
 Each function in this class is pure virtual but is not intended for a user of the A\+PI to overwrite. An implementation file that utilizes this interface will be responsible for its definition and should be of little concern to the consumer. 
 
 \subsection{Typedef Documentation}
-\mbox{\Hypertarget{sc2__interfaces_8h_file_af4abbeea3291e718cf2283e1390f3670}\label{sc2__interfaces_8h_file_af4abbeea3291e718cf2283e1390f3670}} 
+\mbox{\Hypertarget{sc2__interfaces_8h_file_a5cc3d9751182ccd2b085f3e272bcc88b}\label{sc2__interfaces_8h_file_a5cc3d9751182ccd2b085f3e272bcc88b}} 
 \index{sc2\+\_\+interfaces.\+h@{sc2\+\_\+interfaces.\+h}!Filter@{Filter}}
 \index{Filter@{Filter}!sc2\+\_\+interfaces.\+h@{sc2\+\_\+interfaces.\+h}}
 \subsubsection{\texorpdfstring{Filter}{Filter}}
-{\footnotesize\ttfamily typedef std\+::function$<$bool(const Unit\& unit, const Observation\+Interface$\ast$ observation)$>$ \hyperlink{sc2__interfaces_8h_af4abbeea3291e718cf2283e1390f3670}{sc2\+::\+Filter}}
+{\footnotesize\ttfamily typedef std\+::function$<$bool(const Unit\& unit)$>$ \hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{sc2\+::\+Filter}}
 
 Used to filter out units when querying. You can use this filter to get all full health units, for example. 
 \begin{DoxyParams}{Parameters}

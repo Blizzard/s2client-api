@@ -49,5 +49,5 @@ var searchData=
   ['spatialselectrect',['SpatialSelectRect',['../structsc2_1_1_spatial_select_rect.html',1,'sc2']]],
   ['spatialsetup',['SpatialSetup',['../structsc2_1_1_spatial_setup.html',1,'sc2']]],
   ['spatialunitcommand',['SpatialUnitCommand',['../structsc2_1_1_spatial_unit_command.html',1,'sc2']]],
-  ['startgame',['StartGame',['../classsc2_1_1_coordinator.html#a63fe152548d28b619a7bc577544fcdc8',1,'sc2::Coordinator']]]
+  ['startgame',['StartGame',['../classsc2_1_1_coordinator.html#a32ea6e639a39ec1fc813dffa2993d5b1',1,'sc2::Coordinator']]]
 ];

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['getabilitiesforunit',['GetAbilitiesForUnit',['../classsc2_1_1_query_interface.html#a5e06452df74dc9cf0c8cafe8fe42e85b',1,'sc2::QueryInterface']]],
-  ['getabilitiesforunits',['GetAbilitiesForUnits',['../classsc2_1_1_query_interface.html#acf20e12a5b9b8ffb419384df58db023f',1,'sc2::QueryInterface']]],
+  ['getabilitiesforunit',['GetAbilitiesForUnit',['../classsc2_1_1_query_interface.html#a6954d65b93a07bf14e2a8818f9df9b8c',1,'sc2::QueryInterface']]],
+  ['getabilitiesforunits',['GetAbilitiesForUnits',['../classsc2_1_1_query_interface.html#a6add52c8b04f0e50efdd83955952b76f',1,'sc2::QueryInterface']]],
   ['getabilitydata',['GetAbilityData',['../classsc2_1_1_observation_interface.html#a99e1d892c350e4ae10c615bf3185eb85',1,'sc2::ObservationInterface']]],
   ['getarmycount',['GetArmyCount',['../classsc2_1_1_observation_interface.html#a1ab99209855a20aae751684e1af19aaa',1,'sc2::ObservationInterface']]],
   ['getbuffdata',['GetBuffData',['../classsc2_1_1_observation_interface.html#a1b891d52ce1fe82dac0288797ad3720a',1,'sc2::ObservationInterface']]],

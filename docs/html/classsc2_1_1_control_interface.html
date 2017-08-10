@@ -116,9 +116,9 @@ virtual GameResponsePtr&#160;</td><td class="memItemRight" valign="bottom"><b>Wa
 <tr class="memitem:a869db0749b2f5db41731886cc7fe9d87"><td class="memItemLeft" align="right" valign="top"><a id="a869db0749b2f5db41731886cc7fe9d87"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetProcessInfo</b> (const <a class="el" href="structsc2_1_1_process_info.html">ProcessInfo</a> &amp;pi)=0</td></tr>
 <tr class="separator:a869db0749b2f5db41731886cc7fe9d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c3749bc57d64e1d37f37f0d3d16ec62"><td class="memItemLeft" align="right" valign="top"><a id="a0c3749bc57d64e1d37f37f0d3d16ec62"></a>
-virtual const <a class="el" href="structsc2_1_1_process_info.html">ProcessInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>GetProcessInfo</b> ()=0</td></tr>
-<tr class="separator:a0c3749bc57d64e1d37f37f0d3d16ec62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a190f45b9169d5e17cdf48cc906bd70e3"><td class="memItemLeft" align="right" valign="top"><a id="a190f45b9169d5e17cdf48cc906bd70e3"></a>
+virtual const <a class="el" href="structsc2_1_1_process_info.html">ProcessInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>GetProcessInfo</b> () const =0</td></tr>
+<tr class="separator:a190f45b9169d5e17cdf48cc906bd70e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7856754a90ef19fce1c37d532940cc70"><td class="memItemLeft" align="right" valign="top"><a id="a7856754a90ef19fce1c37d532940cc70"></a>
 virtual AppState&#160;</td><td class="memItemRight" valign="bottom"><b>GetAppState</b> () const =0</td></tr>
 <tr class="separator:a7856754a90ef19fce1c37d532940cc70"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +167,12 @@ virtual const std::vector&lt; <a class="el" href="sc2__client_8h.html#ac7d3e3694
 <tr class="memitem:ac26497e85a0dc55ae82270f0f50d5f03"><td class="memItemLeft" align="right" valign="top"><a id="ac26497e85a0dc55ae82270f0f50d5f03"></a>
 virtual const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>GetProtocolErrors</b> () const =0</td></tr>
 <tr class="separator:ac26497e85a0dc55ae82270f0f50d5f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8873d48c9aea76578115f4d5d1fbdbf5"><td class="memItemLeft" align="right" valign="top"><a id="a8873d48c9aea76578115f4d5d1fbdbf5"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>ClearClientErrors</b> ()=0</td></tr>
+<tr class="separator:a8873d48c9aea76578115f4d5d1fbdbf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b7042768e8b428f867b9069281e8c66"><td class="memItemLeft" align="right" valign="top"><a id="a0b7042768e8b428f867b9069281e8c66"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>ClearProtocolErrors</b> ()=0</td></tr>
+<tr class="separator:a0b7042768e8b428f867b9069281e8c66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/sc2api/<a class="el" href="sc2__control__interfaces_8h_source.html">sc2_control_interfaces.h</a></li>

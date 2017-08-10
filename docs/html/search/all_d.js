@@ -11,6 +11,7 @@ var searchData=
   ['playable_5fmax',['playable_max',['../structsc2_1_1_game_info.html#a5b6d4abc12023b79a197ca3071ee79c8',1,'sc2::GameInfo']]],
   ['playable_5fmin',['playable_min',['../structsc2_1_1_game_info.html#acf482bed6694db9ce4b7da0e139eac57',1,'sc2::GameInfo']]],
   ['player_5fid',['player_id',['../structsc2_1_1_replay_player_info.html#a0a10ff4668dd1d3b017ff5d4da1837fc',1,'sc2::ReplayPlayerInfo']]],
+  ['playerinfo',['PlayerInfo',['../structsc2_1_1_player_info.html',1,'sc2']]],
   ['playersetup',['PlayerSetup',['../structsc2_1_1_player_setup.html',1,'sc2']]],
   ['point',['Point',['../structsc2_1_1_ability_data.html#a15aaa20bd058eeb35728e2eeff6518f6a2a3cd5946cfd317eb99c3d32e35e2d4c',1,'sc2::AbilityData']]],
   ['point2d',['Point2D',['../structsc2_1_1_point2_d.html',1,'sc2']]],

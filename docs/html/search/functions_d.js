@@ -19,5 +19,5 @@ var searchData=
   ['settimeoutms',['SetTimeoutMS',['../classsc2_1_1_coordinator.html#aadbfd927d66314a4eb949b2de2ae37b4',1,'sc2::Coordinator']]],
   ['setwindowlocation',['SetWindowLocation',['../classsc2_1_1_coordinator.html#a6e372788e11c3916fdf1982eb2e55511',1,'sc2::Coordinator']]],
   ['setwindowsize',['SetWindowSize',['../classsc2_1_1_coordinator.html#a9b0eca71a6f7575f35d1dd5c3e5d73cf',1,'sc2::Coordinator']]],
-  ['startgame',['StartGame',['../classsc2_1_1_coordinator.html#a63fe152548d28b619a7bc577544fcdc8',1,'sc2::Coordinator']]]
+  ['startgame',['StartGame',['../classsc2_1_1_coordinator.html#a32ea6e639a39ec1fc813dffa2993d5b1',1,'sc2::Coordinator']]]
 ];

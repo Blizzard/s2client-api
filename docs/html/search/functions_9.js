@@ -17,5 +17,6 @@ var searchData=
   ['operator_20t',['operator T',['../classsc2_1_1_s_c2_type.html#a16ef14791e484bcb2708d262fbfbc46f',1,'sc2::SC2Type']]],
   ['operator_20uint32_5ft',['operator uint32_t',['../classsc2_1_1_s_c2_type.html#ab75e39605288070327604d10a5f720bf',1,'sc2::SC2Type']]],
   ['operator_21_3d',['operator!=',['../classsc2_1_1_s_c2_type.html#a6e032550a699843364b52d9f30d7ddcc',1,'sc2::SC2Type']]],
-  ['operator_3d_3d',['operator==',['../classsc2_1_1_s_c2_type.html#a499b06e107c0561ce3d2d80094fbdd94',1,'sc2::SC2Type']]]
+  ['operator_3c',['operator&lt;',['../classsc2_1_1_s_c2_type.html#a9ad0dc8b2a47eca60fa3a49c9c2e5de0',1,'sc2::SC2Type']]],
+  ['operator_3d_3d',['operator==',['../structsc2_1_1_action_raw.html#a9cf9e83ec9ebd6f9db4520ede7150aed',1,'sc2::ActionRaw::operator==()'],['../classsc2_1_1_s_c2_type.html#a499b06e107c0561ce3d2d80094fbdd94',1,'sc2::SC2Type::operator==()']]]
 ];

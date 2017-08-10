@@ -91,8 +91,11 @@ Inheritance diagram for sc2::ReplayObserver:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a99198b2295dc998662b929f96ad17d65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsc2_1_1_replay_control_interface.html">ReplayControlInterface</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_replay_observer.html#a99198b2295dc998662b929f96ad17d65">ReplayControl</a> ()</td></tr>
 <tr class="separator:a99198b2295dc998662b929f96ad17d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac45036d3304612bc02b9794cc9eba187"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_replay_observer.html#ac45036d3304612bc02b9794cc9eba187">IgnoreReplay</a> (const <a class="el" href="structsc2_1_1_replay_info.html">ReplayInfo</a> &amp;replay_info) const</td></tr>
-<tr class="separator:ac45036d3304612bc02b9794cc9eba187"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35461e606619ea1f2c968e37ab164d5d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_replay_observer.html#a35461e606619ea1f2c968e37ab164d5d">IgnoreReplay</a> (const <a class="el" href="structsc2_1_1_replay_info.html">ReplayInfo</a> &amp;replay_info, uint32_t &amp;player_id)</td></tr>
+<tr class="separator:a35461e606619ea1f2c968e37ab164d5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0f3061d817e87afd8fd43753ffc3612"><td class="memItemLeft" align="right" valign="top"><a id="ac0f3061d817e87afd8fd43753ffc3612"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetControl</b> (<a class="el" href="classsc2_1_1_control_interface.html">ControlInterface</a> *control)</td></tr>
+<tr class="separator:ac0f3061d817e87afd8fd43753ffc3612"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classsc2_1_1_client"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classsc2_1_1_client')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classsc2_1_1_client.html">sc2::Client</a></td></tr>
 <tr class="memitem:a9bde4735245a945f37c5505cde5d09c1 inherit pub_methods_classsc2_1_1_client"><td class="memItemLeft" align="right" valign="top"><a id="a9bde4735245a945f37c5505cde5d09c1"></a>
 const <a class="el" href="classsc2_1_1_observation_interface.html">ObservationInterface</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_client.html#a9bde4735245a945f37c5505cde5d09c1">Observation</a> () const</td></tr>
@@ -111,6 +114,9 @@ const <a class="el" href="classsc2_1_1_observation_interface.html">ObservationIn
 <tr class="memitem:a90089d27b898fe537ccee87def3cec4b inherit pub_methods_classsc2_1_1_client"><td class="memItemLeft" align="right" valign="top"><a id="a90089d27b898fe537ccee87def3cec4b"></a>
 const <a class="el" href="classsc2_1_1_control_interface.html">ControlInterface</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Control</b> () const</td></tr>
 <tr class="separator:a90089d27b898fe537ccee87def3cec4b inherit pub_methods_classsc2_1_1_client"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c44d74271f1cae11334a97849ed4da9 inherit pub_methods_classsc2_1_1_client"><td class="memItemLeft" align="right" valign="top"><a id="a3c44d74271f1cae11334a97849ed4da9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Reset</b> ()</td></tr>
+<tr class="separator:a3c44d74271f1cae11334a97849ed4da9 inherit pub_methods_classsc2_1_1_client"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classsc2_1_1_client_events"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classsc2_1_1_client_events')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classsc2_1_1_client_events.html">sc2::ClientEvents</a></td></tr>
 <tr class="memitem:ab980f6942030d3a0cd42e00782742237 inherit pub_methods_classsc2_1_1_client_events"><td class="memItemLeft" align="right" valign="top"><a id="ab980f6942030d3a0cd42e00782742237"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_client_events.html#ab980f6942030d3a0cd42e00782742237">OnGameFullStart</a> ()</td></tr>
@@ -154,8 +160,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A client for running a replay. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac45036d3304612bc02b9794cc9eba187"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac45036d3304612bc02b9794cc9eba187">&#9670;&nbsp;</a></span>IgnoreReplay()</h2>
+<a id="a35461e606619ea1f2c968e37ab164d5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35461e606619ea1f2c968e37ab164d5d">&#9670;&nbsp;</a></span>IgnoreReplay()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -167,8 +173,18 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
           <td class="memname">virtual bool sc2::ReplayObserver::IgnoreReplay </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structsc2_1_1_replay_info.html">ReplayInfo</a> &amp;&#160;</td>
-          <td class="paramname"><em>replay_info</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>replay_info</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t &amp;&#160;</td>
+          <td class="paramname"><em>player_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>

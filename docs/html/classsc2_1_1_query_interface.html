@@ -84,10 +84,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5e06452df74dc9cf0c8cafe8fe42e85b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a5e06452df74dc9cf0c8cafe8fe42e85b">GetAbilitiesForUnit</a> (Tag tag)=0</td></tr>
-<tr class="separator:a5e06452df74dc9cf0c8cafe8fe42e85b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf20e12a5b9b8ffb419384df58db023f"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#acf20e12a5b9b8ffb419384df58db023f">GetAbilitiesForUnits</a> (const std::vector&lt; Tag &gt; &amp;tags)=0</td></tr>
-<tr class="separator:acf20e12a5b9b8ffb419384df58db023f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6954d65b93a07bf14e2a8818f9df9b8c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a6954d65b93a07bf14e2a8818f9df9b8c">GetAbilitiesForUnit</a> (Tag tag, bool ignore_resource_requirements=false)=0</td></tr>
+<tr class="separator:a6954d65b93a07bf14e2a8818f9df9b8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6add52c8b04f0e50efdd83955952b76f"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a6add52c8b04f0e50efdd83955952b76f">GetAbilitiesForUnits</a> (const std::vector&lt; Tag &gt; &amp;tags, bool ignore_resource_requirements=false)=0</td></tr>
+<tr class="separator:a6add52c8b04f0e50efdd83955952b76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf72c7556e59e82e231d9c58bd093546"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#adf72c7556e59e82e231d9c58bd093546">PathingDistance</a> (const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;start, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;end)=0</td></tr>
 <tr class="separator:adf72c7556e59e82e231d9c58bd093546"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a7216c7ad37273dc54e12a92fee7a64"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a1a7216c7ad37273dc54e12a92fee7a64">PathingDistance</a> (const Tag &amp;start_unit_tag, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;end)=0</td></tr>
@@ -107,8 +107,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 <li>Always try and batch things up. These queries are effectively synchronous and will block until returned. </li>
 </ul>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5e06452df74dc9cf0c8cafe8fe42e85b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e06452df74dc9cf0c8cafe8fe42e85b">&#9670;&nbsp;</a></span>GetAbilitiesForUnit()</h2>
+<a id="a6954d65b93a07bf14e2a8818f9df9b8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6954d65b93a07bf14e2a8818f9df9b8c">&#9670;&nbsp;</a></span>GetAbilitiesForUnit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -120,8 +120,18 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
           <td class="memname">virtual <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a> sc2::QueryInterface::GetAbilitiesForUnit </td>
           <td>(</td>
           <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>tag</em></td><td>)</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignore_resource_requirements</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -133,6 +143,7 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 <p>Returns a list of abilities represented as a uint32_t see the ABILITY_ID enum for their corresponding, named, representations. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tag</td><td>Tag of unit. </td></tr>
+    <tr><td class="paramname">ignore_resource_requirements</td><td>Ignores food, mineral and gas costs, as well as cooldowns. </td></tr>
   </table>
   </dd>
 </dl>
@@ -140,8 +151,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 
 </div>
 </div>
-<a id="acf20e12a5b9b8ffb419384df58db023f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf20e12a5b9b8ffb419384df58db023f">&#9670;&nbsp;</a></span>GetAbilitiesForUnits()</h2>
+<a id="a6add52c8b04f0e50efdd83955952b76f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6add52c8b04f0e50efdd83955952b76f">&#9670;&nbsp;</a></span>GetAbilitiesForUnits()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -153,8 +164,18 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
           <td class="memname">virtual std::vector&lt;<a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a>&gt; sc2::QueryInterface::GetAbilitiesForUnits </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; Tag &gt; &amp;&#160;</td>
-          <td class="paramname"><em>tags</em></td><td>)</td>
+          <td class="paramname"><em>tags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignore_resource_requirements</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -166,6 +187,7 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 <p>Issues multiple available abilities queries. Batch version. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tag</td><td>Tags of units. </td></tr>
+    <tr><td class="paramname">ignore_resource_requirements</td><td>Ignores food, mineral and gas costs, as well as cooldowns. </td></tr>
   </table>
   </dd>
 </dl>

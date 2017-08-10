@@ -109,6 +109,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#aed4bf1a5cf1519fc0488bc5d4641a582">SetParticipants</a> (const std::vector&lt; <a class="el" href="structsc2_1_1_player_setup.html">PlayerSetup</a> &gt; &amp;participants)</td></tr>
 <tr class="memdesc:aed4bf1a5cf1519fc0488bc5d4641a582"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the bots and whether they are controlled by in-built AI, human or a custom bot. <br /></td></tr>
 <tr class="separator:aed4bf1a5cf1519fc0488bc5d4641a582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac478d6f4c1b9e6c98514b7212c7997fc"><td class="memItemLeft" align="right" valign="top"><a id="ac478d6f4c1b9e6c98514b7212c7997fc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetReplayRecovery</b> (bool value)</td></tr>
+<tr class="separator:ac478d6f4c1b9e6c98514b7212c7997fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16ebfba44b1abbc303770e4958922d05"><td class="memItemLeft" align="right" valign="top"><a id="a16ebfba44b1abbc303770e4958922d05"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#a16ebfba44b1abbc303770e4958922d05">AddReplayObserver</a> (<a class="el" href="classsc2_1_1_replay_observer.html">ReplayObserver</a> *replay_observer)</td></tr>
 <tr class="memdesc:a16ebfba44b1abbc303770e4958922d05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an instance of <a class="el" href="classsc2_1_1_replay_observer.html" title="A client for running a replay. ">ReplayObserver</a>, each <a class="el" href="classsc2_1_1_replay_observer.html" title="A client for running a replay. ">ReplayObserver</a> will run a separate StarCraft II client. <br /></td></tr>
@@ -117,8 +120,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#ac06566447119abac229fd671d39ff2ee">LaunchStarcraft</a> ()</td></tr>
 <tr class="memdesc:ac06566447119abac229fd671d39ff2ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses settings gathered from LoadSettings, specifically the path to the executable, to run StarCraft II. <br /></td></tr>
 <tr class="separator:ac06566447119abac229fd671d39ff2ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63fe152548d28b619a7bc577544fcdc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#a63fe152548d28b619a7bc577544fcdc8">StartGame</a> (const std::string &amp;map_path=std::string())</td></tr>
-<tr class="separator:a63fe152548d28b619a7bc577544fcdc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32ea6e639a39ec1fc813dffa2993d5b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#a32ea6e639a39ec1fc813dffa2993d5b1">StartGame</a> (const std::string &amp;map_path=std::string())</td></tr>
+<tr class="separator:a32ea6e639a39ec1fc813dffa2993d5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af70ba5246f9d447eb8a69cd76d364eee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#af70ba5246f9d447eb8a69cd76d364eee">Update</a> ()</td></tr>
 <tr class="separator:af70ba5246f9d447eb8a69cd76d364eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8ae051962776e946e457791f70bf6d2"><td class="memItemLeft" align="right" valign="top"><a id="af8ae051962776e946e457791f70bf6d2"></a>
@@ -528,14 +531,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a63fe152548d28b619a7bc577544fcdc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63fe152548d28b619a7bc577544fcdc8">&#9670;&nbsp;</a></span>StartGame()</h2>
+<a id="a32ea6e639a39ec1fc813dffa2993d5b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32ea6e639a39ec1fc813dffa2993d5b1">&#9670;&nbsp;</a></span>StartGame()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void sc2::Coordinator::StartGame </td>
+          <td class="memname">bool sc2::Coordinator::StartGame </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>map_path</em> = <code>std::string()</code></td><td>)</td>
@@ -543,7 +546,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Starts a game on a certain map. There are multiple ways to specify a map: Absolute path: Any .SC2Map file. Relative path: Any .SC2Map file relative to either the library or installation maps folder. Map name: Any BattleNet published map that has been locally cached. </p>
+<p>Starts a game on a certain map. There are multiple ways to specify a map: Absolute path: Any .SC2Map file. Relative path: Any .SC2Map file relative to either the library or installation maps folder. Map name: Any BattleNet published map that has been locally cached. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_path</td><td>Path to the map to run. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the game started, false if there was errors or the game didn't start, override OnError callback to see the exact errors. </dd></dl>
 
 </div>
 </div>
@@ -574,7 +583,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <li>Real time applications will perform the following:<ol type="1">
 <li>The Observation is directly requested. The process will block while waiting for it.</li>
 <li>The Observation is parsed and client events are dispatched.</li>
-<li><a class="el" href="classsc2_1_1_unit.html" title="A unit. Could be a structure, a worker or a military unit. ">Unit</a> actions batched from the <a class="el" href="classsc2_1_1_action_interface.html">ActionInterface</a> are dispatched. <dl class="section return"><dt>Returns</dt><dd>True if the game has ended, false otherwise. </dd></dl>
+<li><a class="el" href="classsc2_1_1_unit.html" title="A unit. Could be a structure, a worker or a military unit. ">Unit</a> actions batched from the <a class="el" href="classsc2_1_1_action_interface.html">ActionInterface</a> are dispatched. <dl class="section return"><dt>Returns</dt><dd>False if the game has ended, true otherwise. </dd></dl>
 </li>
 </ol>
 </li>

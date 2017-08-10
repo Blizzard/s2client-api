@@ -20,7 +20,10 @@ Inheritance diagram for sc2\+:\+:Replay\+Observer\+:\begin{figure}[H]
 \item 
 \hyperlink{classsc2_1_1_replay_control_interface}{Replay\+Control\+Interface} $\ast$ \hyperlink{classsc2_1_1_replay_observer_a99198b2295dc998662b929f96ad17d65}{Replay\+Control} ()
 \item 
-virtual bool \hyperlink{classsc2_1_1_replay_observer_ac45036d3304612bc02b9794cc9eba187}{Ignore\+Replay} (const \hyperlink{structsc2_1_1_replay_info}{Replay\+Info} \&replay\+\_\+info) const
+virtual bool \hyperlink{classsc2_1_1_replay_observer_a35461e606619ea1f2c968e37ab164d5d}{Ignore\+Replay} (const \hyperlink{structsc2_1_1_replay_info}{Replay\+Info} \&replay\+\_\+info, uint32\+\_\+t \&player\+\_\+id)
+\item 
+\mbox{\Hypertarget{classsc2_1_1_replay_observer_ac0f3061d817e87afd8fd43753ffc3612}\label{classsc2_1_1_replay_observer_ac0f3061d817e87afd8fd43753ffc3612}} 
+void {\bfseries Set\+Control} (\hyperlink{classsc2_1_1_control_interface}{Control\+Interface} $\ast$control)
 \end{DoxyCompactItemize}
 
 
@@ -28,11 +31,11 @@ virtual bool \hyperlink{classsc2_1_1_replay_observer_ac45036d3304612bc02b9794cc9
 A client for running a replay. 
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classsc2_1_1_replay_observer_ac45036d3304612bc02b9794cc9eba187}\label{classsc2_1_1_replay_observer_ac45036d3304612bc02b9794cc9eba187}} 
+\mbox{\Hypertarget{classsc2_1_1_replay_observer_a35461e606619ea1f2c968e37ab164d5d}\label{classsc2_1_1_replay_observer_a35461e606619ea1f2c968e37ab164d5d}} 
 \index{sc2\+::\+Replay\+Observer@{sc2\+::\+Replay\+Observer}!Ignore\+Replay@{Ignore\+Replay}}
 \index{Ignore\+Replay@{Ignore\+Replay}!sc2\+::\+Replay\+Observer@{sc2\+::\+Replay\+Observer}}
 \subsubsection{\texorpdfstring{Ignore\+Replay()}{IgnoreReplay()}}
-{\footnotesize\ttfamily virtual bool sc2\+::\+Replay\+Observer\+::\+Ignore\+Replay (\begin{DoxyParamCaption}\item[{const \hyperlink{structsc2_1_1_replay_info}{Replay\+Info} \&}]{replay\+\_\+info }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual bool sc2\+::\+Replay\+Observer\+::\+Ignore\+Replay (\begin{DoxyParamCaption}\item[{const \hyperlink{structsc2_1_1_replay_info}{Replay\+Info} \&}]{replay\+\_\+info,  }\item[{uint32\+\_\+t \&}]{player\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 Determines if the replay should be filtered out. 
 \begin{DoxyParams}{Parameters}

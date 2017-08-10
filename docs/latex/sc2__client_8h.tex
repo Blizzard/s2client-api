@@ -38,11 +38,9 @@ enum \hyperlink{sc2__client_8h_ac7d3e3694a208204e099f04c1e5eded0}{sc2\+::\+Clien
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-bool \hyperlink{sc2__client_8h_a0b21c68f7991ccd7af43a811039eef30}{sc2\+::\+Is\+Unit\+Idle} (const Unit \&unit, const Observation\+Interface $\ast$observation=nullptr)
+bool \hyperlink{sc2__client_8h_a4e833a715cb3d0fe0efbf46a2847b416}{sc2\+::\+Is\+Carrying\+Minerals} (const Unit \&unit)
 \item 
-bool \hyperlink{sc2__client_8h_a9b9e8c7b2858228ee6460d64fa7c32cc}{sc2\+::\+Is\+Carrying\+Minerals} (const Unit \&unit, const Observation\+Interface $\ast$observation=nullptr)
-\item 
-bool \hyperlink{sc2__client_8h_a05212d05ff92bb69a2445e7e946aa25f}{sc2\+::\+Is\+Carrying\+Vespene} (const Unit \&unit, const Observation\+Interface $\ast$observation=nullptr)
+bool \hyperlink{sc2__client_8h_aacc79dc8962c0aee3d14d330e2e74330}{sc2\+::\+Is\+Carrying\+Vespene} (const Unit \&unit)
 \end{DoxyCompactItemize}
 
 
@@ -61,11 +59,11 @@ The Client and Client\+Events provides most of the functionality a user would be
 Errors that the api can encounter, if the On\+Error event in Client\+Events is overwritten it will contain a list of errors encountered. 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{sc2__client_8h_file_a9b9e8c7b2858228ee6460d64fa7c32cc}\label{sc2__client_8h_file_a9b9e8c7b2858228ee6460d64fa7c32cc}} 
+\mbox{\Hypertarget{sc2__client_8h_file_a4e833a715cb3d0fe0efbf46a2847b416}\label{sc2__client_8h_file_a4e833a715cb3d0fe0efbf46a2847b416}} 
 \index{sc2\+\_\+client.\+h@{sc2\+\_\+client.\+h}!Is\+Carrying\+Minerals@{Is\+Carrying\+Minerals}}
 \index{Is\+Carrying\+Minerals@{Is\+Carrying\+Minerals}!sc2\+\_\+client.\+h@{sc2\+\_\+client.\+h}}
 \subsubsection{\texorpdfstring{Is\+Carrying\+Minerals()}{IsCarryingMinerals()}}
-{\footnotesize\ttfamily bool sc2\+::\+Is\+Carrying\+Minerals (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit,  }\item[{const \hyperlink{classsc2_1_1_observation_interface}{Observation\+Interface} $\ast$}]{observation = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool sc2\+::\+Is\+Carrying\+Minerals (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})}
 
 Helper function used to discover whether a unit is carrying minerals or not. You could use this function in Get\+Units to get all units carrying minerals\+: Units units = Get\+Units(\+Alliance\+::\+Self, Is\+Carrying\+Minerals); 
 \begin{DoxyParams}{Parameters}
@@ -77,11 +75,11 @@ Helper function used to discover whether a unit is carrying minerals or not. You
 \begin{DoxyReturn}{Returns}
 Returns true if the unit is carrying minerals, false otherwise. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{sc2__client_8h_file_a05212d05ff92bb69a2445e7e946aa25f}\label{sc2__client_8h_file_a05212d05ff92bb69a2445e7e946aa25f}} 
+\mbox{\Hypertarget{sc2__client_8h_file_aacc79dc8962c0aee3d14d330e2e74330}\label{sc2__client_8h_file_aacc79dc8962c0aee3d14d330e2e74330}} 
 \index{sc2\+\_\+client.\+h@{sc2\+\_\+client.\+h}!Is\+Carrying\+Vespene@{Is\+Carrying\+Vespene}}
 \index{Is\+Carrying\+Vespene@{Is\+Carrying\+Vespene}!sc2\+\_\+client.\+h@{sc2\+\_\+client.\+h}}
 \subsubsection{\texorpdfstring{Is\+Carrying\+Vespene()}{IsCarryingVespene()}}
-{\footnotesize\ttfamily bool sc2\+::\+Is\+Carrying\+Vespene (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit,  }\item[{const \hyperlink{classsc2_1_1_observation_interface}{Observation\+Interface} $\ast$}]{observation = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool sc2\+::\+Is\+Carrying\+Vespene (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})}
 
 Helper function used to discover whether a unit is carrying vespene or not. You could use this function in Get\+Units to get all units carrying vespene\+: Units units = Get\+Units(\+Alliance\+::\+Self, Is\+Carrying\+Vespene); 
 \begin{DoxyParams}{Parameters}
@@ -92,20 +90,4 @@ Helper function used to discover whether a unit is carrying vespene or not. You 
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Returns true if the unit is carrying vespene, false otherwise. 
-\end{DoxyReturn}
-\mbox{\Hypertarget{sc2__client_8h_file_a0b21c68f7991ccd7af43a811039eef30}\label{sc2__client_8h_file_a0b21c68f7991ccd7af43a811039eef30}} 
-\index{sc2\+\_\+client.\+h@{sc2\+\_\+client.\+h}!Is\+Unit\+Idle@{Is\+Unit\+Idle}}
-\index{Is\+Unit\+Idle@{Is\+Unit\+Idle}!sc2\+\_\+client.\+h@{sc2\+\_\+client.\+h}}
-\subsubsection{\texorpdfstring{Is\+Unit\+Idle()}{IsUnitIdle()}}
-{\footnotesize\ttfamily bool sc2\+::\+Is\+Unit\+Idle (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit,  }\item[{const \hyperlink{classsc2_1_1_observation_interface}{Observation\+Interface} $\ast$}]{observation = {\ttfamily nullptr} }\end{DoxyParamCaption})}
-
-Helper function used to discover whether a unit is idle or not. You could use this function in Get\+Units to get all idle units\+: Units units = Get\+Units(\+Alliance\+::\+Self, Is\+Unit\+Idle); 
-\begin{DoxyParams}{Parameters}
-{\em unit} & The unit. \\
-\hline
-{\em observation} & A pointer to the Observation\+Interface. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Returns true if the unit is idle, false otherwise. 
 \end{DoxyReturn}
