@@ -123,7 +123,7 @@ public:
     //!     1. The Observation is directly requested. The process will block while waiting for it.
     //!     2. The Observation is parsed and client events are dispatched.
     //!     3. Unit actions batched from the ActionInterface are dispatched.
-    //! \return True if the game has ended, false otherwise.
+    //! \return False if the game has ended, true otherwise.
     bool Update();
 
     //! Requests for the currently running game to end.
