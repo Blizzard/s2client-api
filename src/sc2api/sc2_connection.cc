@@ -131,7 +131,7 @@ bool Connection::Connect(const std::string& address, int port, bool verbose) {
 }
 
 Connection::~Connection() {
-    mg_close_connection(connection_);
+    Disconnect();
 }
 
 void Connection::Send(const SC2APIProtocol::Request* request) {
@@ -179,8 +179,7 @@ bool Connection::Receive(
 
     lock.unlock();
     response = nullptr;
-    mg_close_connection(connection_);
-    connection_ = nullptr;
+    Disconnect();
     queue_.clear();
 
     // Execute the timeout callback if it exists.
@@ -218,6 +217,11 @@ void Connection::SetConnectionClosedCallback(std::function<void()> callback) {
 
 bool Connection::HasConnection() const {
     return connection_ != nullptr;
+}
+
+void Connection::Disconnect() {
+    mg_close_connection(connection_);
+    connection_ = nullptr;
 }
 
 bool Connection::PollResponse() {

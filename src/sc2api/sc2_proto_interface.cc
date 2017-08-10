@@ -175,11 +175,14 @@ bool ProtoInterface::PingGame() {
 }
 
 void ProtoInterface::Quit() {
+    // Tell the game to close
     GameRequestPtr request = MakeRequest();
     request->mutable_quit();
-    if (!SendRequest(request)) {
-        return;
-    }
+    SendRequest(request);
+
+    // Immediately tear down connection. The callbacks may try to call into objects who are
+    // in the process of being destroyed.
+    connection_.Disconnect();
 }
 
 void ProtoInterface::SetErrorCallback(std::function<void(const std::string& error_str)> error_callback) {

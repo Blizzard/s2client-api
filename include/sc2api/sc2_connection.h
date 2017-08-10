@@ -63,6 +63,9 @@ public:
     //!< \return true if the connection is valid, false otherwise.
     bool HasConnection() const;
 
+    //! Disconnect from the game if currently connected.
+    void Disconnect();
+
     //! Polls the queue in a thread safe way to check if a message has been received.
     //!< \return true if there is a response in the queue, false otherwise.
     bool PollResponse();
