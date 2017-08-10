@@ -209,6 +209,21 @@ struct BuffData {
     std::string Log() const;
 };
 
+//! Power source information for Protoss.
+struct PowerSource {
+    PowerSource(const Point2D in_position, float in_radius, Tag in_tag) :
+        position(in_position),
+        radius(in_radius),
+        tag(in_tag) {};
+
+    //! Power source position.
+    Point2D position;
+    //! Power source radius.
+    float radius;
+    //! Unit tag of the power source.
+    Tag tag;
+};
+
 typedef std::vector<BuffData> Buffs;
 
 AbilityID GetGeneralizedAbilityID(uint32_t ability_id, const ObservationInterface& observation);
