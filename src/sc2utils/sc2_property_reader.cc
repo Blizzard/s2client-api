@@ -43,7 +43,7 @@ bool PropertyReader::LoadFile(const std::string& file_name) {
         unsigned int index = 0;
         size_t equal_index = line.find_first_of('=');
         // Extract key
-        for (index; index < equal_index; ++index) {
+        for (; index < equal_index; ++index) {
             // Spaces are allowed in key except in the last character
             if (index == equal_index - 1 && line[index] == ' ')
                 continue;

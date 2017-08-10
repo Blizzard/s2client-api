@@ -25,8 +25,7 @@ public:
 
     DoSomethingBot() :
         count_restarts_(0),
-        success_(true),
-        Agent() {
+        success_(true) {
     }
 
     bool IsFinished() const {

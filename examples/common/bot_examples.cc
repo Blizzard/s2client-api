@@ -132,7 +132,6 @@ bool FindEnemyStructure(const ObservationInterface* observation, Unit& enemy_uni
 }
 
 bool GetRandomUnit(Unit& unit_out, const ObservationInterface* observation, UnitTypeID unit_type) {
-    int count = 0;
     Units my_units = observation->GetUnits(Unit::Alliance::Self);
     std::random_shuffle(my_units.begin(), my_units.end()); // Doesn't work, or doesn't work well.
     for (const Unit& unit : my_units) {

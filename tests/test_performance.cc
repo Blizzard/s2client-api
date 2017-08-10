@@ -98,7 +98,6 @@ void PingBot::OnTestStart() {
 
     static const int MARINE_COUNT = 50;
     static const int NEXUS_COUNT = 1;
-    static bool spawn = false;
 
     if (!stats.reset_) {
         debug->DebugShowMap();

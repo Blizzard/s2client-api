@@ -46,6 +46,8 @@ typedef std::function<bool(const Unit& unit)> Filter;
 //! The ObservationInterface reflects the current state of the game. Guaranteed to be valid when OnGameStart or OnStep is called.
 class ObservationInterface {
 public:
+    virtual ~ObservationInterface() = default;
+
     //! Gets a unique ID that represents the player.
     //!< \return The player ID.
     virtual uint32_t GetPlayerID() const = 0;
@@ -228,6 +230,8 @@ public:
 //!  - Always try and batch things up. These queries are effectively synchronous and will block until returned.
 class QueryInterface {
 public:
+    virtual ~QueryInterface() = default;
+
     //! Returns a list of abilities represented as a uint32_t see the ABILITY_ID enum for their corresponding, named, representations.
     //!< \param tag Tag of unit.
     //!< \param ignore_resource_requirements Ignores food, mineral and gas costs, as well as cooldowns.
@@ -291,6 +295,8 @@ public:
 //! Guaranteed to be valid when the OnStep event is called.
 class ActionInterface {
 public:
+    virtual ~ActionInterface() = default;
+
     /*!\fn virtual void UnitCommand(Tag unit_tag, uint32_t ability)
      * Batches a UnitCommand that will be dispatched when SendActions() is called. UnitCommand has many overloaded functions, you can call it with
      * most combinations of Unit types (the Unit object or tag), ability types (the enum or uint32_t) and targets (a 2D position or tag).
@@ -350,6 +356,8 @@ public:
 //! Guaranteed to be valid when the OnStep event is called.
 class ActionFeatureLayerInterface {
 public:
+    virtual ~ActionFeatureLayerInterface() = default;
+
     //! Issues a command to whatever is selected. Self targeting.
     //!< \param ability The ability id of the command.
     virtual void UnitCommand(AbilityID ability) = 0;
@@ -386,6 +394,8 @@ public:
 //! continue to draw without resending until another SendDebug is called.
 class DebugInterface {
 public:
+    virtual ~DebugInterface() = default;
+
     // Debug drawing primitives.
 
     //! Outputs text at the top, left of the screen.

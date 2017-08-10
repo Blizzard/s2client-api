@@ -215,8 +215,7 @@ const ReplayInfo& ReplayControlImp::GetReplayInfo() const {
 //-------------------------------------------------------------------------------------------------
 
 ReplayObserver::ReplayObserver() :
-    replay_control_imp_(nullptr),
-    Client() {
+    replay_control_imp_(nullptr) {
     replay_control_imp_ = new ReplayControlImp(Control(), this);
 }
 

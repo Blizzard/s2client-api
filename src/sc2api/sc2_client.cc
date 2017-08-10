@@ -127,9 +127,9 @@ ObservationImp::ObservationImp(ProtoInterface& proto, ObservationPtr& observatio
     proto_(proto),
     observation_(observation),
     response_(response),
+    control_(control),
     current_game_loop_(std::numeric_limits<uint32_t>::max()),
-    previous_game_loop(std::numeric_limits<uint32_t>::max()),
-    control_(control) {
+    previous_game_loop(std::numeric_limits<uint32_t>::max()) {
     ClearFlags();
 }
 
@@ -412,7 +412,7 @@ const GameInfo& ObservationImp::GetGameInfo() const {
     }
 
     GameRequestPtr request = proto_.MakeRequest();
-    SC2APIProtocol::RequestGameInfo* request_game_info = request->mutable_game_info();
+    request->mutable_game_info();
 
     if (!proto_.SendRequest(request)) {
         return game_info_;
@@ -1404,24 +1404,24 @@ public:
     void IssueAlertEvents();
     void IssueUpgradeEvents();
 
-    void DumpProtoUsage();
+    void DumpProtoUsage() override;
 
     void ResolveMap (const std::string& map_name, SC2APIProtocol::RequestCreateGame* request);
 
     const std::vector<ClientError>& GetClientErrors() const final { return client_errors_; };
     const std::vector<std::string>& GetProtocolErrors() const final { return protocol_errors_; };
 
-    void ClearClientErrors() { client_errors_.clear(); };
-    void ClearProtocolErrors() { protocol_errors_.clear(); };
+    void ClearClientErrors() override { client_errors_.clear(); };
+    void ClearProtocolErrors() override { protocol_errors_.clear(); };
 };
 
 ControlImp::ControlImp(Client& client) :
+    client_(client),
+    app_state_(AppState::normal),
     is_multiplayer_(false),
     observation_imp_(nullptr),
     query_imp_(nullptr),
-    debug_imp_(nullptr),
-    client_(client),
-    app_state_(AppState::normal) {
+    debug_imp_(nullptr) {
     proto_.SetControl(this);
     observation_imp_ = new ObservationImp(proto_, observation_, response_, *this);
     query_imp_ = new QueryImp(proto_, *this, *observation_imp_);
@@ -1500,6 +1500,7 @@ bool ControlImp::RemoteSaveMap(const void* data, int data_size, std::string remo
 
     bool success = true;
     if (response_save_game.has_error()) {
+        success = false;
         std::string errorCode = "Unknown";
         switch (response_save_game.error()) {
             case SC2APIProtocol::ResponseSaveMap::InvalidMapData: {
@@ -1512,7 +1513,7 @@ bool ControlImp::RemoteSaveMap(const void* data, int data_size, std::string remo
         }
     }
 
-    return true;
+    return success;
 }
 
 void ControlImp::ResolveMap (const std::string& map_name, SC2APIProtocol::RequestCreateGame* request) {
@@ -1742,7 +1743,7 @@ bool ControlImp::WaitStep() {
 
 bool ControlImp::SaveReplay(const std::string& path) {
     GameRequestPtr request = proto_.MakeRequest();
-    SC2APIProtocol::RequestSaveReplay* step = request->mutable_save_replay();
+    request->mutable_save_replay();
     if (!proto_.SendRequest(request)) {
         return false;
     }

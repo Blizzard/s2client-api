@@ -19,8 +19,7 @@ public:
 
     TestAppBasic(DebugInterface::AppTest app_test, int delay_ms = 0) :
         app_test_(app_test),
-        delay_ms_(delay_ms),
-        TestSequence() {
+        delay_ms_(delay_ms) {
     }
 
     void OnTestStart() override {
@@ -39,8 +38,7 @@ public:
     bool reported_hang_;
 
     AppTestBotHang() :
-        reported_hang_(false),
-        UnitTestBot() {
+        reported_hang_(false) {
         Add(TestAppBasic(DebugInterface::hang));
     }
 
@@ -65,8 +63,7 @@ public:
     bool reported_crash_;
 
     AppTestBotCrash() :
-        reported_crash_(false),
-        UnitTestBot() {
+        reported_crash_(false) {
         Add(TestAppBasic(DebugInterface::crash));
     }
 

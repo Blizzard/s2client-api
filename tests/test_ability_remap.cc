@@ -18,8 +18,7 @@ public:
     Point2DI command_center_pt_;
 
     TestRemap() :
-        command_center_pt_(24, 24),
-        TestSequence() {
+        command_center_pt_(24, 24) {
     }
 
     Unit GetCommandCenter() {
@@ -38,7 +37,6 @@ public:
 class TestRemapStart : public TestRemap {
 public:
     void OnTestStart() override {
-        const ObservationInterface* obs = agent_->Observation();
         const GameInfo& game_info = agent_->Observation()->GetGameInfo();
 
         Point2D min = game_info.playable_min;

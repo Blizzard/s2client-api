@@ -60,14 +60,13 @@ ProtoInterface::ProtoInterface() :
     port_(5000),
     default_timeout_ms_(kDefaultProtoInterfaceTimeout),
     latest_status_(SC2APIProtocol::Status::unknown),
-    response_pending_(SC2APIProtocol::Response::RESPONSE_NOT_SET),
-    error_callback_() {
+    response_pending_(SC2APIProtocol::Response::RESPONSE_NOT_SET) {
 }
 
 bool ProtoInterface::ConnectToGame(const std::string& address, int port, int timeout_ms) {
     latest_status_ = SC2APIProtocol::Status::unknown;
     address_ = address;
-    port = port;
+    port_ = port;
     default_timeout_ms_ = timeout_ms;
     if (!connection_.Connect(address, port, false)) {
         return false;

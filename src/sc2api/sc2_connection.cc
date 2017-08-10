@@ -97,7 +97,6 @@ Connection::Connection() :
     queue_(),
     mutex_(),
     condition_(),
-    timeout_callback_(),
     has_response_(false) {}
 
 
