@@ -80,7 +80,8 @@ void ActionImp::SendActions() {
 }
 
 void ActionImp::ToggleAutocast(Tag unit_tag, AbilityID ability) {
-    ToggleAutocast({ unit_tag }, ability);
+    std::vector<Tag> tags = { unit_tag };
+    ToggleAutocast(tags, ability);
 }
 
 void ActionImp::ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID ability) {
@@ -282,9 +283,9 @@ public:
 };
 
 AgentControlImp::AgentControlImp(Agent* agent, ControlInterface* control_interface) :
-    agent_(agent),
+    control_interface_(control_interface),
     actions_(nullptr),
-    control_interface_(control_interface) {
+    agent_(agent) {
     actions_ = new ActionImp(control_interface_->Proto(), *control_interface);
     actions_feature_layer_ = new ActionFeatureLayerImp(control_interface_->Proto(), *control_interface);
 }
@@ -296,7 +297,7 @@ AgentControlImp::~AgentControlImp() {
 
 bool AgentControlImp::Restart() {
     GameRequestPtr request = control_interface_->Proto().MakeRequest();
-    SC2APIProtocol::RequestRestartGame* restart_game = request->mutable_restart_game();
+    request->mutable_restart_game();
     if (!control_interface_->Proto().SendRequest(request)) {
         return false;
     }

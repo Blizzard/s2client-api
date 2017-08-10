@@ -93,7 +93,7 @@ namespace sc2 {
             wait_game_loops_ = 150;
         }
 
-        void OnTestFinish() {
+        void OnTestFinish() override {
             VerifyUnitExistsAndComplete(UNIT_TYPEID::TERRAN_BARRACKS);
             VerifyUnitIdleAfterOrder(test_unit_type_);
             VerifyUnitIdleAfterOrder(UNIT_TYPEID::TERRAN_BARRACKS);
@@ -1305,7 +1305,6 @@ namespace sc2 {
 
         void OnStep() override {
             const ObservationInterface* obs = agent_->Observation();
-            const Units& units = obs->GetUnits();
 
             test_units_ = obs->GetUnits(Unit::Self, [&](const Unit& unit) {
                 return unit.unit_type == test_unit_type_;
@@ -1342,7 +1341,7 @@ namespace sc2 {
             }
         }
 
-        void VerifyUnitIdleAfterOrder(UNIT_TYPEID unit_type) {}
+        void VerifyUnitIdleAfterOrder(UNIT_TYPEID unit_type) override {}
     };
 
 

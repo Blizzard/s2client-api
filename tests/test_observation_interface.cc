@@ -96,7 +96,8 @@ namespace sc2 {
             ReportError("Supply Count is Incorrect");
         }
         if (obs->GetFoodCap() != 16) {
-            ReportError("Supply cap is Incorrect the supply is reporting 16 instead of " + obs->GetFoodCap());
+            std::string errorStr = "Supply cap is Incorrect the supply is reporting 16 instead of " + std::to_string(obs->GetFoodCap());
+            ReportError(errorStr.c_str());
         }
         if (obs->GetWarpGateCount() != 1) {
             ReportError("Warp gate Count is Incorrect");
@@ -125,7 +126,6 @@ namespace sc2 {
     class TestGetResources : public TestSequence {
         void OnTestStart() {
             wait_game_loops_ = 10;
-            const ObservationInterface* obs = agent_->Observation();
             agent_->Debug()->DebugGiveAllResources();
             agent_->Debug()->SendDebug();
         }
@@ -246,15 +246,15 @@ namespace sc2 {
                 ReportError(errorStr.c_str());
             }
             if (stalker_data.cargo_size != 2) {
-                std::string errorStr = "UnitTypeData is reporting an incorrect cargo value. Expected : 0 Result : " + stalker_data.cargo_size;
+                std::string errorStr = "UnitTypeData is reporting an incorrect cargo value. Expected : 0 Result : " + std::to_string(stalker_data.cargo_size);
                 ReportError(errorStr.c_str());
             }
             if (stalker_data.mineral_cost != 125) {
-                std::string errorStr = "UnitTypeData is reporting an incorrect mineral cost value. Expected : 125 Result : " + stalker_data.mineral_cost;
+                std::string errorStr = "UnitTypeData is reporting an incorrect mineral cost value. Expected : 125 Result : " + std::to_string(stalker_data.mineral_cost);
                 ReportError(errorStr.c_str());
             }
             if (stalker_data.vespene_cost != 50) {
-                std::string errorStr = "UnitTypeData is reporting an incorrect vespene value. Expected : 50 Result : " + stalker_data.vespene_cost;
+                std::string errorStr = "UnitTypeData is reporting an incorrect vespene value. Expected : 50 Result : " + std::to_string(stalker_data.vespene_cost);
                 ReportError(errorStr.c_str());
             }
             if (stalker_data.name != "Stalker") {
@@ -262,7 +262,7 @@ namespace sc2 {
                 ReportError(errorStr.c_str());
             }
             if (stalker_data.unit_type_id != UNIT_TYPEID::PROTOSS_STALKER) {
-                std::string errorStr = "UnitTypeData is reporting an incorrect unittypeID Expected : 74 Result : " + stalker_data.unit_type_id;
+                std::string errorStr = "UnitTypeData is reporting an incorrect unittypeID Expected : 74 Result : " + std::to_string(stalker_data.unit_type_id);
                 ReportError(errorStr.c_str());
             }
             if (stalker_data.weapons.empty()) {

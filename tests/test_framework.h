@@ -36,9 +36,8 @@ class UnitTestBot : public Agent {
 public:
     UnitTestBot() :
         success_(true),
-        game_loop_done_(2),
         current_sequence_(-1),
-        Agent() {
+        game_loop_done_(2) {
     }
 
     bool IsFinished() const {

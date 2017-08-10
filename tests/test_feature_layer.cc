@@ -18,8 +18,6 @@ class TestBasic : public TestSequence {
 public:
 
     void OnTestStart() override {
-        const ObservationInterface* obs = agent_->Observation();
-
         const GameInfo& game_info = agent_->Observation()->GetGameInfo();
         Point2D spawn_pt = FindRandomLocation(game_info);
         agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARINE, spawn_pt, agent_->Observation()->GetPlayerID(), 1);
@@ -69,8 +67,6 @@ public:
     Point2D spawn_pt_;
 
     void OnTestStart() override {
-        const ObservationInterface* obs = agent_->Observation();
-
         const GameInfo& mapInfo = agent_->Observation()->GetGameInfo();
         spawn_pt_= FindRandomLocation(mapInfo);
         agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARINE, spawn_pt_, agent_->Observation()->GetPlayerID(), 1);
@@ -118,9 +114,7 @@ public:
     Point2D spawn_pt_;
 
     void OnTestStart() override {
-        const ObservationInterface* obs = agent_->Observation();
-
-        const GameInfo& game_info = agent_->Observation()->GetGameInfo();
+       const GameInfo& game_info = agent_->Observation()->GetGameInfo();
         float camera_size = game_info.options.feature_layer.camera_width;
         float max_spawn_offset = (camera_size / 2.0f) - 1.0f;
 
@@ -306,11 +300,8 @@ public:
             if (obs->GetFeatureLayerActions().unit_commands.empty()) {
                 ReportError("Unit Command is not being reported.");
             }
-            else {
-                Point2DI target = obs->GetFeatureLayerActions().unit_commands.front().target;
-                if (obs->GetFeatureLayerActions().unit_commands.front().ability_id != ABILITY_ID::BURROWDOWN) {
-                    ReportError("Unit Command is reporting an incorrect Ability ID");
-                }
+            else if (obs->GetFeatureLayerActions().unit_commands.front().ability_id != ABILITY_ID::BURROWDOWN) {
+                ReportError("Unit Command is reporting an incorrect Ability ID");
             }
         }
     }

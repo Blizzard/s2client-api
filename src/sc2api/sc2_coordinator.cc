@@ -201,9 +201,9 @@ CoordinatorImp::CoordinatorImp() :
     agents_(),
     replay_observers_(),
     game_ended_(),
+    starcraft_started_(false),
     game_settings_(),
-    process_settings_(false, 1, "", "127.0.0.1", kDefaultProtoInterfaceTimeout, 8168, false),
-    starcraft_started_(false) {
+    process_settings_(false, 1, "", "127.0.0.1", kDefaultProtoInterfaceTimeout, 8168, false) {
 }
 
 CoordinatorImp::~CoordinatorImp() {

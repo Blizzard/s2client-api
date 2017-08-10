@@ -35,13 +35,11 @@ public:
     SnapshotTestBot* bot_;
 
     TestSnapshotBase() :
-        bot_(nullptr),
-        TestSequence() {
+        bot_(nullptr) {
     }
 
     TestSnapshotBase(SnapshotTestBot* bot) :
-        bot_(bot),
-        TestSequence() {
+        bot_(bot) {
     }
 
     bool FindSCV(Unit& unit) {
@@ -235,8 +233,7 @@ public:
 //
 
 SnapshotTestBot::SnapshotTestBot() :
-    mineral_tag_(NullTag),
-    UnitTestBot() {
+    mineral_tag_(NullTag) {
     Add(TestSnapshot1(this));    // Spawn TERRAN_SCV, mineral field and command center.
     Add(TestSnapshot2(this));    // Get the mineral field tag and toggle off vision.
     Add(TestSnapshot3(this));    // Destroy the mineral field and select the TERRAN_SCV.

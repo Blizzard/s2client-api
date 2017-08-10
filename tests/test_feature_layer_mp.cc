@@ -111,7 +111,6 @@ public:
         }
         else if (loop == 10) {
             Point2D target = obs->GetStartLocation() + Point2D(3.0f, 3.0f);
-            Point2DI target_minimap = ConvertWorldToMinimap(game_info, target);
             debug->DebugCreateUnit(UNIT_TYPEID::PROTOSS_PROBE, target, agent_->Observation()->GetPlayerID(), 1);
             debug->DebugIgnoreMineral();
             debug->SendDebug();

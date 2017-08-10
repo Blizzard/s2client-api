@@ -10,8 +10,7 @@ public:
     uint32_t restarts_;
 
     FooBot() :
-        restarts_(0),
-        Agent() {
+        restarts_(0) {
     }
 
     virtual void OnGameStart() final {
