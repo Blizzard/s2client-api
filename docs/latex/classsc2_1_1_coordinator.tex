@@ -40,13 +40,16 @@ void \hyperlink{classsc2_1_1_coordinator_aa59950d8ccb9d010288df3e1e6045eb9}{Add\
 \mbox{\Hypertarget{classsc2_1_1_coordinator_aed4bf1a5cf1519fc0488bc5d4641a582}\label{classsc2_1_1_coordinator_aed4bf1a5cf1519fc0488bc5d4641a582}} 
 void \hyperlink{classsc2_1_1_coordinator_aed4bf1a5cf1519fc0488bc5d4641a582}{Set\+Participants} (const std\+::vector$<$ \hyperlink{structsc2_1_1_player_setup}{Player\+Setup} $>$ \&participants)
 \begin{DoxyCompactList}\small\item\em Sets up the bots and whether they are controlled by in-\/built AI, human or a custom bot. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_coordinator_ac478d6f4c1b9e6c98514b7212c7997fc}\label{classsc2_1_1_coordinator_ac478d6f4c1b9e6c98514b7212c7997fc}} 
+void {\bfseries Set\+Replay\+Recovery} (bool value)
+\item 
 \mbox{\Hypertarget{classsc2_1_1_coordinator_a16ebfba44b1abbc303770e4958922d05}\label{classsc2_1_1_coordinator_a16ebfba44b1abbc303770e4958922d05}} 
 void \hyperlink{classsc2_1_1_coordinator_a16ebfba44b1abbc303770e4958922d05}{Add\+Replay\+Observer} (\hyperlink{classsc2_1_1_replay_observer}{Replay\+Observer} $\ast$replay\+\_\+observer)
 \begin{DoxyCompactList}\small\item\em Add an instance of \hyperlink{classsc2_1_1_replay_observer}{Replay\+Observer}, each \hyperlink{classsc2_1_1_replay_observer}{Replay\+Observer} will run a separate Star\+Craft II client. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classsc2_1_1_coordinator_ac06566447119abac229fd671d39ff2ee}\label{classsc2_1_1_coordinator_ac06566447119abac229fd671d39ff2ee}} 
 void \hyperlink{classsc2_1_1_coordinator_ac06566447119abac229fd671d39ff2ee}{Launch\+Starcraft} ()
 \begin{DoxyCompactList}\small\item\em Uses settings gathered from Load\+Settings, specifically the path to the executable, to run Star\+Craft II. \end{DoxyCompactList}\item 
-void \hyperlink{classsc2_1_1_coordinator_a63fe152548d28b619a7bc577544fcdc8}{Start\+Game} (const std\+::string \&map\+\_\+path=std\+::string())
+bool \hyperlink{classsc2_1_1_coordinator_a32ea6e639a39ec1fc813dffa2993d5b1}{Start\+Game} (const std\+::string \&map\+\_\+path=std\+::string())
 \item 
 bool \hyperlink{classsc2_1_1_coordinator_af70ba5246f9d447eb8a69cd76d364eee}{Update} ()
 \item 
@@ -248,13 +251,21 @@ Sets the game window dimensions.
 {\em height} & Height of game window. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_coordinator_a63fe152548d28b619a7bc577544fcdc8}\label{classsc2_1_1_coordinator_a63fe152548d28b619a7bc577544fcdc8}} 
+\mbox{\Hypertarget{classsc2_1_1_coordinator_a32ea6e639a39ec1fc813dffa2993d5b1}\label{classsc2_1_1_coordinator_a32ea6e639a39ec1fc813dffa2993d5b1}} 
 \index{sc2\+::\+Coordinator@{sc2\+::\+Coordinator}!Start\+Game@{Start\+Game}}
 \index{Start\+Game@{Start\+Game}!sc2\+::\+Coordinator@{sc2\+::\+Coordinator}}
 \subsubsection{\texorpdfstring{Start\+Game()}{StartGame()}}
-{\footnotesize\ttfamily void sc2\+::\+Coordinator\+::\+Start\+Game (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{map\+\_\+path = {\ttfamily std\+:\+:string()} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool sc2\+::\+Coordinator\+::\+Start\+Game (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{map\+\_\+path = {\ttfamily std\+:\+:string()} }\end{DoxyParamCaption})}
 
-Starts a game on a certain map. There are multiple ways to specify a map\+: Absolute path\+: Any .S\+C2\+Map file. Relative path\+: Any .S\+C2\+Map file relative to either the library or installation maps folder. Map name\+: Any Battle\+Net published map that has been locally cached. \mbox{\Hypertarget{classsc2_1_1_coordinator_af70ba5246f9d447eb8a69cd76d364eee}\label{classsc2_1_1_coordinator_af70ba5246f9d447eb8a69cd76d364eee}} 
+Starts a game on a certain map. There are multiple ways to specify a map\+: Absolute path\+: Any .S\+C2\+Map file. Relative path\+: Any .S\+C2\+Map file relative to either the library or installation maps folder. Map name\+: Any Battle\+Net published map that has been locally cached. 
+\begin{DoxyParams}{Parameters}
+{\em map\+\_\+path} & Path to the map to run. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the game started, false if there was errors or the game didn\textquotesingle{}t start, override On\+Error callback to see the exact errors. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classsc2_1_1_coordinator_af70ba5246f9d447eb8a69cd76d364eee}\label{classsc2_1_1_coordinator_af70ba5246f9d447eb8a69cd76d364eee}} 
 \index{sc2\+::\+Coordinator@{sc2\+::\+Coordinator}!Update@{Update}}
 \index{Update@{Update}!sc2\+::\+Coordinator@{sc2\+::\+Coordinator}}
 \subsubsection{\texorpdfstring{Update()}{Update()}}
@@ -276,7 +287,7 @@ Helper function used to actually run a bot. This function will behave differentl
 \item The Observation is directly requested. The process will block while waiting for it.
 \item The Observation is parsed and client events are dispatched.
 \item \hyperlink{classsc2_1_1_unit}{Unit} actions batched from the \hyperlink{classsc2_1_1_action_interface}{Action\+Interface} are dispatched. \begin{DoxyReturn}{Returns}
-True if the game has ended, false otherwise. 
+False if the game has ended, true otherwise. 
 \end{DoxyReturn}
 
 \end{DoxyEnumerate}

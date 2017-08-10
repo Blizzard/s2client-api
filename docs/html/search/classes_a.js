@@ -3,6 +3,7 @@ var searchData=
   ['passengerunit',['PassengerUnit',['../structsc2_1_1_passenger_unit.html',1,'sc2']]],
   ['pathingquery',['PathingQuery',['../structsc2_1_1_query_interface_1_1_pathing_query.html',1,'sc2::QueryInterface']]],
   ['placementquery',['PlacementQuery',['../structsc2_1_1_query_interface_1_1_placement_query.html',1,'sc2::QueryInterface']]],
+  ['playerinfo',['PlayerInfo',['../structsc2_1_1_player_info.html',1,'sc2']]],
   ['playersetup',['PlayerSetup',['../structsc2_1_1_player_setup.html',1,'sc2']]],
   ['point2d',['Point2D',['../structsc2_1_1_point2_d.html',1,'sc2']]],
   ['point2di',['Point2DI',['../structsc2_1_1_point2_d_i.html',1,'sc2']]],

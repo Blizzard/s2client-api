@@ -14,9 +14,9 @@ struct \hyperlink{structsc2_1_1_query_interface_1_1_placement_query}{Placement\+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} \hyperlink{classsc2_1_1_query_interface_a5e06452df74dc9cf0c8cafe8fe42e85b}{Get\+Abilities\+For\+Unit} (Tag tag)=0
+virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} \hyperlink{classsc2_1_1_query_interface_a6954d65b93a07bf14e2a8818f9df9b8c}{Get\+Abilities\+For\+Unit} (Tag tag, bool ignore\+\_\+resource\+\_\+requirements=false)=0
 \item 
-virtual std\+::vector$<$ \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} $>$ \hyperlink{classsc2_1_1_query_interface_acf20e12a5b9b8ffb419384df58db023f}{Get\+Abilities\+For\+Units} (const std\+::vector$<$ Tag $>$ \&tags)=0
+virtual std\+::vector$<$ \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} $>$ \hyperlink{classsc2_1_1_query_interface_a6add52c8b04f0e50efdd83955952b76f}{Get\+Abilities\+For\+Units} (const std\+::vector$<$ Tag $>$ \&tags, bool ignore\+\_\+resource\+\_\+requirements=false)=0
 \item 
 virtual float \hyperlink{classsc2_1_1_query_interface_adf72c7556e59e82e231d9c58bd093546}{Pathing\+Distance} (const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&start, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&end)=0
 \item 
@@ -40,29 +40,33 @@ Performance note\+:
 \end{DoxyItemize}
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classsc2_1_1_query_interface_a5e06452df74dc9cf0c8cafe8fe42e85b}\label{classsc2_1_1_query_interface_a5e06452df74dc9cf0c8cafe8fe42e85b}} 
+\mbox{\Hypertarget{classsc2_1_1_query_interface_a6954d65b93a07bf14e2a8818f9df9b8c}\label{classsc2_1_1_query_interface_a6954d65b93a07bf14e2a8818f9df9b8c}} 
 \index{sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}!Get\+Abilities\+For\+Unit@{Get\+Abilities\+For\+Unit}}
 \index{Get\+Abilities\+For\+Unit@{Get\+Abilities\+For\+Unit}!sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Abilities\+For\+Unit()}{GetAbilitiesForUnit()}}
-{\footnotesize\ttfamily virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Unit (\begin{DoxyParamCaption}\item[{Tag}]{tag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Unit (\begin{DoxyParamCaption}\item[{Tag}]{tag,  }\item[{bool}]{ignore\+\_\+resource\+\_\+requirements = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Returns a list of abilities represented as a uint32\+\_\+t see the A\+B\+I\+L\+I\+T\+Y\+\_\+\+ID enum for their corresponding, named, representations. 
 \begin{DoxyParams}{Parameters}
 {\em tag} & Tag of unit. \\
 \hline
+{\em ignore\+\_\+resource\+\_\+requirements} & Ignores food, mineral and gas costs, as well as cooldowns. \\
+\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Abilities for the unit. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_query_interface_acf20e12a5b9b8ffb419384df58db023f}\label{classsc2_1_1_query_interface_acf20e12a5b9b8ffb419384df58db023f}} 
+\mbox{\Hypertarget{classsc2_1_1_query_interface_a6add52c8b04f0e50efdd83955952b76f}\label{classsc2_1_1_query_interface_a6add52c8b04f0e50efdd83955952b76f}} 
 \index{sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}!Get\+Abilities\+For\+Units@{Get\+Abilities\+For\+Units}}
 \index{Get\+Abilities\+For\+Units@{Get\+Abilities\+For\+Units}!sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Abilities\+For\+Units()}{GetAbilitiesForUnits()}}
-{\footnotesize\ttfamily virtual std\+::vector$<$\hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities}$>$ sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Units (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Tag $>$ \&}]{tags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual std\+::vector$<$\hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities}$>$ sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Units (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Tag $>$ \&}]{tags,  }\item[{bool}]{ignore\+\_\+resource\+\_\+requirements = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Issues multiple available abilities queries. Batch version. 
 \begin{DoxyParams}{Parameters}
 {\em tag} & Tags of units. \\
+\hline
+{\em ignore\+\_\+resource\+\_\+requirements} & Ignores food, mineral and gas costs, as well as cooldowns. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

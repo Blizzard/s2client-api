@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SC2API: sc2::IsUnit Struct Reference</title>
+<title>SC2API: include/sc2lib/sc2_utils.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -60,45 +60,18 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>sc2</b></li><li class="navelem"><a class="el" href="structsc2_1_1_is_unit.html">IsUnit</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_807d26fa7f138cb5a03fab117dd2a7fb.html">sc2lib</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="structsc2_1_1_is_unit-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">sc2::IsUnit Struct Reference</div>  </div>
+<div class="title">sc2_utils.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Determines if the unit matches the unit type.  
- <a href="structsc2_1_1_is_unit.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="sc2__unit_8h_source.html">sc2_unit.h</a>&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:ac2017bcac8de9e3d3c70a80ecb00503a"><td class="memItemLeft" align="right" valign="top"><a id="ac2017bcac8de9e3d3c70a80ecb00503a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>IsUnit</b> (UNIT_TYPEID type)</td></tr>
-<tr class="separator:ac2017bcac8de9e3d3c70a80ecb00503a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcba145d52a6ade952ac443a0957dae3"><td class="memItemLeft" align="right" valign="top"><a id="abcba145d52a6ade952ac443a0957dae3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> &amp;unit)</td></tr>
-<tr class="separator:abcba145d52a6ade952ac443a0957dae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:abf70a6314708ccc3266c65a69dfd24fb"><td class="memItemLeft" align="right" valign="top"><a id="abf70a6314708ccc3266c65a69dfd24fb"></a>
-UNIT_TYPEID&#160;</td><td class="memItemRight" valign="bottom"><b>type_</b></td></tr>
-<tr class="separator:abf70a6314708ccc3266c65a69dfd24fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Determines if the unit matches the unit type. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>include/sc2api/<a class="el" href="sc2__unit_8h_source.html">sc2_unit.h</a></li>
-</ul>
-</div><!-- contents -->
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;</div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="sc2__common_8h.html">sc2api/sc2_common.h</a>&quot;</span></div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="sc2__map__info_8h.html">sc2api/sc2_map_info.h</a>&quot;</span></div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesc2.html">sc2</a> {</div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;Point2D FindRandomLocation(<span class="keyword">const</span> Point2D&amp; min, <span class="keyword">const</span> Point2D&amp; max);</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;Point2D FindRandomLocation(<span class="keyword">const</span> GameInfo&amp; game_info);</div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;Point2D FindCenterOfMap(<span class="keyword">const</span> GameInfo&amp; game_info);</div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div><div class="ttc" id="sc2__common_8h_html"><div class="ttname"><a href="sc2__common_8h.html">sc2_common.h</a></div><div class="ttdoc">Common data types, including points, rectangles and colors. </div></div>
+<div class="ttc" id="namespacesc2_html"><div class="ttname"><a href="namespacesc2.html">sc2</a></div><div class="ttdef"><b>Definition:</b> sc2_action.h:9</div></div>
+<div class="ttc" id="sc2__map__info_8h_html"><div class="ttname"><a href="sc2__map__info_8h.html">sc2_map_info.h</a></div><div class="ttdoc">Information about a game map. </div></div>
+</div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -18,9 +18,9 @@ virtual uint32\+\_\+t \hyperlink{classsc2_1_1_observation_interface_a19d85546124
 \item 
 virtual const Units \& \hyperlink{classsc2_1_1_observation_interface_ab08e71ba04b19d3b4048ce9da6838e00}{Get\+Units} () const =0
 \item 
-virtual Units \hyperlink{classsc2_1_1_observation_interface_aa43cfa17a9ac893500bce33eb41e6171}{Get\+Units} (\hyperlink{classsc2_1_1_unit_a5a40e672e7599d73ef8ef5758bbd7461}{Unit\+::\+Alliance} alliance, \hyperlink{sc2__interfaces_8h_af4abbeea3291e718cf2283e1390f3670}{Filter} filter=\{\}) const =0
+virtual Units \hyperlink{classsc2_1_1_observation_interface_aa43cfa17a9ac893500bce33eb41e6171}{Get\+Units} (\hyperlink{classsc2_1_1_unit_a5a40e672e7599d73ef8ef5758bbd7461}{Unit\+::\+Alliance} alliance, \hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{Filter} filter=\{\}) const =0
 \item 
-virtual Units \hyperlink{classsc2_1_1_observation_interface_ab0d22edc6bd276b8e9d27387294fdc88}{Get\+Units} (\hyperlink{sc2__interfaces_8h_af4abbeea3291e718cf2283e1390f3670}{Filter} filter) const =0
+virtual Units \hyperlink{classsc2_1_1_observation_interface_ab0d22edc6bd276b8e9d27387294fdc88}{Get\+Units} (\hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{Filter} filter) const =0
 \item 
 virtual const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$ \hyperlink{classsc2_1_1_observation_interface_a0f766e5a6522a6966b4d2abf0a2daff2}{Get\+Unit} (Tag tag) const =0
 \item 
@@ -331,7 +331,7 @@ List of all ally and visible enemy and neutral units.
 \index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Units@{Get\+Units}}
 \index{Get\+Units@{Get\+Units}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Units()}{GetUnits()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
-{\footnotesize\ttfamily virtual Units sc2\+::\+Observation\+Interface\+::\+Get\+Units (\begin{DoxyParamCaption}\item[{\hyperlink{classsc2_1_1_unit_a5a40e672e7599d73ef8ef5758bbd7461}{Unit\+::\+Alliance}}]{alliance,  }\item[{\hyperlink{sc2__interfaces_8h_af4abbeea3291e718cf2283e1390f3670}{Filter}}]{filter = {\ttfamily \{\}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual Units sc2\+::\+Observation\+Interface\+::\+Get\+Units (\begin{DoxyParamCaption}\item[{\hyperlink{classsc2_1_1_unit_a5a40e672e7599d73ef8ef5758bbd7461}{Unit\+::\+Alliance}}]{alliance,  }\item[{\hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{Filter}}]{filter = {\ttfamily \{\}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Get all units belonging to a certain alliance and meet the conditions provided by the filter. The unit structure is const data only. Therefore editing that data will not change any in game state. See the \hyperlink{classsc2_1_1_action_interface}{Action\+Interface} for changing \hyperlink{classsc2_1_1_unit}{Unit} state. 
 \begin{DoxyParams}{Parameters}
@@ -347,7 +347,7 @@ A list of units that meet the conditions provided by alliance and filter.
 \index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Units@{Get\+Units}}
 \index{Get\+Units@{Get\+Units}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Units()}{GetUnits()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
-{\footnotesize\ttfamily virtual Units sc2\+::\+Observation\+Interface\+::\+Get\+Units (\begin{DoxyParamCaption}\item[{\hyperlink{sc2__interfaces_8h_af4abbeea3291e718cf2283e1390f3670}{Filter}}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual Units sc2\+::\+Observation\+Interface\+::\+Get\+Units (\begin{DoxyParamCaption}\item[{\hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{Filter}}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Get all units belonging to self that meet the conditions provided by the filter. The unit structure is const data only. Therefore editing that data will not change any in game state. See the \hyperlink{classsc2_1_1_action_interface}{Action\+Interface} for changing \hyperlink{classsc2_1_1_unit}{Unit} state. 
 \begin{DoxyParams}{Parameters}
