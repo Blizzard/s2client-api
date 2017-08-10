@@ -126,7 +126,6 @@ public:
     Point3D staging_location_;
 
 private:
-    uint32_t last_echoed_gameloop_;
     std::string last_action_text_;
 
 };
@@ -174,7 +173,6 @@ private:
     int max_colossus_count_ = 5;
     int max_sentry_count_ = 2;
     int max_stalker_count_ = 20;
-    int max_immortal_count_ = 10;
 };
 
 class ZergMultiplayerBot : public MultiplayerBot {
