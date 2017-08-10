@@ -39,7 +39,7 @@ int scan_directory(const char* directory_path, std::vector<std::string>& files, 
             }
         }
         case DT_DIR: {
-            if (!list_directories || !ent->d_name || !*ent->d_name) {
+            if (!list_directories || !*ent->d_name) {
                 continue;
             }
 
