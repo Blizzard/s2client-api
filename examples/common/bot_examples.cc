@@ -665,7 +665,7 @@ void ProtossMultiplayerBot::ManageArmy() {
                             break;
                         }
                         Point2D blink_location = startLocation_;
-                        if (observation->GetPreviousUnit(unit.tag) > 0 && unit.shield < 1) {
+                        if (observation->GetPreviousUnit(unit.tag) != nullptr && unit.shield < 1) {
                             if (!unit.orders.empty()) {
                                 if (target_unit != nullptr) {
                                     Vector2D diff = unit.pos - target_unit->pos;
