@@ -26,7 +26,7 @@ Add the following code to your Bot class.
 // In your bot class.
 virtual void OnUnitIdle(const Unit& unit) final {
     switch (unit.unit_type.ToType()) {
-        case UNIT_TYPEID::COMMANDCENTER: {
+        case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
             break;
         }
