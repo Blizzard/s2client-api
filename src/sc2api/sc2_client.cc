@@ -2019,7 +2019,7 @@ void ControlImp::IssueUnitAddedEvents() {
             }
         }
 
-        if (add.alliance == Unit::Alliance::Enemy) {
+        if (add.alliance == Unit::Alliance::Enemy && add.display_type == Unit::DisplayType::Visible) {
             client_.OnUnitEnterVision(add);
         }
     }
