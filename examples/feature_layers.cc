@@ -17,11 +17,18 @@ void DrawFeatureLayer1BPP(const SC2APIProtocol::ImageData& image_data, int off_x
     sc2::renderer::Matrix1BPP(image_data.data().c_str(), width, height, off_x, off_y, kPixelDrawSize, kPixelDrawSize);
 }
 
-void DrawFeatureLayer8BPP(const SC2APIProtocol::ImageData& image_data, int off_x, int off_y) {
+void DrawFeatureLayerUnits8BPP(const SC2APIProtocol::ImageData& image_data, int off_x, int off_y) {
     assert(image_data.bits_per_pixel() == 8);
     int width = image_data.size().x();
     int height = image_data.size().y();
-    sc2::renderer::Matrix8BPP(image_data.data().c_str(), width, height, off_x, off_y, kPixelDrawSize, kPixelDrawSize);
+    sc2::renderer::Matrix8BPPPlayers(image_data.data().c_str(), width, height, off_x, off_y, kPixelDrawSize, kPixelDrawSize);
+}
+
+void DrawFeatureLayerHeightMap8BPP(const SC2APIProtocol::ImageData& image_data, int off_x, int off_y) {
+    assert(image_data.bits_per_pixel() == 8);
+    int width = image_data.size().x();
+    int height = image_data.size().y();
+    sc2::renderer::Matrix8BPPHeightMap(image_data.data().c_str(), width, height, off_x, off_y, kPixelDrawSize, kPixelDrawSize);
 }
 
 class RenderAgent : public sc2::Agent {
@@ -34,11 +41,11 @@ public:
         const SC2APIProtocol::Observation* observation = Observation()->GetRawObservation();
 
         const SC2APIProtocol::FeatureLayers& m = observation->feature_layer_data().renders();
-        DrawFeatureLayer8BPP(m.unit_density(), 0, 0);
+        DrawFeatureLayerUnits8BPP(m.unit_density(), 0, 0);
         DrawFeatureLayer1BPP(m.selected(), kDrawSize, 0);
 
         const SC2APIProtocol::FeatureLayersMinimap& mi = observation->feature_layer_data().minimap_renders();
-        DrawFeatureLayer8BPP(mi.height_map(), 0, kDrawSize);
+        DrawFeatureLayerHeightMap8BPP(mi.height_map(), 0, kDrawSize);
         DrawFeatureLayer1BPP(mi.camera(), kDrawSize, kDrawSize);
 
         sc2::renderer::Render();
