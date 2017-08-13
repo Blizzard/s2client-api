@@ -69,7 +69,25 @@ void Matrix1BPP(const char* bytes, int w_mat, int h_mat, int off_x, int off_y, i
     }
 }
 
-void Matrix8BPP(const char* bytes, int w_mat, int h_mat, int off_x, int off_y, int px_w, int px_h) {
+void Matrix8BPPHeightMap(const char* bytes, int w_mat, int h_mat, int off_x, int off_y, int px_w, int px_h) {
+    assert(renderer_);
+    assert(window_);
+
+    SDL_Rect rect = CreateRect(0, 0, px_w, px_h);
+    for (size_t y = 0; y < h_mat; ++y) {
+        for (size_t x = 0; x < w_mat; ++x) {
+            rect.x = off_x + (int(x) * rect.w);
+            rect.y = off_y + (int(y) * rect.h);
+
+            // Renders the height map in grayscale [0-255]
+            size_t index = x + y * w_mat;
+            SDL_SetRenderDrawColor(renderer_, bytes[index], bytes[index], bytes[index], 255);
+            SDL_RenderFillRect(renderer_, &rect);
+        }
+    }
+}
+
+void Matrix8BPPPlayers(const char* bytes, int w_mat, int h_mat, int off_x, int off_y, int px_w, int px_h) {
     assert(renderer_);
     assert(window_);
 
