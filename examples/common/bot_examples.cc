@@ -423,22 +423,22 @@ bool MultiplayerBot::TryBuildGas(AbilityID build_ability, UnitTypeID worker_type
 
     //only search within this radius
     float minimum_distance = 15.0f;
-    Tag closestGeyster = 0;
+    Tag closestGeyser = 0;
     for (const auto& geyser : geysers) {
         float current_distance = Distance2D(base_location, geyser.pos);
         if (current_distance < minimum_distance) {
             if (Query()->Placement(build_ability, geyser.pos)) {
                 minimum_distance = current_distance;
-                closestGeyster = geyser.tag;
+                closestGeyser = geyser.tag;
             }
         }
     }
 
     // In the case where there are no more available geysers nearby
-    if (closestGeyster == 0) {
+    if (closestGeyser == 0) {
         return false;
     }
-    return TryBuildStructure(build_ability, worker_type, closestGeyster);
+    return TryBuildStructure(build_ability, worker_type, closestGeyser);
 
 }
 
