@@ -1,9 +1,11 @@
-s2client-api
-============
+s2client-api (blizzard_internal)
+================================
 
 The StarCraft II API provides access to in-game state observation and unit control. The API is a wrapper around protobuf defined protocol over a websocket connection.
 
 While it's possible to write directly to the protocol, this library provides a C++ and class-based abstraction. You can see a simple example below.
+
+**This branch is intended for internal use only. It relies on protocol changes that are not yet in the live game. Feel free to browse commits but just know they will not function in the live game until the next patch.**
 
 ```C++
 #include <sc2api/sc2_api.h>
