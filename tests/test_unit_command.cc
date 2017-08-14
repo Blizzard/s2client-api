@@ -1681,7 +1681,7 @@ namespace sc2 {
             });
 
             if (!marauders_loaded_) {
-                act->UnitCommand(GetTagListFromUnits(test_marauder_units), ABILITY_ID::SMART, test_unit_);
+                act->UnitCommand(test_marauder_units, ABILITY_ID::SMART, test_unit_);
                 marauders_loaded_ = true;
             }
 

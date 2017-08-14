@@ -63,15 +63,6 @@ namespace sc2 {
         return offset_point;
     }
 
-    std::vector<Tag> TestUnitCommand::GetTagListFromUnits(Units units) {
-        std::vector<Tag> tags;
-        for (const auto& unit : units) {
-            tags.push_back(unit.tag);
-        }
-
-        return tags;
-    }
-
     void TestUnitCommand::SetOriginPoint() {
         const GameInfo& game_info = agent_->Observation()->GetGameInfo();
         origin_pt_ = FindCenterOfMap(game_info);
@@ -222,7 +213,7 @@ namespace sc2 {
         VerifyOwnerOfUnits(test_units_);
 
         if (test_units_.size() > 1) {
-            act->UnitCommand(GetTagListFromUnits(test_units_), test_ability_);
+            act->UnitCommand(test_units_, test_ability_);
         }
         else {
             act->UnitCommand(test_unit_, test_ability_);
@@ -260,7 +251,7 @@ namespace sc2 {
         }
 
         if (test_units_.size() > 1) {
-            act->UnitCommand(GetTagListFromUnits(test_units_), test_ability_, target_point_);
+            act->UnitCommand(test_units_, test_ability_, target_point_);
         }
         else {
             act->UnitCommand(test_unit_, test_ability_, target_point_);
@@ -307,7 +298,7 @@ namespace sc2 {
         }
 
         if (test_units_.size() > 1) {
-            act->UnitCommand(GetTagListFromUnits(test_units_), test_ability_, target_unit_);
+            act->UnitCommand(test_units_, test_ability_, target_unit_);
         }
         else {
             act->UnitCommand(test_unit_, test_ability_, target_unit_);
