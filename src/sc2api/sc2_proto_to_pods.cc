@@ -252,6 +252,8 @@ bool Convert(const ObservationRawPtr& observation_raw, Units& units) {
             unit.buffs.push_back(observation_unit.buff_ids(buff_index));
         }
 
+        unit.is_powered = observation_unit.is_powered();
+
         units.push_back(unit);
     }
 
