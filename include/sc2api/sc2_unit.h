@@ -174,6 +174,8 @@ public:
     Tag engaged_target_tag;
     //! Buffs on this unit. Only valid for this player's units.
     std::vector<BuffID> buffs;
+    //! Whether the unit is powered by a pylon.
+    bool is_powered;
 
     Unit();
 
