@@ -226,8 +226,6 @@ private:
     }
 
     bool TryBuildBarracks() {
-        const ObservationInterface* observation = Observation();
-
         if (CountUnitType(UNIT_TYPEID::TERRAN_SUPPLYDEPOT) < 1) {
             return false;
         }
