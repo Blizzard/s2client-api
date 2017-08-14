@@ -180,7 +180,17 @@ public:
     operator Tag() const { return tag; }
 };
 
-typedef std::vector<Unit> Units;
+class Units : public std::vector<Unit> {
+public:
+    operator std::vector<Tag>() const {
+        std::vector<Tag> tags;
+        for (auto& unit : *this) {
+            tags.push_back(unit.tag);
+        }
+        return tags;
+    }
+};
+
 typedef std::unordered_map<Tag, size_t> UnitIdxMap;
 
 //! Determines if the unit matches the unit type.

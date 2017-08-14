@@ -38,7 +38,6 @@ namespace sc2 {
         virtual void AdditionalTestSetup();
         virtual void IssueUnitCommand(ActionInterface* act);
         virtual Point2D GetPointOffsetX(Point2D starting_point, float offset = 5);
-        virtual std::vector<Tag> GetTagListFromUnits(Units units);
         virtual void SetOriginPoint();
         virtual void SetTestTime();
         virtual void VerifyUnitOrders(Tag unit_tag, ABILITY_ID test_ability);
