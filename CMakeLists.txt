@@ -85,6 +85,6 @@ if (BUILD_API_EXAMPLES)
     add_subdirectory("examples")
 endif ()
 
-if (BUILD_API_EXAMPLES)
+if (BUILD_API_TESTS)
     add_subdirectory("tests")
 endif ()
