@@ -189,6 +189,9 @@ typedef std::vector<UnitTypeData> UnitTypes;
 struct UpgradeData {
     uint32_t upgrade_id;                                // Stable ID.
     std::string name;                                   // Catalog name of the upgrade.
+    uint32_t mineral_cost;
+    uint32_t vespene_cost;
+    AbilityID ability_id;
 
     UpgradeData();
 

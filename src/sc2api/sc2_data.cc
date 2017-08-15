@@ -295,6 +295,10 @@ void UpgradeData::ReadFromProto(const SC2APIProtocol::UpgradeData& upgrade_data)
 
     // name_
     name = upgrade_data.name();
+
+    mineral_cost = upgrade_data.mineral_cost();
+    vespene_cost = upgrade_data.vespene_cost();
+    ability_id = upgrade_data.ability_id();
 }
 
 std::string UpgradeData::Log() const {
