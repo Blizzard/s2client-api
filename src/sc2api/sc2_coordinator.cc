@@ -89,7 +89,7 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
 int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clients, int window_width, int window_height, int window_start_x, int window_start_y) {
     int last_port = 0;
     // Start an sc2 process for each bot.
-    int i = 0;
+    int clientIndex = 0;
     for (auto c : clients) {
         last_port = LaunchProcess(process_settings, 
             c, 
@@ -98,7 +98,7 @@ int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clie
             window_start_x, 
             window_start_y, 
             process_settings.port_start + static_cast<int>(process_settings.process_info.size()) - 1, 
-            i++);
+            clientIndex++);
     }
 
     // Since connect is blocking do it after the processes are launched.
@@ -480,8 +480,8 @@ bool CoordinatorImp::StartGame() {
     assert(starcraft_started_);
 
     // Create the game with the first client.
-    Agent* c = agents_.front();
-    bool is_game_created = c->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
+    Agent* firstClient = agents_.front();
+    bool is_game_created = firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
     assert(is_game_created);
 
     int i = 0;

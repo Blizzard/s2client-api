@@ -323,8 +323,8 @@ bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions&
             action.target_point.y = action_raw_command.target_world_space_pos().y();
         }
 
-        for (int i = 0; i < action_raw_command.unit_tags_size(); ++i)
-            action.unit_tags.push_back(action_raw_command.unit_tags(i));
+        for (int j = 0; j < action_raw_command.unit_tags_size(); ++j)
+            action.unit_tags.push_back(action_raw_command.unit_tags(j));
 
         // TODO: Add optional target positions.
         // optional Point target_world_space_pos = 2;
@@ -396,8 +396,8 @@ bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActi
             const SC2APIProtocol::ActionSpatialUnitSelectionRect& action_select = action_FL.unit_selection_rect();
 
             SpatialSelectRect select;
-            for (int i = 0; i < action_select.selection_screen_coord_size(); ++i) {
-                const SC2APIProtocol::RectangleI& rect_proto = action_select.selection_screen_coord(i);
+            for (int j = 0; j < action_select.selection_screen_coord_size(); ++j) {
+                const SC2APIProtocol::RectangleI& rect_proto = action_select.selection_screen_coord(j);
 
                 Rect2DI rect;
                 rect.from.x = rect_proto.p0().x();
