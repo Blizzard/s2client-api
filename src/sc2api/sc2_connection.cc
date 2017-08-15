@@ -61,7 +61,7 @@ bool GetClientData(const mg_connection* connection, sc2::Connection*& out) {
 
 static int DataHandler(
     mg_connection* conn,
-    int flags,
+    int /*flags*/,
     char* data,
     size_t data_len,
     void*) {

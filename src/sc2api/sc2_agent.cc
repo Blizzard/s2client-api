@@ -251,7 +251,7 @@ void ActionFeatureLayerImp::Select(const Point2DI& center, PointSelectionType se
     select_pt->set_type(static_cast<SC2APIProtocol::ActionSpatialUnitSelectionPoint_Type>(selection_type));
 }
 
-void ActionFeatureLayerImp::Select(const Point2DI& p0, const Point2DI& p1, bool add_to_selection) {
+void ActionFeatureLayerImp::Select(const Point2DI& p0, const Point2DI& p1, bool /*add_to_selection*/) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionSpatial* action_feature_layer = action->mutable_action_feature_layer();

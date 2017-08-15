@@ -294,7 +294,7 @@ bool Convert(const ObservationPtr& observation_ptr, RenderedFrame& render) {
     return true;
 }
 
-bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions& actions, const Units& units, uint32_t player_id) {
+bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions& actions, const Units& /*units*/, uint32_t /*player_id*/) {
     for (int i = 0; i < response_observation_ptr->actions_size(); ++i) {
         const SC2APIProtocol::Action& proto_action = response_observation_ptr->actions(i);
         if (!proto_action.has_action_raw()) {
@@ -345,7 +345,7 @@ bool Convert(const SC2APIProtocol::ActionSpatialUnitSelectionPoint::Type& type_p
     return false;
 }
 
-bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions, const Units& units, uint32_t player_id) {
+bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions, const Units& /*units*/, uint32_t /*player_id*/) {
     for (int i = 0; i < response_observation_ptr->actions_size(); ++i) {
         const SC2APIProtocol::Action& proto_action = response_observation_ptr->actions(i);
         if (!proto_action.has_action_feature_layer()) {

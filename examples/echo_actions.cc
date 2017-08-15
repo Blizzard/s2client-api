@@ -22,7 +22,7 @@ public:
         last_echoed_gameloop_ = 0;
     }
 
-    void EchoAction(const sc2::RawActions& actions, sc2::DebugInterface* debug, const sc2::Abilities& abilities) {
+    void EchoAction(const sc2::RawActions& actions, sc2::DebugInterface* debug, const sc2::Abilities&) {
         if (actions.size() < 1) {
             debug->DebugTextOut(last_action_text_);
             return;

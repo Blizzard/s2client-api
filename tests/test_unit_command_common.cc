@@ -55,7 +55,7 @@ namespace sc2 {
 
     void TestUnitCommand::AdditionalTestSetup() {}
 
-    void TestUnitCommand::IssueUnitCommand(ActionInterface* act) {}
+    void TestUnitCommand::IssueUnitCommand(ActionInterface*) {}
 
     Point2D TestUnitCommand::GetPointOffsetX(Point2D starting_point, float offset) {
         Point2D offset_point = starting_point;
