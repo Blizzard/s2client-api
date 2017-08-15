@@ -148,7 +148,7 @@ std::string GetGameMapsDirectory(const std::string& process_path) {
     return result;
 }
 
-BOOL WINAPI ConsoleHandlerRoutine(DWORD dwCtrlType) {
+BOOL WINAPI ConsoleHandlerRoutine(DWORD /*dwCtrlType*/) {
     while (windows_processes.size()) {
         uint64_t pid = static_cast<uint64_t>(windows_processes[windows_processes.size() - 1].pi_.dwProcessId);
         if (!TerminateProcess(pid))

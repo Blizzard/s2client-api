@@ -223,7 +223,7 @@ bool MultiplayerBot::FindNearestMineralPatch(const Point2D& start, Tag& target) 
 
 // Tries to find a random location that can be pathed to on the map.
 // Returns 'true' if a new, random location has been found that is pathable by the unit.
-bool MultiplayerBot::FindEnemyPosition(Tag tag, Point2D& target_pos) {
+bool MultiplayerBot::FindEnemyPosition(Tag, Point2D& target_pos) {
     if (game_info_.enemy_start_locations.empty()) {
         return false;
     }
@@ -1111,7 +1111,7 @@ void ProtossMultiplayerBot::ConvertGateWayToWarpGate() {
     }
 }
 
-bool ProtossMultiplayerBot::TryBuildStructureNearPylon(AbilityID ability_type_for_structure, UnitTypeID unit_type) {
+bool ProtossMultiplayerBot::TryBuildStructureNearPylon(AbilityID ability_type_for_structure, UnitTypeID) {
     const ObservationInterface* observation = Observation();
 
     //Need to check to make sure its a pylon instead of a warp prism
@@ -3017,7 +3017,7 @@ void TerranBot::OnGameStart() {
 
 // Tries to find a random location that can be pathed to on the map.
 // Returns 'true' if a new, random location has been found that is pathable by the unit.
-bool TerranBot::FindEnemyPosition(Tag tag, Point2D& target_pos) {
+bool TerranBot::FindEnemyPosition(Tag, Point2D& target_pos) {
     if (game_info_.enemy_start_locations.empty()) return false;
     target_pos = game_info_.enemy_start_locations.front();
     return true;

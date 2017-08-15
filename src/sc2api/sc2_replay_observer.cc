@@ -227,7 +227,7 @@ ReplayControlInterface* ReplayObserver::ReplayControl() {
     return replay_control_imp_;
 }
 
-bool ReplayObserver::IgnoreReplay(const ReplayInfo& replay_info, uint32_t& player_id) {
+bool ReplayObserver::IgnoreReplay(const ReplayInfo& replay_info, uint32_t& /*player_id*/) {
     // Ignore games less than 30 seconds.
     static const float MinimumReplayDuration = 30.0f;
     if (replay_info.duration < MinimumReplayDuration) {

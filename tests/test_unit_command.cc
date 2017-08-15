@@ -1341,7 +1341,7 @@ namespace sc2 {
             }
         }
 
-        void VerifyUnitIdleAfterOrder(UNIT_TYPEID unit_type) override {}
+        void VerifyUnitIdleAfterOrder(UNIT_TYPEID) override {}
     };
 
 

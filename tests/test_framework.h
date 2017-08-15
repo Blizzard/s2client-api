@@ -57,7 +57,7 @@ protected:
     virtual void OnTestsEnd () = 0;
     virtual void OnPostStep () {}
 
-    void OnError(const std::vector<ClientError>& client_errors, const std::vector<std::string>& protocol_errors = {}) override { success_ = false; }
+    void OnError(const std::vector<ClientError>& /*client_errors*/, const std::vector<std::string>& /*protocol_errors*/ = {}) override { success_ = false; }
 
 private:
     void OnGameStart() final;
