@@ -165,6 +165,7 @@ struct ReplayInfo {
     std::string map_path;
     std::string replay_path;
     std::string version;
+    std::string data_version;
     ReplayPlayerInfo players[max_num_players];
 
     ReplayInfo() :
