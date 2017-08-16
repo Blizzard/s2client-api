@@ -10,6 +10,7 @@
 
 #include "sc2api.pb.h"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -213,13 +214,10 @@ CoordinatorImp::~CoordinatorImp() {
 }
 
 bool CoordinatorImp::AnyObserverAvailable() const {
-    for (auto r : replay_observers_) {
-        if (!r->Control()->IsInGame()) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(replay_observers_.cbegin(), replay_observers_.cend(),
+                       [](ReplayObserver* r) {
+                           return !r->Control()->IsInGame();
+                       });
 }
 
 void CoordinatorImp::StartReplay() {
@@ -398,15 +396,15 @@ void CoordinatorImp::StepReplayObservers() {
     }
     else {
         // Run all steps in parallel.
-        std::vector<std::thread> threads(replay_observers_.size());
-        for (size_t i = 0; i < replay_observers_.size(); ++i) {
-            ReplayObserver* r = replay_observers_[i];
-            threads[i] = std::thread(std::bind(run_replay, r));
+        std::vector<std::thread> threads;
+        threads.reserve(replay_observers_.size());
+        for (auto r : replay_observers_) {
+            threads.emplace_back(run_replay, r);
         }
 
         // Join all threads.
-        for (size_t i = 0; i < threads.size(); ++i) {
-            threads[i].join();
+        for (auto& t : threads) {
+            t.join();
         }
     }
 
