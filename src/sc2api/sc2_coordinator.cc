@@ -48,13 +48,8 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     // DirectX will fail if multiple games try to launch in fullscreen mode. Force them into windowed mode.
     cl.push_back("-displayMode"); cl.push_back("0");
 
-    // TODO: This is deprecated. Remove this.
-    cl.push_back("-simulationSpeed");
-    if (process_settings.realtime) {
-        cl.push_back("1");
-    }
-    else {
-        cl.push_back("0");
+    if (process_settings.data_version.size() > 0) {
+        cl.push_back("-dataVersion"); cl.push_back(process_settings.data_version);
     }
 
     for (const std::string& command : process_settings.extra_command_lines)
@@ -177,6 +172,8 @@ public:
 
     bool StartGame();
     void StartReplay();
+    bool ShouldIgnore(ReplayObserver* r, const std::string& file);
+    bool ShouldRelaunch(ReplayObserver* r, const std::string& file);
 
     void StepAgents();
     void StepAgentsRealtime();
@@ -222,6 +219,36 @@ bool CoordinatorImp::AnyObserverAvailable() const {
                        });
 }
 
+bool CoordinatorImp::ShouldIgnore(ReplayObserver* r, const std::string& file) {
+    if (file.empty())
+        return true;
+
+    // Gather replay information with the available observer.
+    r->ReplayControl()->GatherReplayInfo(file, true);
+
+    // If the replay isn't being pruned based on replay info start it.
+    return r->IgnoreReplay(r->ReplayControl()->GetReplayInfo(), replay_settings_.player_id);
+}
+
+bool CoordinatorImp::ShouldRelaunch(ReplayObserver* r, const std::string& file) {
+    const ReplayInfo& replay_info = r->ReplayControl()->GetReplayInfo();
+
+    bool version_match = replay_info.base_build == r->Control()->Proto().GetBaseBuild() &&
+        replay_info.data_version == r->Control()->Proto().GetDataVersion();
+    if (version_match)
+        return false;
+
+    // Version failed to download. Just continue with trying to load in current version.
+    // It will likely fail, and then just skip past this replay.
+    if (!FindBaseExe(process_settings_.process_path, replay_info.base_build))
+        return false;
+
+    std::cout << "Replay is from a different version. Relaunching client into the correct version..." << std::endl;
+    process_settings_.data_version = replay_info.data_version;
+    r->Control()->Error(ClientError::WrongGameVersion);
+    return true;
+}
+
 void CoordinatorImp::StartReplay() {
     // If no replays given in the settings don't try.
     if (replay_settings_.replay_file.empty()) {
@@ -236,33 +263,28 @@ void CoordinatorImp::StartReplay() {
 
     // Run a replay with each available replay observer.
     for (auto r : replay_observers_) {
-        bool loaded_replay = false;
-        while (!loaded_replay) {
-            if (replay_settings_.replay_file.empty()) {
+        // If the replay observer is idle or out of game use it for a new replay.
+        if (!r->Control()->IsReadyForCreateGame()) {
+            continue;
+        }
+
+        auto& replays = replay_settings_.replay_file;
+        while (replays.size() != 0) {
+            const std::string& file = replay_settings_.replay_file.front();
+
+            if (ShouldIgnore(r, file)) {
+                replays.erase(replays.begin());
+                continue;
+            }
+
+            if (ShouldRelaunch(r, file)) {
                 break;
             }
 
-            const std::string& file = replay_settings_.replay_file.front();
-
-            if (!file.empty()) {
-                // If the replay observer is idle or out of game use it for a new replay.
-                if (!r->Control()->IsReadyForCreateGame()) {
-                    loaded_replay = true;
-                    continue;
-                }
-
-                // Gather replay information with the available observer.
-                r->ReplayControl()->GatherReplayInfo(file);
-
-                // If the replay isn't being pruned based on replay info start it.
-                if (!r->IgnoreReplay(r->ReplayControl()->GetReplayInfo(), replay_settings_.player_id)) {
-                    loaded_replay = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
-                }
-            }
-
-            // Front to back ordering more important than remove from back speedup.
-            replay_settings_.replay_file.erase(
-                replay_settings_.replay_file.begin(), replay_settings_.replay_file.begin() + 1);
+            bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
+            replays.erase(replays.begin());
+            if (launched)
+                break;
         }
     }
 
@@ -701,7 +723,6 @@ bool Coordinator::Update() {
             }
         }
     }
-
 
     // End the coordinator update on the idea that an error in the API should mean it's time to stop.
     if (error_occurred) {

@@ -19,7 +19,7 @@ public:
 
     ReplayControlImp(ControlInterface* control_interface, ReplayObserver* replay_observer);
 
-    virtual bool GatherReplayInfo(const std::string& path) override;
+    virtual bool GatherReplayInfo(const std::string& path, bool download_data) override;
     virtual bool LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id) override;
     virtual bool WaitForReplay() override;
 
@@ -31,13 +31,14 @@ ReplayControlImp::ReplayControlImp(ControlInterface* control_interface, ReplayOb
     replay_observer_(replay_observer) {
 }
 
-bool ReplayControlImp::GatherReplayInfo(const std::string& path) {
+bool ReplayControlImp::GatherReplayInfo(const std::string& path, bool download_data) {
     replay_info_.num_players = 0;
 
     // Request the replay info.
     GameRequestPtr request = control_interface_->Proto().MakeRequest();
     SC2APIProtocol::RequestReplayInfo* request_replay_info = request->mutable_replay_info();
     request_replay_info->set_replay_path(path);
+    request_replay_info->set_download_data(download_data);
     if (!control_interface_->Proto().SendRequest(request)) {
         return false;
     }
@@ -61,6 +62,7 @@ bool ReplayControlImp::GatherReplayInfo(const std::string& path) {
     std::string map_name = proto_replay_info.map_name();
     std::string map_path = proto_replay_info.local_map_path();
     std::string version = proto_replay_info.game_version();
+    std::string data_version = proto_replay_info.data_version();
 
     if (map_name.length() >= max_path_size) {
         std::cerr << "Map name is too long: " << map_name << std::endl;
@@ -79,6 +81,7 @@ bool ReplayControlImp::GatherReplayInfo(const std::string& path) {
     replay_info_.map_path = map_path.c_str();
     replay_info_.replay_path = path.c_str();
     replay_info_.version = version.c_str();
+    replay_info_.data_version = data_version.c_str();
 
     replay_info_.duration = proto_replay_info.game_duration_seconds();
     replay_info_.duration_gameloops = proto_replay_info.game_duration_loops();

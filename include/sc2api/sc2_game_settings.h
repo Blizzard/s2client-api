@@ -27,6 +27,7 @@ struct ProcessSettings {
     bool realtime;
     int step_size;
     std::string process_path;
+    std::string data_version;
     std::string net_address;
     int timeout_ms;
     int port_start;

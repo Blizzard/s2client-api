@@ -167,10 +167,14 @@ bool ProtoInterface::PingGame() {
     // Wait for the return of the ping.
     // TODO: Implement a time out here.
     GameResponsePtr response = WaitForResponseInternal();
-    if (response.get()) {
-        return true;
+    if (!response.get() || !response->has_ping()) {
+        return false;
     }
-    return false;
+
+    const auto& response_ping = response->ping();
+    base_build_ = response_ping.base_build();
+    data_version_ = response_ping.data_version();
+    return true;
 }
 
 void ProtoInterface::Quit() {
