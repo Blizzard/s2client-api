@@ -37,6 +37,7 @@ enum class ClientError {
     SC2AppFailure,       /*! SC2 has either crashed or been forcibly terminated by this library because it was not responding to requests. */
     SC2ProtocolError,    /*! The response from SC2 contains errors, most likely meaning the API was not used in a correct way. */
     SC2ProtocolTimeout,  /*! A request was made and a response was not received in the amount of time given by the timeout. */
+    WrongGameVersion,    /*! A replay was attempted to be loaded in the wrong game version. */
 };
 
 //! A set of common events a user can override in their derived bot or replay observer class.

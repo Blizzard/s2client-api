@@ -3,11 +3,9 @@
 #include "sc2utils/sc2_arg_parser.h"
 #include "sc2utils/sc2_manage_process.h"
 #include "sc2utils/sc2_property_reader.h"
-#include "sc2utils/sc2_scan_directory.h"
 
 #include <cassert>
 #include <iostream>
-#include <algorithm>
 
 namespace sc2 {
 
@@ -34,46 +32,6 @@ bool ParseFromFile(ProcessSettings& process_settings, GameSettings& game_setting
     reader.ReadString("map", game_settings.map_name);
     reader.ReadInt("timeout", process_settings.timeout_ms);
     return true;
-}
-
-bool FindLatestExe(std::string& path) {
-    if (path.length() < 4)
-        return false;
-
-    static const char VersionsFolder[] = "Versions\\";
-    static std::size_t BaseFolderNameLen = 10; // "Base00000\"
-    std::size_t versions_pos = path.find(VersionsFolder);
-    if (versions_pos == std::string::npos) {
-        return DoesFileExist(path);
-    }
-
-    // Get the versions path.
-    std::string versions_path = path;
-    versions_path.erase(versions_path.begin() + versions_pos + sizeof(VersionsFolder) - 1, versions_path.end());
-
-    // Get the exe name.
-    std::string exe_name = path;
-    exe_name.erase(exe_name.begin(), exe_name.begin() + versions_pos + sizeof(VersionsFolder) + BaseFolderNameLen - 1);
-
-    // Get a list of all subfolders.
-    std::vector<std::string> subfolders;
-    scan_directory(versions_path.c_str(), subfolders, true, true);
-    if (subfolders.size() < 1) {
-        return DoesFileExist(path);
-    }
-
-    // Sort the subfolders list.
-    std::sort(subfolders.begin(), subfolders.end());
-
-    for (int folder_index = static_cast<int>(subfolders.size()) - 1; folder_index >= 0; --folder_index) {
-        std::string test_path = subfolders[folder_index] + "\\" + exe_name;
-        if (DoesFileExist(test_path)) {
-            path = test_path;
-            return true;
-        }
-    }
-
-    return DoesFileExist(path);
 }
 
 #if defined(_WIN32)
