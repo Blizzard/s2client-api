@@ -238,7 +238,7 @@ bool TerminateProcess(uint64_t process_id) {
     if (index < 0)
         return false;
 
-    ::TerminateProcess(windows_processes[index].pi_.hProcess, -1);
+    ::TerminateProcess(windows_processes[index].pi_.hProcess, static_cast<UINT>(-1));
     WaitForSingleObject(windows_processes[index].pi_.hProcess, 120 * 1000);
 
     process_id = 0LL;
