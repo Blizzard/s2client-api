@@ -1234,13 +1234,12 @@ void DebugImp::SendDebug() {
         unit_value->set_unit_tag(set_unit_value.tag);
     }
 
-    for (std::size_t i = 0; i < debug_state_.size(); ++i) {
+    for (const SC2APIProtocol::DebugGameState& state : debug_state_) {
         SC2APIProtocol::DebugCommand* command = request_debug->add_debug();
-        command->set_game_state(debug_state_[i]);
+        command->set_game_state(state);
     }
 
-    for (const DebugUnit& unit : debug_unit_)
-    {
+    for (const DebugUnit& unit : debug_unit_) {
         if (unit.count < 1) {
             continue;
         }
