@@ -272,12 +272,12 @@ void ActionFeatureLayerImp::Select(const Point2DI& p0, const Point2DI& p1, bool 
 class AgentControlImp : public AgentControlInterface {
 public:
     ControlInterface* control_interface_;
-    ActionImp* actions_;
-    ActionFeatureLayerImp* actions_feature_layer_;
+    std::unique_ptr<ActionImp> actions_;
+    std::unique_ptr<ActionFeatureLayerImp> actions_feature_layer_;
     Agent* agent_;
 
     AgentControlImp(Agent* agent, ControlInterface* control_interface);
-    ~AgentControlImp();
+    ~AgentControlImp() = default;
 
     bool Restart() override;
 };
@@ -286,13 +286,8 @@ AgentControlImp::AgentControlImp(Agent* agent, ControlInterface* control_interfa
     control_interface_(control_interface),
     actions_(nullptr),
     agent_(agent) {
-    actions_ = new ActionImp(control_interface_->Proto(), *control_interface);
-    actions_feature_layer_ = new ActionFeatureLayerImp(control_interface_->Proto(), *control_interface);
-}
-
-AgentControlImp::~AgentControlImp() {
-    delete actions_;
-    delete actions_feature_layer_;
+    actions_ = std::make_unique<ActionImp>(control_interface_->Proto(), *control_interface);
+    actions_feature_layer_ = std::make_unique<ActionFeatureLayerImp>(control_interface_->Proto(), *control_interface);
 }
 
 bool AgentControlImp::Restart() {
@@ -338,11 +333,11 @@ Agent::~Agent() {
 }
 
 ActionInterface* Agent::Actions() {
-    return agent_control_imp_->actions_;
+    return agent_control_imp_->actions_.get();
 }
 
 ActionFeatureLayerInterface* Agent::ActionsFeatureLayer() {
-    return agent_control_imp_->actions_feature_layer_;
+    return agent_control_imp_->actions_feature_layer_.get();
 }
 
 AgentControlInterface* Agent::AgentControl() {
