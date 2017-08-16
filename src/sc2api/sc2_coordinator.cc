@@ -187,6 +187,8 @@ public:
     bool WaitForAllResponses();
     void AddAgent(Agent* agent);
 
+    bool Relaunch(ReplayObserver* replay_observer);
+
     int window_width_ = 1024;
     int window_height_ = 768;
 
@@ -528,6 +530,36 @@ bool CoordinatorImp::StartGame() {
     return true;
 }
 
+bool CoordinatorImp::Relaunch(ReplayObserver* replay_observer) {
+    ControlInterface* control = replay_observer->Control();
+    const ProcessInfo& pi = control->GetProcessInfo();
+
+    // Try to kill SC2 then relaunch it
+    sc2::TerminateProcess(pi.process_id);
+
+    // Reset the control interface so internal state gets reset.
+    replay_observer->Reset();
+
+    // ReplayObserver needs the control interface from Client.
+    replay_observer->SetControl(replay_observer->Control());
+
+    // Control interface has been reconstructed.
+    control = replay_observer->Control();
+
+    last_port_ = LaunchProcess(process_settings_,
+        replay_observer,
+        window_width_,
+        window_height_,
+        window_start_x_,
+        window_start_y_,
+        last_port_ + 1
+    );
+
+    const ProcessInfo& pi_new = control->GetProcessInfo();
+
+    return control->Connect(process_settings_.net_address, pi_new.port, process_settings_.timeout_ms);
+}
+
 // Coordinator.
 
 Coordinator::Coordinator() {
@@ -652,6 +684,7 @@ bool Coordinator::Update() {
         }
     }
 
+    bool relaunched = false;
     for (auto replay_observer : imp_->replay_observers_) {
         ControlInterface* control = replay_observer->Control();
         const std::vector<ClientError>& client_errors = control->GetClientErrors();
@@ -659,35 +692,11 @@ bool Coordinator::Update() {
             replay_observer->OnError(client_errors, control->GetProtocolErrors());
             error_occurred = true;
             if (imp_->replay_recovery_) {
-                const ProcessInfo& pi = control->GetProcessInfo();
-
-                // Try to kill SC2 then relaunch it
-                sc2::TerminateProcess(pi.process_id);
-
-                // Reset the control interface so internal state gets reset.
-                replay_observer->Reset();
-
-                // ReplayObserver needs the control interface from Client.
-                replay_observer->SetControl(replay_observer->Control());
-
-                // Control interface has been reconstructed.
-                control = replay_observer->Control();
-
-                imp_->last_port_ = LaunchProcess(imp_->process_settings_, 
-                    replay_observer, 
-                    imp_->window_width_, 
-                    imp_->window_height_, 
-                    imp_->window_start_x_, 
-                    imp_->window_start_y_, 
-                    imp_->last_port_ + 1);
-
-                const ProcessInfo& pi_new = control->GetProcessInfo();
-
-                bool connected = control->Connect(imp_->process_settings_.net_address, pi_new.port, imp_->process_settings_.timeout_ms);
-
                 // An error did occur but if we succesfully recovered ignore it. The client will still gets its event
+                bool connected = imp_->Relaunch(replay_observer);
                 if (connected) {
                     error_occurred = false;
+                    relaunched = true;
                 }
             }
         }
@@ -699,7 +708,7 @@ bool Coordinator::Update() {
         return false;
     }
 
-    return !AllGamesEnded();
+    return !AllGamesEnded() || relaunched;
 }
 
 bool Coordinator::AllGamesEnded() const {
