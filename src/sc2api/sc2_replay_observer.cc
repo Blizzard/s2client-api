@@ -75,10 +75,10 @@ bool ReplayControlImp::GatherReplayInfo(const std::string& path) {
         return false;
     }
 
-   replay_info_.map_name = map_name.c_str();
-   replay_info_.map_path = map_path.c_str();
-   replay_info_.replay_path = path.c_str();
-   replay_info_.version = version.c_str();
+    replay_info_.map_name = map_name.c_str();
+    replay_info_.map_path = map_path.c_str();
+    replay_info_.replay_path = path.c_str();
+    replay_info_.version = version.c_str();
 
     replay_info_.duration = proto_replay_info.game_duration_seconds();
     replay_info_.duration_gameloops = proto_replay_info.game_duration_loops();
