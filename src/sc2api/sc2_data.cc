@@ -1,5 +1,6 @@
 #include "sc2api/sc2_data.h"
 #include "sc2api/sc2_interfaces.h"
+#include "sc2api/sc2_proto_to_pods.h"
 
 #include <iostream>
 #include <cassert>
@@ -275,6 +276,16 @@ void UnitTypeData::ReadFromProto(const SC2APIProtocol::UnitTypeData& unit_data) 
         weapon.ReadFromProto(unit_data.weapons(i));
         weapons.push_back(weapon);
     }
+
+    food_provided = unit_data.food_provided();
+
+    food_required = unit_data.food_required();
+
+    ability_id = unit_data.ability_id();
+
+    race = ConvertRaceFromProto(unit_data.race());
+
+    build_time = unit_data.build_time();
 }
 
 std::string UnitTypeData::Log() const {
