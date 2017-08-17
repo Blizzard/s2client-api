@@ -172,6 +172,16 @@ struct UnitTypeData {
     float armor;
     //! Weapons on this unit type.
     std::vector<Weapon> weapons;
+    //! How much food the unit requires.
+    float food_required;
+    //! How much food the unit provides.
+    float food_provided;
+    //! Which ability id creates the unit.
+    AbilityID ability_id;
+    //! The race the unit belongs to.
+    Race race;
+    //! How long the unit takes to build.
+    float build_time;
 
     //! Constructor.
     UnitTypeData();
