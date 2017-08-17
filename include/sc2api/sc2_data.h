@@ -182,6 +182,10 @@ struct UnitTypeData {
     Race race;
     //! How long the unit takes to build.
     float build_time;
+    //! Whether the unit can have minerals (mineral patches).
+    bool has_minerals;
+    //! Whether the unit can have vespene (vespene geysers).
+    bool has_vespene;
 
     //! Constructor.
     UnitTypeData();

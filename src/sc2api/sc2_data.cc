@@ -286,6 +286,10 @@ void UnitTypeData::ReadFromProto(const SC2APIProtocol::UnitTypeData& unit_data) 
     race = ConvertRaceFromProto(unit_data.race());
 
     build_time = unit_data.build_time();
+
+    has_minerals = unit_data.has_minerals();
+
+    has_vespene = unit_data.has_vespene();
 }
 
 std::string UnitTypeData::Log() const {
