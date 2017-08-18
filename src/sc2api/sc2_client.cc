@@ -1234,13 +1234,12 @@ void DebugImp::SendDebug() {
         unit_value->set_unit_tag(set_unit_value.tag);
     }
 
-    for (std::size_t i = 0; i < debug_state_.size(); ++i) {
+    for (const SC2APIProtocol::DebugGameState& state : debug_state_) {
         SC2APIProtocol::DebugCommand* command = request_debug->add_debug();
-        command->set_game_state(debug_state_[i]);
+        command->set_game_state(state);
     }
 
-    for (const DebugUnit& unit : debug_unit_)
-    {
+    for (const DebugUnit& unit : debug_unit_) {
         if (unit.count < 1) {
             continue;
         }
@@ -1345,9 +1344,9 @@ public:
     ObservationPtr observation_;
     ResponseObservationPtr response_;
 
-    ObservationImp* observation_imp_;
-    QueryImp* query_imp_;
-    DebugImp* debug_imp_;
+    std::unique_ptr<ObservationImp> observation_imp_;
+    std::unique_ptr<QueryImp> query_imp_;
+    std::unique_ptr<DebugImp> debug_imp_;
     ProcessInfo pi_;
 
     // Errors that may have occured during calls to the various interfaces.
@@ -1423,15 +1422,12 @@ ControlImp::ControlImp(Client& client) :
     query_imp_(nullptr),
     debug_imp_(nullptr) {
     proto_.SetControl(this);
-    observation_imp_ = new ObservationImp(proto_, observation_, response_, *this);
-    query_imp_ = new QueryImp(proto_, *this, *observation_imp_);
-    debug_imp_= new DebugImp(proto_, *observation_imp_, *this);
+    observation_imp_ = std::make_unique<ObservationImp>(proto_, observation_, response_, *this);
+    query_imp_ = std::make_unique<QueryImp>(proto_, *this, *observation_imp_);
+    debug_imp_= std::make_unique<DebugImp>(proto_, *observation_imp_, *this);
 }
 
 ControlImp::~ControlImp() {
-    delete observation_imp_;
-    delete query_imp_;
-    delete debug_imp_;
     proto_.Quit();
 }
 
@@ -2202,16 +2198,16 @@ Client::~Client() {
 
 const ObservationInterface* Client::Observation() const {
     // TODO: Should this return a nullptr if the interface is not valid (e.g., before a game is started)?
-    return control_imp_->observation_imp_;
+    return control_imp_->observation_imp_.get();
 }
 
 QueryInterface* Client::Query() {
     // TODO: Should this return a nullptr if the interface is not valid (e.g., before a game is started)?
-    return control_imp_->query_imp_;
+    return control_imp_->query_imp_.get();
 }
 
 DebugInterface* Client::Debug() {
-    return control_imp_->debug_imp_;
+    return control_imp_->debug_imp_.get();
 }
 
 ControlInterface* Client::Control() {
