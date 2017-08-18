@@ -29,6 +29,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(CIVETWEB_ENABLE_WEBSOCKETS ON CACHE BOOL "" FORCE)
 
+# Disable installing the executable.
+set(CIVETWEB_INSTALL_EXECUTABLE OFF CACHE BOOL "" FORCE)
+
 # Don't build civetweb with sanitizers
 set(CIVETWEB_ENABLE_ASAN OFF CACHE BOOL "" FORCE)
 
@@ -39,11 +42,9 @@ set(protobuf_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # Don't build SDL dynamic lib.
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 
-# Run civetwebs cmake.
+# Run civetweb's cmake.
 add_subdirectory("contrib/civetweb")
 
-# TODO: This generates a cmake warning but we don't 
-# want to include it in the project.
 #set_target_properties(c-executable PROPERTIES FOLDER contrib)
 set_target_properties(c-executable PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 set_target_properties(c-library c-executable PROPERTIES FOLDER contrib)
