@@ -185,7 +185,7 @@ static Attribute ConvertAttributeEnum(SC2APIProtocol::Attribute attribute) {
         case SC2APIProtocol::Attribute::Hover:       return Attribute::Hover;
         case SC2APIProtocol::Attribute::Heroic:      return Attribute::Heroic;
         case SC2APIProtocol::Attribute::Summoned:    return Attribute::Summoned;
-        default:                                        return Attribute::Invalid;
+        default:                                     return Attribute::Invalid;
     }
 }
 
@@ -205,7 +205,7 @@ static Weapon::TargetType ConvertTargetTypeEnum(SC2APIProtocol::Weapon::TargetTy
         case SC2APIProtocol::Weapon::Ground:     return Weapon::TargetType::Ground;
         case SC2APIProtocol::Weapon::Air:        return Weapon::TargetType::Air;
         case SC2APIProtocol::Weapon::Any:        return Weapon::TargetType::Any;
-        default:                                    return Weapon::TargetType::Invalid;
+        default:                                 return Weapon::TargetType::Invalid;
     }
 }
 

@@ -419,10 +419,10 @@ void Convert(const SC2APIProtocol::SpatialCameraSetup& setup_proto, SpatialSetup
     setup.camera_width = setup_proto.width();
     const SC2APIProtocol::Size2DI& resolution = setup_proto.resolution();
     const SC2APIProtocol::Size2DI& minimap_resolution = setup_proto.minimap_resolution();
-    setup.map_resolution_x= resolution.x();
-    setup.map_resolution_y= resolution.y();
-    setup.minimap_resolution_x= minimap_resolution.x();
-    setup.minimap_resolution_y= minimap_resolution.y();
+    setup.map_resolution_x = resolution.x();
+    setup.map_resolution_y = resolution.y();
+    setup.minimap_resolution_x = minimap_resolution.x();
+    setup.minimap_resolution_y = minimap_resolution.y();
 }
 
 bool Convert(const SC2APIProtocol::InterfaceOptions& options_proto, InterfaceOptions& options) {
