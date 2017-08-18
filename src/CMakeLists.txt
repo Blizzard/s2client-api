@@ -15,6 +15,8 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated)
 foreach(proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME_WE)
     list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.cc)
+    # Get just headers for lib install
+    list(APPEND sc2protocol_headers "${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.h")
 endforeach()
 
 # Now include that directory
@@ -29,7 +31,6 @@ add_library(sc2utils ${sources_utils})
 # Glob header files together for install
 file(GLOB sc2api_headers "../include/sc2api/*.h")
 file(GLOB sc2lib_headers "../include/sc2lib/*.h")
-file(GLOB sc2protocol_headers "${PROJECT_BINARY_DIR}/generated/*.pb.h")
 file(GLOB sc2utils_headers "../include/sc2utils/*.h")
 
 message(STATUS "PROTOCOL ${sc2protocol_headers}")
