@@ -33,8 +33,6 @@ file(GLOB sc2api_headers "../include/sc2api/*.h")
 file(GLOB sc2lib_headers "../include/sc2lib/*.h")
 file(GLOB sc2utils_headers "../include/sc2utils/*.h")
 
-message(STATUS "PROTOCOL ${sc2protocol_headers}")
-
 # Set the public headers for install
 set_target_properties(sc2api PROPERTIES PUBLIC_HEADER "${sc2api_headers}")
 set_target_properties(sc2lib PROPERTIES PUBLIC_HEADER "${sc2lib_headers}")
