@@ -42,24 +42,32 @@ set_target_properties(sc2utils PROPERTIES PUBLIC_HEADER "${sc2utils_headers}")
 # Install the libraries and their includes
 install(
   TARGETS sc2api
+  EXPORT SC2API_EXPORTS
   ARCHIVE DESTINATION "lib"
   PUBLIC_HEADER DESTINATION "include/sc2api"
+  COMPONENT api
 )
 install(
   TARGETS sc2lib
+  EXPORT SC2API_EXPORTS
   ARCHIVE DESTINATION "lib"
   PUBLIC_HEADER DESTINATION "include/sc2lib"
+  COMPONENT lib
 )
 install(
   TARGETS sc2protocol
+  EXPORT SC2API_EXPORTS
   ARCHIVE DESTINATION "lib"
   PUBLIC_HEADER DESTINATION "include" # These are expected to be included as
                                       # "*.pb.h" not "dir/*.pb.h"
+  COMPONENT protocol
 )
 install(
   TARGETS sc2utils
+  EXPORT SC2API_EXPORTS
   ARCHIVE DESTINATION "lib"
   PUBLIC_HEADER DESTINATION "include/sc2utils"
+  COMPONENT utils
 )
 
 set_target_properties(sc2api PROPERTIES DEBUG_POSTFIX "d")
@@ -80,8 +88,10 @@ if (NOT APPLE)
     set_target_properties(sc2renderer PROPERTIES PUBLIC_HEADER "${sc2renderer_headers}")
     install(
       TARGETS sc2renderer
+      EXPORT SC2API_EXPORTS
       ARCHIVE DESTINATION "lib"
       PUBLIC_HEADER DESTINATION "include/sc2renderer"
+      COMPONENT renderer
     )
     set_target_properties(sc2renderer PROPERTIES DEBUG_POSTFIX "d")
     target_link_libraries(sc2renderer SDL2-static)
@@ -127,6 +137,7 @@ if (WIN32)
     set_target_properties(sc2utils PROPERTIES COMPILE_FLAGS "/W3 /WX")
     set_target_properties(sc2protocol PROPERTIES COMPILE_FLAGS "/W0")
 endif (WIN32)
+
 
 target_link_libraries(sc2api sc2protocol c-library)
 target_link_libraries(sc2lib sc2api)
