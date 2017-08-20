@@ -1,0 +1,26 @@
+# Config file for the SC2API package.
+#
+# It defines the following variables
+#  SC2API_INCLUDE_DIRS - include directories for sc2api
+#  SC2API_LIBRARIES    - libraries to link against
+#
+# It does not define the following variables
+#  SC2API_EXECUTABLE   - there are no exectuables at this time
+
+# Compute paths
+get_filename_component(SC2API_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(SC2API_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET sc2_api AND NOT SC2API_BINARY_DIR)
+  include("${SC2API_CMAKE_DIR}/SC2APITargets.cmake")
+endif()
+
+# These are IMPORTED targets created by SC2APITargets.cmake
+set(SC2API_LIBRARIES sc2api sc2lib sc2protocol sc2utils)
+if(NOT APPLE)
+  set(SC2API_LIBRARIES ${SC2API_LIBRARIES} sc2renderer)
+endif()
+
+# If we had executables.. (update file header please)
+# set(SC2API_EXECUTABLE [target names])
