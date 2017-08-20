@@ -19,6 +19,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_BINARY_DIR}/bin)
 
+# Create our install directories. Necessary so that the install directives in
+# the src directory have the correct paths
+include("cmake/install_dirs.cmake")
+
 # Build with c++14 support.
 set(CMAKE_CXX_STANDARD 14)
 
@@ -81,6 +85,9 @@ if (NOT APPLE)
     set_target_properties(sc2renderer PROPERTIES FOLDER utilities)
     set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
 endif ()
+
+# Install the SC2API cmake package
+include("cmake/install.cmake")
 
 if (BUILD_API_EXAMPLES)
     add_subdirectory("examples")
