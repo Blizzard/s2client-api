@@ -290,6 +290,16 @@ void UnitTypeData::ReadFromProto(const SC2APIProtocol::UnitTypeData& unit_data) 
     has_minerals = unit_data.has_minerals();
 
     has_vespene = unit_data.has_vespene();
+
+    for (int i = 0; i < unit_data.tech_alias_size(); ++i) {
+        tech_alias.push_back(unit_data.tech_alias(i));
+    }
+
+    unit_alias = unit_data.unit_alias();
+
+    tech_requirement = unit_data.tech_requirement();
+
+    require_attached = unit_data.require_attached();
 }
 
 std::string UnitTypeData::Log() const {
