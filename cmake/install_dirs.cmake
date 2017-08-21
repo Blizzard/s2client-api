@@ -36,9 +36,9 @@ set(
 
 # Choose our cmake file install dir based on OS
 if(WIN32 AND NOT CYGWIN)
-  set(DEF_INSTALL_CMAKE_DIR CMake)
+  set(DEF_INSTALL_CMAKE_DIR cmake)
 else()
-  set(DEF_INSTALL_CMAKE_DIR lib/CMake/SC2API)
+  set(DEF_INSTALL_CMAKE_DIR lib/cmake/SC2API)
 endif()
 
 # Set up actual cmake file install dir
