@@ -3,6 +3,7 @@
 #include "test_feature_layer.h"
 #include "test_feature_layer_mp.h"
 #include "test_multiplayer.h"
+#include "test_rendered.h"
 #include "test_snapshots.h"
 #include "test_app.h"
 #include "test_unit_command.h"
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
     TEST(sc2::TestPerformance);
     TEST(sc2::TestObservationInterface);
     //TEST(sc2::TestObservationActions);
+    TEST(sc2::TestRendered);
     if (success)
         std::cout << "All tests succeeded!" << std::endl;
     else
