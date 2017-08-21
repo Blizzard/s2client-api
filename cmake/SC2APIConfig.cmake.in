@@ -31,6 +31,7 @@ set(
   ${Protobuf_LIBRARIES} # Required to link with sc2protocol
   civetweb # Required to link with sc2protocol
   dl # Required to link with civetweb
+  pthread # Required to link with civetweb
 )
 if(NOT APPLE)
   set(SC2API_LIBRARIES ${SC2API_LIBRARIES} sc2renderer)
