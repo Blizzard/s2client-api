@@ -29,9 +29,14 @@ install(
   COMPONENT cmake_package
 )
 
+# This is currently disabled due to some issues with the build process. Due to
+# the sc2api target's dependence on CivetWeb's c-library target and the
+# sc2renderer target's dependence on SDL2's SDL2-static target we encounter
+# errors from cmake when trying to install our own export set. Please see
+# issue #90 in the blizzard/s2client-api repo for further discussion.
 # Install the export set for use with the install-tree
-install(
-  EXPORT SC2API_EXPORTS
-  DESTINATION "${SC2API_INSTALL_CMAKE_DIR}"
-  COMPONENT cmake_package
-)
+# install(
+#   EXPORT SC2API_EXPORTS
+#   DESTINATION "${SC2API_INSTALL_CMAKE_DIR}"
+#   COMPONENT cmake_package
+# )
