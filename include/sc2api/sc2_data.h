@@ -187,6 +187,15 @@ struct UnitTypeData {
     //! Whether the unit can have vespene (vespene geysers).
     bool has_vespene;
 
+    //! Units this is equivalent to in terms of satisfying tech requirements.
+    std::vector<UnitTypeID> tech_alias;
+    //! Units that are morphed variants of the same unit.
+    UnitTypeID unit_alias;
+    //! Structure required to build this unit. (Or any with the same tech_alias)
+    UnitTypeID tech_requirement;
+    //! Whether tech_requirement is an add-on.
+    bool require_attached;
+
     //! Constructor.
     UnitTypeData();
 
