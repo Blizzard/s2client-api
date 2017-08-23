@@ -20,6 +20,8 @@ endforeach()
 # Now include that directory
 include_directories(SYSTEM "${PROJECT_BINARY_DIR}/generated")
 
+# Setup MSVC parallelized builds
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 # Create the library
 add_library(sc2api ${sources_sc2})
