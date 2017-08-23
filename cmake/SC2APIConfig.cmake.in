@@ -10,6 +10,7 @@
 # Compute paths
 get_filename_component(SC2API_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(SC2API_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+get_filename_component(SC2API_INCLUDE_DIRS ${SC2API_INCLUDE_DIRS} ABSOLUTE)
 
 # This is disabled right now, please see s2client-api/cmake/install.cmake for an
 # explanation of why.
