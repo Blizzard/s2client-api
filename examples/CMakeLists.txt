@@ -6,6 +6,9 @@ file(GLOB common_sources "common/*.h" "common/*.cc")
 include_directories(SYSTEM "${PROJECT_BINARY_DIR}/generated")
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/contrib/SDL-mirror/include")
 
+# Setup MSVC parallelized builds
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
 #bot_simple
 add_executable(bot_simple "bot_simple.cc")
 set_target_properties(bot_simple PROPERTIES FOLDER examples)

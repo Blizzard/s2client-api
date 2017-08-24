@@ -7,6 +7,9 @@ file(GLOB test_SRC
     "*.cc"
 )
 
+# Setup MSVC parallelized builds
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
 #all_tests
 add_executable(all_tests ${test_SRC})
 set_target_properties(all_tests PROPERTIES FOLDER tests)
