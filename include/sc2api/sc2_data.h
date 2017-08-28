@@ -210,11 +210,18 @@ typedef std::vector<UnitTypeData> UnitTypes;
 
 //! Upgrade data.
 struct UpgradeData {
-    uint32_t upgrade_id;                                // Stable ID.
-    std::string name;                                   // Catalog name of the upgrade.
+    //! Stable ID. This ID will not change between patches.
+    uint32_t upgrade_id;
+    //! Upgrade name, corresponds to the game's catalog.
+    std::string name;
+    //! Mineral cost of researching the upgrade.
     uint32_t mineral_cost;
+    //! Vespene cost of researching the upgrade.
     uint32_t vespene_cost;
+    //! Ability that researches this upgrade.
     AbilityID ability_id;
+    //! Time in GameLoops to research this upgrade.
+    float research_time;
 
     UpgradeData();
 
@@ -226,8 +233,10 @@ typedef std::vector<UpgradeData> Upgrades;
 
 //! Buff data.
 struct BuffData {
-    uint32_t buff_id;                                   // Stable ID.
-    std::string name;                                   // Catalog name of the buff.
+    //! Stable ID. This ID will not change between patches.
+    uint32_t buff_id;
+    //! Buff name, corresponds to the game's catalog.
+    std::string name;
 
     BuffData();
 
