@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 #include "sc2_map_info.h"
 #include "sc2_score.h"
 #include "sc2_unit.h"
