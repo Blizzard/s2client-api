@@ -8,7 +8,7 @@
 #include "sc2utils/sc2_manage_process.h"
 #include "sc2utils/sc2_scan_directory.h"
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 #include <algorithm>
 #include <iostream>
@@ -173,7 +173,7 @@ public:
     bool StartGame();
     void StartReplay();
     bool ShouldIgnore(ReplayObserver* r, const std::string& file);
-    bool ShouldRelaunch(ReplayObserver* r, const std::string& file);
+    bool ShouldRelaunch(ReplayObserver* r);
 
     void StepAgents();
     void StepAgentsRealtime();
@@ -230,7 +230,7 @@ bool CoordinatorImp::ShouldIgnore(ReplayObserver* r, const std::string& file) {
     return r->IgnoreReplay(r->ReplayControl()->GetReplayInfo(), replay_settings_.player_id);
 }
 
-bool CoordinatorImp::ShouldRelaunch(ReplayObserver* r, const std::string& file) {
+bool CoordinatorImp::ShouldRelaunch(ReplayObserver* r) {
     const ReplayInfo& replay_info = r->ReplayControl()->GetReplayInfo();
 
     bool version_match = replay_info.base_build == r->Control()->Proto().GetBaseBuild() &&
@@ -277,7 +277,7 @@ void CoordinatorImp::StartReplay() {
                 continue;
             }
 
-            if (ShouldRelaunch(r, file)) {
+            if (ShouldRelaunch(r)) {
                 break;
             }
 

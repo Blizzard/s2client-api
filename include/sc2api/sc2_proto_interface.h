@@ -2,7 +2,7 @@
 
 #include "sc2_connection.h"
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 #include <functional>
 
