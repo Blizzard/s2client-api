@@ -25,6 +25,7 @@ var searchData=
   ['debugsphereout',['DebugSphereOut',['../classsc2_1_1_debug_interface.html#a9c4b50b0c3b07cd77c4b9c98afc689b0',1,'sc2::DebugInterface']]],
   ['debugtestapp',['DebugTestApp',['../classsc2_1_1_debug_interface.html#a9a6fd0d4719dea83de3f5e374127a1da',1,'sc2::DebugInterface']]],
   ['debugtextout',['DebugTextOut',['../classsc2_1_1_debug_interface.html#a3edaf8b4f0e0155f3b8eaf2cf672ee29',1,'sc2::DebugInterface::DebugTextOut(const std::string &amp;out, Color color=Colors::White)=0'],['../classsc2_1_1_debug_interface.html#a5044b5772c931b1115fd3ec40682a257',1,'sc2::DebugInterface::DebugTextOut(const std::string &amp;out, const Point2D &amp;pt_virtual_2D, Color color=Colors::White)=0'],['../classsc2_1_1_debug_interface.html#a8037bf4a4941d49c372c6e73dfe4663c',1,'sc2::DebugInterface::DebugTextOut(const std::string &amp;out, const Point3D &amp;pt3D, Color color=Colors::White)=0']]],
+  ['disconnect',['Disconnect',['../classsc2_1_1_connection.html#a0a84c7b58a8ecb0046f6ad235ce01067',1,'sc2::Connection']]],
   ['distance2d',['Distance2D',['../sc2__common_8h.html#a828525a11f27628914021c21736f2810',1,'sc2']]],
   ['distance3d',['Distance3D',['../sc2__common_8h.html#a68da467a343f431544f3cea7c105bcde',1,'sc2']]],
   ['distancesquared2d',['DistanceSquared2D',['../sc2__common_8h.html#a9c649eca988aae078b7e72d087c2459f',1,'sc2']]],

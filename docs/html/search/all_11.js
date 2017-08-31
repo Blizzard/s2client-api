@@ -13,6 +13,8 @@ var searchData=
   ['targetscreen',['TargetScreen',['../structsc2_1_1_spatial_unit_command.html#ad50a0bbdbaff9ef68fbda3d817d3a32ea7f95fd3b8b1bbeb6221f223074dbbf9a',1,'sc2::SpatialUnitCommand']]],
   ['targettype',['TargetType',['../structsc2_1_1_action_raw.html#a18505ce7c00e382d636339eba391d800',1,'sc2::ActionRaw::TargetType()'],['../structsc2_1_1_spatial_unit_command.html#ad50a0bbdbaff9ef68fbda3d817d3a32e',1,'sc2::SpatialUnitCommand::TargetType()']]],
   ['targetunittag',['TargetUnitTag',['../structsc2_1_1_action_raw.html#a18505ce7c00e382d636339eba391d800a61c42ac7737f36c0c9ee4be66feb1933',1,'sc2::ActionRaw']]],
+  ['tech_5falias',['tech_alias',['../structsc2_1_1_unit_type_data.html#a2cd00ee675ab4280fa6e8bfeef27061a',1,'sc2::UnitTypeData']]],
+  ['tech_5frequirement',['tech_requirement',['../structsc2_1_1_unit_type_data.html#acd5714a07964d41b8af883d6b230e38e',1,'sc2::UnitTypeData']]],
   ['terrain_5fheight',['terrain_height',['../structsc2_1_1_game_info.html#af0b251e21f771f06ca1927c9dff2e43b',1,'sc2::GameInfo']]],
   ['terrainheight',['TerrainHeight',['../classsc2_1_1_observation_interface.html#a8e6d0c2bce48f675b3d4b99f925dfafb',1,'sc2::ObservationInterface']]],
   ['timeout_5fcallback_5f',['timeout_callback_',['../classsc2_1_1_connection.html#abab9f14cde0fe589fc3a1c9588c6607a',1,'sc2::Connection']]],
