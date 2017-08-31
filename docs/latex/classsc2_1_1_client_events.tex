@@ -29,15 +29,15 @@ virtual void \hyperlink{classsc2_1_1_client_events_a2c5023d18ffc88bed76c844e643e
 \begin{DoxyCompactList}\small\item\em Called when a game has ended. \end{DoxyCompactList}\item 
 virtual void \hyperlink{classsc2_1_1_client_events_a6f5839e220d2a5a19b30065e0b8290c4}{On\+Step} ()
 \item 
-virtual void \hyperlink{classsc2_1_1_client_events_ae80cd238b975c76b5db062939949b598}{On\+Unit\+Destroyed} (const \hyperlink{classsc2_1_1_unit}{Unit} \&unit)
+virtual void \hyperlink{classsc2_1_1_client_events_a1e0c8a37df68695cf898aa86fddc5a1a}{On\+Unit\+Destroyed} (const \hyperlink{classsc2_1_1_unit}{Unit} \&)
 \item 
-virtual void \hyperlink{classsc2_1_1_client_events_a2619e1734feeccd4f8412fd7447fe230}{On\+Unit\+Created} (const \hyperlink{classsc2_1_1_unit}{Unit} \&unit)
+virtual void \hyperlink{classsc2_1_1_client_events_a28c6dc5471d2a7bacfc6cf289983bcc5}{On\+Unit\+Created} (const \hyperlink{classsc2_1_1_unit}{Unit} \&)
 \item 
-virtual void \hyperlink{classsc2_1_1_client_events_a5d57eb9cdfa579a7c50442305dbf8635}{On\+Unit\+Idle} (const \hyperlink{classsc2_1_1_unit}{Unit} \&unit)
+virtual void \hyperlink{classsc2_1_1_client_events_ac1d79ab7cceb688172f375edb2f48f60}{On\+Unit\+Idle} (const \hyperlink{classsc2_1_1_unit}{Unit} \&)
 \item 
-virtual void \hyperlink{classsc2_1_1_client_events_a0ff0017571ba53e018f85dda03861c3a}{On\+Upgrade\+Completed} (\hyperlink{classsc2_1_1_s_c2_type}{Upgrade\+ID} upgrade)
+virtual void \hyperlink{classsc2_1_1_client_events_a4cdc022420833b34fbcd1c9713096754}{On\+Upgrade\+Completed} (\hyperlink{classsc2_1_1_s_c2_type}{Upgrade\+ID})
 \item 
-virtual void \hyperlink{classsc2_1_1_client_events_a9bf081c662bf5e5e64598f8c05f9a309}{On\+Building\+Construction\+Complete} (const \hyperlink{classsc2_1_1_unit}{Unit} \&unit)
+virtual void \hyperlink{classsc2_1_1_client_events_a635150e0895fb3fed29268f5b53cbd05}{On\+Building\+Construction\+Complete} (const \hyperlink{classsc2_1_1_unit}{Unit} \&)
 \item 
 \mbox{\Hypertarget{classsc2_1_1_client_events_afde152c65ab94bdb57e345a8fd1532aa}\label{classsc2_1_1_client_events_afde152c65ab94bdb57e345a8fd1532aa}} 
 virtual void \hyperlink{classsc2_1_1_client_events_afde152c65ab94bdb57e345a8fd1532aa}{On\+Nydus\+Detected} ()
@@ -45,10 +45,10 @@ virtual void \hyperlink{classsc2_1_1_client_events_afde152c65ab94bdb57e345a8fd15
 \mbox{\Hypertarget{classsc2_1_1_client_events_ab9923f256e3bf6e518ccb8ec26f8ae88}\label{classsc2_1_1_client_events_ab9923f256e3bf6e518ccb8ec26f8ae88}} 
 virtual void \hyperlink{classsc2_1_1_client_events_ab9923f256e3bf6e518ccb8ec26f8ae88}{On\+Nuclear\+Launch\+Detected} ()
 \begin{DoxyCompactList}\small\item\em Called when a nuclear launch is detected. \end{DoxyCompactList}\item 
-virtual void \hyperlink{classsc2_1_1_client_events_aecbbd77ffd17a729b307f87bbb899cc9}{On\+Unit\+Enter\+Vision} (const \hyperlink{classsc2_1_1_unit}{Unit} \&unit)
+virtual void \hyperlink{classsc2_1_1_client_events_a835228e18d8b4488b0f8e830a39116ce}{On\+Unit\+Enter\+Vision} (const \hyperlink{classsc2_1_1_unit}{Unit} \&)
 \item 
-\mbox{\Hypertarget{classsc2_1_1_client_events_a5205616dd617571eca2b437d8baf257d}\label{classsc2_1_1_client_events_a5205616dd617571eca2b437d8baf257d}} 
-virtual void \hyperlink{classsc2_1_1_client_events_a5205616dd617571eca2b437d8baf257d}{On\+Error} (const std\+::vector$<$ \hyperlink{sc2__client_8h_ac7d3e3694a208204e099f04c1e5eded0}{Client\+Error} $>$ \&client\+\_\+errors, const std\+::vector$<$ std\+::string $>$ \&protocol\+\_\+errors=\{\})
+\mbox{\Hypertarget{classsc2_1_1_client_events_a35424cb2a0baa509f997149521ab2c52}\label{classsc2_1_1_client_events_a35424cb2a0baa509f997149521ab2c52}} 
+virtual void \hyperlink{classsc2_1_1_client_events_a35424cb2a0baa509f997149521ab2c52}{On\+Error} (const std\+::vector$<$ \hyperlink{sc2__client_8h_ac7d3e3694a208204e099f04c1e5eded0}{Client\+Error} $>$ \&, const std\+::vector$<$ std\+::string $>$ \&=\{\})
 \begin{DoxyCompactList}\small\item\em Called for various errors the library can encounter. See Client\+Error enum for possible errors. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -56,11 +56,11 @@ virtual void \hyperlink{classsc2_1_1_client_events_a5205616dd617571eca2b437d8baf
 A set of common events a user can override in their derived bot or replay observer class. 
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classsc2_1_1_client_events_a9bf081c662bf5e5e64598f8c05f9a309}\label{classsc2_1_1_client_events_a9bf081c662bf5e5e64598f8c05f9a309}} 
+\mbox{\Hypertarget{classsc2_1_1_client_events_a635150e0895fb3fed29268f5b53cbd05}\label{classsc2_1_1_client_events_a635150e0895fb3fed29268f5b53cbd05}} 
 \index{sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}!On\+Building\+Construction\+Complete@{On\+Building\+Construction\+Complete}}
 \index{On\+Building\+Construction\+Complete@{On\+Building\+Construction\+Complete}!sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}}
 \subsubsection{\texorpdfstring{On\+Building\+Construction\+Complete()}{OnBuildingConstructionComplete()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Building\+Construction\+Complete (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Building\+Construction\+Complete (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 Called when the unit in the previous step had a build progress less than 1.\+0 but is greater than or equal to 1.\+0 in the current step. 
 \begin{DoxyParams}{Parameters}
@@ -73,55 +73,55 @@ Called when the unit in the previous step had a build progress less than 1.\+0 b
 \subsubsection{\texorpdfstring{On\+Step()}{OnStep()}}
 {\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Step (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
-This event will only get called when stepping. It will not get called in a real time game. In a real time game the user will be responsible for calling Get\+Observation() via the \hyperlink{classsc2_1_1_observation_interface}{Observation\+Interface}. \mbox{\Hypertarget{classsc2_1_1_client_events_a2619e1734feeccd4f8412fd7447fe230}\label{classsc2_1_1_client_events_a2619e1734feeccd4f8412fd7447fe230}} 
+This event will only get called when stepping. It will not get called in a real time game. In a real time game the user will be responsible for calling Get\+Observation() via the \hyperlink{classsc2_1_1_observation_interface}{Observation\+Interface}. \mbox{\Hypertarget{classsc2_1_1_client_events_a28c6dc5471d2a7bacfc6cf289983bcc5}\label{classsc2_1_1_client_events_a28c6dc5471d2a7bacfc6cf289983bcc5}} 
 \index{sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}!On\+Unit\+Created@{On\+Unit\+Created}}
 \index{On\+Unit\+Created@{On\+Unit\+Created}!sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}}
 \subsubsection{\texorpdfstring{On\+Unit\+Created()}{OnUnitCreated()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Created (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Created (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 Called when a \hyperlink{classsc2_1_1_unit}{Unit} has been created by the player. 
 \begin{DoxyParams}{Parameters}
 {\em unit} & The created unit. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_client_events_ae80cd238b975c76b5db062939949b598}\label{classsc2_1_1_client_events_ae80cd238b975c76b5db062939949b598}} 
+\mbox{\Hypertarget{classsc2_1_1_client_events_a1e0c8a37df68695cf898aa86fddc5a1a}\label{classsc2_1_1_client_events_a1e0c8a37df68695cf898aa86fddc5a1a}} 
 \index{sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}!On\+Unit\+Destroyed@{On\+Unit\+Destroyed}}
 \index{On\+Unit\+Destroyed@{On\+Unit\+Destroyed}!sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}}
 \subsubsection{\texorpdfstring{On\+Unit\+Destroyed()}{OnUnitDestroyed()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Destroyed (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Destroyed (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 Called whenever one of the player\textquotesingle{}s units has been destroyed. 
 \begin{DoxyParams}{Parameters}
 {\em unit} & The destroyed unit. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_client_events_aecbbd77ffd17a729b307f87bbb899cc9}\label{classsc2_1_1_client_events_aecbbd77ffd17a729b307f87bbb899cc9}} 
+\mbox{\Hypertarget{classsc2_1_1_client_events_a835228e18d8b4488b0f8e830a39116ce}\label{classsc2_1_1_client_events_a835228e18d8b4488b0f8e830a39116ce}} 
 \index{sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}!On\+Unit\+Enter\+Vision@{On\+Unit\+Enter\+Vision}}
 \index{On\+Unit\+Enter\+Vision@{On\+Unit\+Enter\+Vision}!sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}}
 \subsubsection{\texorpdfstring{On\+Unit\+Enter\+Vision()}{OnUnitEnterVision()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Enter\+Vision (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Enter\+Vision (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 Called when an enemy unit enters vision from out of fog of war. 
 \begin{DoxyParams}{Parameters}
 {\em unit} & The unit entering vision. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_client_events_a5d57eb9cdfa579a7c50442305dbf8635}\label{classsc2_1_1_client_events_a5d57eb9cdfa579a7c50442305dbf8635}} 
+\mbox{\Hypertarget{classsc2_1_1_client_events_ac1d79ab7cceb688172f375edb2f48f60}\label{classsc2_1_1_client_events_ac1d79ab7cceb688172f375edb2f48f60}} 
 \index{sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}!On\+Unit\+Idle@{On\+Unit\+Idle}}
 \index{On\+Unit\+Idle@{On\+Unit\+Idle}!sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}}
 \subsubsection{\texorpdfstring{On\+Unit\+Idle()}{OnUnitIdle()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Idle (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Unit\+Idle (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 Called when a unit becomes idle, this will only occur as an event so will only be called when the unit becomes idle and not a second time. Being idle is defined by having orders in the previous step and not currently having orders or if it did not exist in the previous step and now does, a unit being created, for instance, will call both On\+Unit\+Created and On\+Unit\+Idle if it does not have a rally set. 
 \begin{DoxyParams}{Parameters}
 {\em unit} & The idle unit. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_client_events_a0ff0017571ba53e018f85dda03861c3a}\label{classsc2_1_1_client_events_a0ff0017571ba53e018f85dda03861c3a}} 
+\mbox{\Hypertarget{classsc2_1_1_client_events_a4cdc022420833b34fbcd1c9713096754}\label{classsc2_1_1_client_events_a4cdc022420833b34fbcd1c9713096754}} 
 \index{sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}!On\+Upgrade\+Completed@{On\+Upgrade\+Completed}}
 \index{On\+Upgrade\+Completed@{On\+Upgrade\+Completed}!sc2\+::\+Client\+Events@{sc2\+::\+Client\+Events}}
 \subsubsection{\texorpdfstring{On\+Upgrade\+Completed()}{OnUpgradeCompleted()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Upgrade\+Completed (\begin{DoxyParamCaption}\item[{\hyperlink{classsc2_1_1_s_c2_type}{Upgrade\+ID}}]{upgrade }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Client\+Events\+::\+On\+Upgrade\+Completed (\begin{DoxyParamCaption}\item[{\hyperlink{classsc2_1_1_s_c2_type}{Upgrade\+ID}}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 Called when an upgrade is finished, warp gate, ground weapons, baneling speed, etc. 
 \begin{DoxyParams}{Parameters}

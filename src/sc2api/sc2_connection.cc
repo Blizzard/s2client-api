@@ -4,7 +4,7 @@
 #include <cassert>
 #include <chrono>
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 #include "civetweb.h"
 

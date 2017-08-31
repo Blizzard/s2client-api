@@ -1,10 +1,11 @@
 #include "sc2api/sc2_data.h"
 #include "sc2api/sc2_interfaces.h"
+#include "sc2api/sc2_proto_to_pods.h"
 
 #include <iostream>
 #include <cassert>
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 // TODO: Fill out the log functions
 
@@ -275,6 +276,30 @@ void UnitTypeData::ReadFromProto(const SC2APIProtocol::UnitTypeData& unit_data) 
         weapon.ReadFromProto(unit_data.weapons(i));
         weapons.push_back(weapon);
     }
+
+    food_provided = unit_data.food_provided();
+
+    food_required = unit_data.food_required();
+
+    ability_id = unit_data.ability_id();
+
+    race = ConvertRaceFromProto(unit_data.race());
+
+    build_time = unit_data.build_time();
+
+    has_minerals = unit_data.has_minerals();
+
+    has_vespene = unit_data.has_vespene();
+
+    for (int i = 0; i < unit_data.tech_alias_size(); ++i) {
+        tech_alias.push_back(unit_data.tech_alias(i));
+    }
+
+    unit_alias = unit_data.unit_alias();
+
+    tech_requirement = unit_data.tech_requirement();
+
+    require_attached = unit_data.require_attached();
 }
 
 std::string UnitTypeData::Log() const {
@@ -295,6 +320,11 @@ void UpgradeData::ReadFromProto(const SC2APIProtocol::UpgradeData& upgrade_data)
 
     // name_
     name = upgrade_data.name();
+
+    mineral_cost = upgrade_data.mineral_cost();
+    vespene_cost = upgrade_data.vespene_cost();
+    ability_id = upgrade_data.ability_id();
+    research_time = upgrade_data.research_time();
 }
 
 std::string UpgradeData::Log() const {

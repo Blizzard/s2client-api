@@ -18,4 +18,7 @@ std::string GetUserDirectory();
 std::string GetLibraryMapsDirectory();
 std::string GetGameMapsDirectory(const std::string& process_path);
 
+bool FindLatestExe(std::string& path);
+bool FindBaseExe(std::string& path, uint32_t base_build);
+
 }

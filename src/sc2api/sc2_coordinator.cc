@@ -8,7 +8,7 @@
 #include "sc2utils/sc2_manage_process.h"
 #include "sc2utils/sc2_scan_directory.h"
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 #include <algorithm>
 #include <iostream>
@@ -48,13 +48,8 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     // DirectX will fail if multiple games try to launch in fullscreen mode. Force them into windowed mode.
     cl.push_back("-displayMode"); cl.push_back("0");
 
-    // TODO: This is deprecated. Remove this.
-    cl.push_back("-simulationSpeed");
-    if (process_settings.realtime) {
-        cl.push_back("1");
-    }
-    else {
-        cl.push_back("0");
+    if (process_settings.data_version.size() > 0) {
+        cl.push_back("-dataVersion"); cl.push_back(process_settings.data_version);
     }
 
     for (const std::string& command : process_settings.extra_command_lines)
@@ -177,6 +172,8 @@ public:
 
     bool StartGame();
     void StartReplay();
+    bool ShouldIgnore(ReplayObserver* r, const std::string& file);
+    bool ShouldRelaunch(ReplayObserver* r);
 
     void StepAgents();
     void StepAgentsRealtime();
@@ -186,6 +183,8 @@ public:
 
     bool WaitForAllResponses();
     void AddAgent(Agent* agent);
+
+    bool Relaunch(ReplayObserver* replay_observer);
 
     int window_width_ = 1024;
     int window_height_ = 768;
@@ -220,6 +219,36 @@ bool CoordinatorImp::AnyObserverAvailable() const {
                        });
 }
 
+bool CoordinatorImp::ShouldIgnore(ReplayObserver* r, const std::string& file) {
+    if (file.empty())
+        return true;
+
+    // Gather replay information with the available observer.
+    r->ReplayControl()->GatherReplayInfo(file, true);
+
+    // If the replay isn't being pruned based on replay info start it.
+    return r->IgnoreReplay(r->ReplayControl()->GetReplayInfo(), replay_settings_.player_id);
+}
+
+bool CoordinatorImp::ShouldRelaunch(ReplayObserver* r) {
+    const ReplayInfo& replay_info = r->ReplayControl()->GetReplayInfo();
+
+    bool version_match = replay_info.base_build == r->Control()->Proto().GetBaseBuild() &&
+        replay_info.data_version == r->Control()->Proto().GetDataVersion();
+    if (version_match)
+        return false;
+
+    // Version failed to download. Just continue with trying to load in current version.
+    // It will likely fail, and then just skip past this replay.
+    if (!FindBaseExe(process_settings_.process_path, replay_info.base_build))
+        return false;
+
+    std::cout << "Replay is from a different version. Relaunching client into the correct version..." << std::endl;
+    process_settings_.data_version = replay_info.data_version;
+    r->Control()->Error(ClientError::WrongGameVersion);
+    return true;
+}
+
 void CoordinatorImp::StartReplay() {
     // If no replays given in the settings don't try.
     if (replay_settings_.replay_file.empty()) {
@@ -234,33 +263,28 @@ void CoordinatorImp::StartReplay() {
 
     // Run a replay with each available replay observer.
     for (auto r : replay_observers_) {
-        bool loaded_replay = false;
-        while (!loaded_replay) {
-            if (replay_settings_.replay_file.empty()) {
+        // If the replay observer is idle or out of game use it for a new replay.
+        if (!r->Control()->IsReadyForCreateGame()) {
+            continue;
+        }
+
+        auto& replays = replay_settings_.replay_file;
+        while (replays.size() != 0) {
+            const std::string& file = replay_settings_.replay_file.front();
+
+            if (ShouldIgnore(r, file)) {
+                replays.erase(replays.begin());
+                continue;
+            }
+
+            if (ShouldRelaunch(r)) {
                 break;
             }
 
-            const std::string& file = replay_settings_.replay_file.front();
-
-            if (!file.empty()) {
-                // If the replay observer is idle or out of game use it for a new replay.
-                if (!r->Control()->IsReadyForCreateGame()) {
-                    loaded_replay = true;
-                    continue;
-                }
-
-                // Gather replay information with the available observer.
-                r->ReplayControl()->GatherReplayInfo(file);
-
-                // If the replay isn't being pruned based on replay info start it.
-                if (!r->IgnoreReplay(r->ReplayControl()->GetReplayInfo(), replay_settings_.player_id)) {
-                    loaded_replay = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
-                }
-            }
-
-            // Front to back ordering more important than remove from back speedup.
-            replay_settings_.replay_file.erase(
-                replay_settings_.replay_file.begin(), replay_settings_.replay_file.begin() + 1);
+            bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
+            replays.erase(replays.begin());
+            if (launched)
+                break;
         }
     }
 
@@ -528,6 +552,36 @@ bool CoordinatorImp::StartGame() {
     return true;
 }
 
+bool CoordinatorImp::Relaunch(ReplayObserver* replay_observer) {
+    ControlInterface* control = replay_observer->Control();
+    const ProcessInfo& pi = control->GetProcessInfo();
+
+    // Try to kill SC2 then relaunch it
+    sc2::TerminateProcess(pi.process_id);
+
+    // Reset the control interface so internal state gets reset.
+    replay_observer->Reset();
+
+    // ReplayObserver needs the control interface from Client.
+    replay_observer->SetControl(replay_observer->Control());
+
+    // Control interface has been reconstructed.
+    control = replay_observer->Control();
+
+    last_port_ = LaunchProcess(process_settings_,
+        replay_observer,
+        window_width_,
+        window_height_,
+        window_start_x_,
+        window_start_y_,
+        last_port_ + 1
+    );
+
+    const ProcessInfo& pi_new = control->GetProcessInfo();
+
+    return control->Connect(process_settings_.net_address, pi_new.port, process_settings_.timeout_ms);
+}
+
 // Coordinator.
 
 Coordinator::Coordinator() {
@@ -652,6 +706,7 @@ bool Coordinator::Update() {
         }
     }
 
+    bool relaunched = false;
     for (auto replay_observer : imp_->replay_observers_) {
         ControlInterface* control = replay_observer->Control();
         const std::vector<ClientError>& client_errors = control->GetClientErrors();
@@ -659,47 +714,22 @@ bool Coordinator::Update() {
             replay_observer->OnError(client_errors, control->GetProtocolErrors());
             error_occurred = true;
             if (imp_->replay_recovery_) {
-                const ProcessInfo& pi = control->GetProcessInfo();
-
-                // Try to kill SC2 then relaunch it
-                sc2::TerminateProcess(pi.process_id);
-
-                // Reset the control interface so internal state gets reset.
-                replay_observer->Reset();
-
-                // ReplayObserver needs the control interface from Client.
-                replay_observer->SetControl(replay_observer->Control());
-
-                // Control interface has been reconstructed.
-                control = replay_observer->Control();
-
-                imp_->last_port_ = LaunchProcess(imp_->process_settings_, 
-                    replay_observer, 
-                    imp_->window_width_, 
-                    imp_->window_height_, 
-                    imp_->window_start_x_, 
-                    imp_->window_start_y_, 
-                    imp_->last_port_ + 1);
-
-                const ProcessInfo& pi_new = control->GetProcessInfo();
-
-                bool connected = control->Connect(imp_->process_settings_.net_address, pi_new.port, imp_->process_settings_.timeout_ms);
-
                 // An error did occur but if we succesfully recovered ignore it. The client will still gets its event
+                bool connected = imp_->Relaunch(replay_observer);
                 if (connected) {
                     error_occurred = false;
+                    relaunched = true;
                 }
             }
         }
     }
-
 
     // End the coordinator update on the idea that an error in the API should mean it's time to stop.
     if (error_occurred) {
         return false;
     }
 
-    return !AllGamesEnded();
+    return !AllGamesEnded() || relaunched;
 }
 
 bool Coordinator::AllGamesEnded() const {

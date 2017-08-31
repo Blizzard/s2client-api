@@ -1,5 +1,7 @@
 #include "sc2utils/sc2_manage_process.h"
+#include "sc2utils/sc2_scan_directory.h"
 
+#include <algorithm>
 #include <iostream>
 #include <cassert>
 #include <stdio.h>
@@ -465,6 +467,69 @@ bool PollKeyPress() {
         return true;
     // TODO: Consume the character.
     return false;
+}
+
+bool FindLatestExe(std::string& path) {
+    if (path.length() < 4)
+        return false;
+
+    static const char VersionsFolder[] = "Versions\\";
+    static std::size_t BaseFolderNameLen = 10; // "Base00000\"
+    std::size_t versions_pos = path.find(VersionsFolder);
+    if (versions_pos == std::string::npos) {
+        return DoesFileExist(path);
+    }
+
+    // Get the versions path.
+    std::string versions_path = path;
+    versions_path.erase(versions_path.begin() + versions_pos + sizeof(VersionsFolder) - 1, versions_path.end());
+
+    // Get the exe name.
+    std::string exe_name = path;
+    exe_name.erase(exe_name.begin(), exe_name.begin() + versions_pos + sizeof(VersionsFolder) + BaseFolderNameLen - 1);
+
+    // Get a list of all subfolders.
+    std::vector<std::string> subfolders;
+    scan_directory(versions_path.c_str(), subfolders, true, true);
+    if (subfolders.size() < 1) {
+        return DoesFileExist(path);
+    }
+
+    // Sort the subfolders list.
+    std::sort(subfolders.begin(), subfolders.end());
+
+    for (int folder_index = static_cast<int>(subfolders.size()) - 1; folder_index >= 0; --folder_index) {
+        std::string test_path = subfolders[folder_index] + "\\" + exe_name;
+        if (DoesFileExist(test_path)) {
+            path = test_path;
+            return true;
+        }
+    }
+
+    return DoesFileExist(path);
+}
+
+bool FindBaseExe(std::string& path, uint32_t base_build) {
+    const std::string base_folder = "Base";
+
+    std::string new_path = path;
+    std::string new_num = std::to_string(base_build);
+
+    auto folder_start = new_path.find(base_folder);
+    if (folder_start == std::string::npos)
+        return false;
+
+    auto num_start = folder_start + base_folder.size();
+    auto num_end = num_start + new_num.size();
+    if (num_end > new_path.size())
+        return false;
+
+    new_path.replace(new_path.begin() + num_start, new_path.begin() + num_end, new_num.begin(), new_num.end());
+    if (!DoesFileExist(new_path))
+        return false;
+
+    path = new_path;
+    return true;
 }
 
 }

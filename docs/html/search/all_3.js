@@ -29,6 +29,7 @@ var searchData=
   ['debugtextout',['DebugTextOut',['../classsc2_1_1_debug_interface.html#a3edaf8b4f0e0155f3b8eaf2cf672ee29',1,'sc2::DebugInterface::DebugTextOut(const std::string &amp;out, Color color=Colors::White)=0'],['../classsc2_1_1_debug_interface.html#a5044b5772c931b1115fd3ec40682a257',1,'sc2::DebugInterface::DebugTextOut(const std::string &amp;out, const Point2D &amp;pt_virtual_2D, Color color=Colors::White)=0'],['../classsc2_1_1_debug_interface.html#a8037bf4a4941d49c372c6e73dfe4663c',1,'sc2::DebugInterface::DebugTextOut(const std::string &amp;out, const Point3D &amp;pt3D, Color color=Colors::White)=0']]],
   ['detect_5frange',['detect_range',['../classsc2_1_1_unit.html#a212a848d56f8ce323c1a8b5ac7bd0221',1,'sc2::Unit']]],
   ['difficulty',['difficulty',['../structsc2_1_1_player_setup.html#ac9616c686e3e31c2d8f9f023c9cd7dca',1,'sc2::PlayerSetup']]],
+  ['disconnect',['Disconnect',['../classsc2_1_1_connection.html#a0a84c7b58a8ecb0046f6ad235ce01067',1,'sc2::Connection']]],
   ['display_5ftype',['display_type',['../classsc2_1_1_unit.html#a37330a1811b5fe37894d13d8b8f000ac',1,'sc2::Unit']]],
   ['displaytype',['DisplayType',['../classsc2_1_1_unit.html#af7815dad89107a05298c245b702ab270',1,'sc2::Unit']]],
   ['distance2d',['Distance2D',['../sc2__common_8h.html#a828525a11f27628914021c21736f2810',1,'sc2']]],
