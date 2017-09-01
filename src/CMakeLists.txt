@@ -14,7 +14,6 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated/s2clientprotocol)
 
 foreach(proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME_WE)
-    message(${proto_name})
     list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.cc)
 endforeach()
 
@@ -73,9 +72,6 @@ foreach (proto ${proto_files})
     get_filename_component(proto_name_we ${proto} NAME_WE)
     set(outputCC ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.cc)
     set(outputH ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.h)
-
-    message(${proto})
-    message(${proto_name_we})
 
     add_custom_command(
         DEPENDS protoc
