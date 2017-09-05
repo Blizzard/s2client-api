@@ -195,6 +195,8 @@ public:
     // If a ReplayObserver fails, try to recover
     bool replay_recovery_ = true;
     int last_port_ = 0;
+
+    bool use_generalized_ability_id = true;
 };
 
 CoordinatorImp::CoordinatorImp() :
@@ -267,6 +269,8 @@ void CoordinatorImp::StartReplay() {
         if (!r->Control()->IsReadyForCreateGame()) {
             continue;
         }
+
+        r->ReplayControl()->UseGeneralizedAbility(use_generalized_ability_id);
 
         auto& replays = replay_settings_.replay_file;
         while (replays.size() != 0) {
@@ -528,6 +532,8 @@ bool CoordinatorImp::StartGame() {
             c->OnError(client_errors, control->GetProtocolErrors());
             errors_occurred = true;
         }
+
+        c->Control()->UseGeneralizedAbility(use_generalized_ability_id);
     }
 
     if (errors_occurred) {
@@ -817,6 +823,11 @@ void Coordinator::SetWindowLocation(int x, int y) {
     assert(!imp_->starcraft_started_);
     imp_->window_start_x_ = x;
     imp_->window_start_y_ = y;
+}
+
+void Coordinator::SetUseGeneralizedAbilityId(bool value) {
+    assert(!imp_->starcraft_started_);
+    imp_->use_generalized_ability_id = value;
 }
 
 bool Coordinator::SetReplayPath(const std::string& path) {

@@ -22,6 +22,7 @@ public:
     virtual bool GatherReplayInfo(const std::string& path, bool download_data) override;
     virtual bool LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id) override;
     virtual bool WaitForReplay() override;
+    virtual void UseGeneralizedAbility(bool value) override;
 
     virtual const ReplayInfo& GetReplayInfo() const override;
 };
@@ -207,6 +208,10 @@ bool ReplayControlImp::WaitForReplay() {
 
     std::cout << "Replaying: '" << replay_info_.replay_path << "'" << std::endl;
     return true;
+}
+
+void ReplayControlImp::UseGeneralizedAbility(bool value) {
+    control_interface_->UseGeneralizedAbility(value);
 }
 
 const ReplayInfo& ReplayControlImp::GetReplayInfo() const {

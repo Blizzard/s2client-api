@@ -48,6 +48,7 @@ public:
     // Game info.
     mutable GameInfo game_info_;
     mutable bool game_info_cached_;
+    mutable bool use_generalized_ability_ = true;
 
     // Player data.
     int32_t minerals_;
@@ -563,11 +564,13 @@ bool ObservationImp::UpdateObservation() {
 
     // Remap ability ids.
     {
-        for (ActionRaw& action : raw_actions_) {
-            action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
-        }
-        for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
-            spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+        if (use_generalized_ability_) {
+            for (ActionRaw& action : raw_actions_) {
+                action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
+            }
+            for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
+                spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+            }
         }
     }
 
@@ -591,7 +594,9 @@ bool ObservationImp::UpdateObservation() {
     // Remap ability ids in orders.
     for (Unit& unit : units_) {
         for (UnitOrder& unit_order : unit.orders) {
-            unit_order.ability_id = GetGeneralizedAbilityID(unit_order.ability_id, *this);
+            if (use_generalized_ability_) {
+                unit_order.ability_id = GetGeneralizedAbilityID(unit_order.ability_id, *this);
+            }
         }
     }
 
@@ -626,7 +631,6 @@ bool ObservationImp::UpdateObservation() {
 const SC2APIProtocol::Observation* ObservationImp::GetRawObservation() const {
     return observation_.get();
 }
-
 
 //-------------------------------------------------------------------------------------------------
 // QueryImp: An implementation of QueryInterface.
@@ -1412,6 +1416,7 @@ public:
 
     void ClearClientErrors() override { client_errors_.clear(); };
     void ClearProtocolErrors() override { protocol_errors_.clear(); };
+    void UseGeneralizedAbility(bool value) override { observation_imp_->use_generalized_ability_ = value; };
 };
 
 ControlImp::ControlImp(Client& client) :
