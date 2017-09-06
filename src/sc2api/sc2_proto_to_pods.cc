@@ -200,7 +200,9 @@ bool Convert(const ObservationRawPtr& observation_raw, Units& units) {
         unit.health = observation_unit.health();
         unit.health_max = observation_unit.health_max();
         unit.shield = observation_unit.shield();
+        unit.shield_max = observation_unit.shield_max();
         unit.energy = observation_unit.energy();
+        unit.energy_max = observation_unit.energy_max();
 
         unit.mineral_contents = observation_unit.mineral_contents();
         unit.vespene_contents = observation_unit.vespene_contents();
@@ -236,8 +238,12 @@ bool Convert(const ObservationRawPtr& observation_raw, Units& units) {
                 passengerUnit.health_max = passengerProto.health_max();
             if (passengerProto.has_shield())
                 passengerUnit.shield = passengerProto.shield();
+            if (passengerProto.has_shield_max())
+                passengerUnit.shield_max = passengerProto.shield_max();
             if (passengerProto.has_energy())
                 passengerUnit.energy = passengerProto.energy();
+            if (passengerProto.has_energy_max())
+                passengerUnit.energy_max = passengerProto.energy_max();
             if (passengerProto.has_unit_type())
                 passengerUnit.unit_type = passengerProto.unit_type();
             unit.passengers.push_back(passengerUnit);

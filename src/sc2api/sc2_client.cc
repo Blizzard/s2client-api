@@ -14,7 +14,7 @@
 #include <limits>
 #include <fstream>
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 namespace sc2 {
 

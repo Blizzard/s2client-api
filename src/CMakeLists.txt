@@ -10,11 +10,12 @@ file(GLOB proto_files
 )
 
 # Create the output directory for generated protos.
-file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated/s2clientprotocol)
 
 foreach(proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME_WE)
-    list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.cc)
+    message(${proto_name})
+    list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.cc)
 endforeach()
 
 # Now include that directory
@@ -70,12 +71,16 @@ add_dependencies(sc2protocol protoc)
 foreach (proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME)
     get_filename_component(proto_name_we ${proto} NAME_WE)
-    set(output ${PROJECT_BINARY_DIR}/generated/${proto_name_we}.pb.h)
+    set(outputCC ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.cc)
+    set(outputH ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.h)
+
+    message(${proto})
+    message(${proto_name_we})
 
     add_custom_command(
         DEPENDS protoc
-        COMMAND ${PROJECT_BINARY_DIR}/bin/protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/../protocol/s2clientprotocol --cpp_out=${PROJECT_BINARY_DIR}/generated ${proto}
-        OUTPUT ${PROJECT_BINARY_DIR}/generated/${proto_name_we}.pb.cc ${output}
+        COMMAND ${PROJECT_BINARY_DIR}/bin/protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/../protocol/ --cpp_out=${PROJECT_BINARY_DIR}/generated ${proto}
+        OUTPUT ${outputCC} ${outputH}
     )
 
 endforeach()
