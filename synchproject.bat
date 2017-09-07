@@ -23,4 +23,3 @@ xcopy include\sc2utils\* project\include\sc2utils\ /s /e
 xcopy build\generated\* project\include\ /s /e
 xcopy contrib\protobuf\src\google\* project\include\google\ /s /e
 xcopy contrib\protobuf\src\google\* project\include\google\ /s /e
-xcopy contrib\SDL-mirror\include\* project\include\SDL-mirror\ /s /e
