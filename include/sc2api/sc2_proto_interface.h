@@ -2,7 +2,7 @@
 
 #include "sc2_connection.h"
 
-#include "sc2api.pb.h"
+#include "s2clientprotocol/sc2api.pb.h"
 
 #include <functional>
 
@@ -101,6 +101,9 @@ public:
     const std::vector<uint32_t>& GetStats() const { return count_uses_; }
     void SetControl(ControlInterface* control) { control_ = control; }
 
+    uint32_t GetBaseBuild() const { return base_build_; }
+    const std::string& GetDataVersion() const { return data_version_; }
+
 protected:
     Connection connection_;
     std::string address_;
@@ -111,6 +114,9 @@ protected:
     SC2APIProtocol::Response::ResponseCase response_pending_;
     std::vector<uint32_t> count_uses_;
     ControlInterface* control_;
+
+    uint32_t base_build_;
+    std::string data_version_;
 };
 
 // Helper to produce a string for the proto type.

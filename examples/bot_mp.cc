@@ -24,7 +24,6 @@ int main(int argc, char* argv[]) {
     }
 
     coordinator.SetMultithreaded(true);
-    coordinator.SetRealtime(true);
     if (PlayerOneIsHuman) {
         coordinator.SetRealtime(true);
     }

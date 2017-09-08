@@ -81,6 +81,10 @@ public:
     //! \param y y position of game window.
     void SetWindowLocation(int x, int y);
 
+    //! Uses generalized abilities where possible. Example: BUILD_TECHLAB_BARRACKS, BUILD_TECHLAB_FACTORY, BUILD_TECHLAB_STARPORT 
+    //! ability ids are generalized to BUILD_TECHLAB ability id in the observation.
+    void SetUseGeneralizedAbilityId(bool value);
+
     //! Appends a command line argument to be fed to StarCraft II when starting.
     // \param option The string to be appended to the executable invoke.
     void AddCommandLine(const std::string& option);

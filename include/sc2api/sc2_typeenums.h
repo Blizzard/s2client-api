@@ -23,6 +23,8 @@ namespace sc2 {
     typedef SC2Type<BUFF_ID>      BuffID;
 
     enum class UNIT_TYPEID {
+        INVALID = 0,
+
         // Terran
         TERRAN_ARMORY = 29,    // CANCEL, HALT, CANCEL_LAST, RESEARCH_TERRANSHIPWEAPONS, RESEARCH_TERRANVEHICLEANDSHIPPLATING, RESEARCH_TERRANVEHICLEWEAPONS
         TERRAN_AUTOTURRET = 31,    // SMART, STOP, ATTACK
@@ -76,7 +78,7 @@ namespace sc2 {
         TERRAN_WIDOWMINE = 498,   // SMART, MOVE, PATROL, HOLDPOSITION, BURROWDOWN, STOP, ATTACK
         TERRAN_WIDOWMINEBURROWED = 500,   // SMART, EFFECT_WIDOWMINEATTACK, BURROWUP
 
-                                          // Terran non-interactive
+        // Terran non-interactive
         TERRAN_KD8CHARGE = 830,
         TERRAN_NUKE = 58,
         TERRAN_POINTDEFENSEDRONE = 11,
@@ -154,7 +156,7 @@ namespace sc2 {
         ZERG_ZERGLING = 105,   // SMART, MOVE, PATROL, HOLDPOSITION, TRAIN_BANELING, BURROWDOWN, STOP, ATTACK
         ZERG_ZERGLINGBURROWED = 119,   // BURROWUP
 
-                                       // Zerg non-interactive
+        // Zerg non-interactive
         ZERG_PARASITICBOMBDUMMY = 824,
 
         // Protoss
@@ -200,9 +202,9 @@ namespace sc2 {
         PROTOSS_WARPPRISMPHASING = 136,   // SMART, MORPH_WARPPRISMTRANSPORTMODE, STOP, LOAD, UNLOADALLAT
         PROTOSS_ZEALOT = 73,    // SMART, MOVE, PATROL, HOLDPOSITION, EFFECT_CHARGE, STOP, RALLY_UNITS, ATTACK
 
-                                // Protoss non-interactive
+        // Protoss non-interactive
 
-                                // Neutral
+        // Neutral
         NEUTRAL_COLLAPSIBLEROCKTOWERDEBRIS = 490,
         NEUTRAL_COLLAPSIBLEROCKTOWERDIAGONAL = 588,
         NEUTRAL_COLLAPSIBLEROCKTOWERPUSHUNIT = 561,
@@ -239,6 +241,7 @@ namespace sc2 {
     };
 
     enum class ABILITY_ID {
+        INVALID = 0,
         SMART = 1,     // Target: Unit, Point.
 
         ATTACK = 3674,  // Target: Unit, Point.
@@ -705,6 +708,7 @@ namespace sc2 {
     };
 
     enum class UPGRADE_ID {
+        INVALID = 0,
         CARRIERLAUNCHSPEEDUPGRADE = 1,
         GLIALRECONSTITUTION = 2,
         TUNNELINGCLAWS = 3,
@@ -793,6 +797,7 @@ namespace sc2 {
     };
 
     enum class BUFF_ID {
+        INVALID = 0,
         GRAVITONBEAM = 5,
         GHOSTCLOAK = 6,
         BANSHEECLOAK = 7,

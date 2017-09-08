@@ -10,17 +10,20 @@ file(GLOB proto_files
 )
 
 # Create the output directory for generated protos.
-file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated/s2clientprotocol)
 
 foreach(proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME_WE)
-    list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.cc)
+    list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.cc)
     # Get just headers for lib install
-    list(APPEND sc2protocol_headers "${PROJECT_BINARY_DIR}/generated/${proto_name}.pb.h")
+    list(APPEND sc2protocol_headers "${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.h")
 endforeach()
 
 # Now include that directory
 include_directories(SYSTEM "${PROJECT_BINARY_DIR}/generated")
+
+# Setup MSVC parallelized builds
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 # Create the library
 add_library(sc2api ${sources_sc2})
@@ -120,12 +123,13 @@ add_dependencies(sc2protocol protoc)
 foreach (proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME)
     get_filename_component(proto_name_we ${proto} NAME_WE)
-    set(output ${PROJECT_BINARY_DIR}/generated/${proto_name_we}.pb.h)
+    set(outputCC ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.cc)
+    set(outputH ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.h)
 
     add_custom_command(
         DEPENDS protoc
-        COMMAND ${PROJECT_BINARY_DIR}/bin/protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/../protocol/s2clientprotocol --cpp_out=${PROJECT_BINARY_DIR}/generated ${proto}
-        OUTPUT ${PROJECT_BINARY_DIR}/generated/${proto_name_we}.pb.cc ${output}
+        COMMAND ${PROJECT_BINARY_DIR}/bin/protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/../protocol/ --cpp_out=${PROJECT_BINARY_DIR}/generated ${proto}
+        OUTPUT ${outputCC} ${outputH}
     )
 
 endforeach()
