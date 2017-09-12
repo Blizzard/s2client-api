@@ -11,13 +11,6 @@
 #    */include/sc2api/sc2api/. sc2_api.h is still included via
 #    # include <sc2api/sc2_api.h>
 
-# If on windows we want to install to the StarCraft II User's Document folder
-# https://github.com/Blizzard/s2client-api/issues/90#issuecomment-325395402
-if(WIN32 AND NOT CYGWIN)
-  set(SC2API_OLD_CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-  get_filename_component(CMAKE_INSTALL_PREFIX "$ENV{USERPROFILE}/Documents/StarCraft II" ABSOLUTE)
-endif()
-
 # Set up lib, bin, include install destination dirs
 set(
   SC2API_INSTALL_LIB_DIR
@@ -43,7 +36,7 @@ set(
 
 # Choose our cmake file install dir based on OS
 if(WIN32 AND NOT CYGWIN)
-  set(DEF_INSTALL_CMAKE_DIR CMake)
+  set(DEF_INSTALL_CMAKE_DIR cmake)
 else()
   set(DEF_INSTALL_CMAKE_DIR lib/cmake/SC2API)
 endif()
@@ -64,8 +57,3 @@ foreach(p LIB BIN INCLUDE CMAKE)
     set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
   endif()
 endforeach()
-
-# Reset CMAKE_INSTALL_PREFIX to not affect super projects who potentially use it...
-if (WIN32 AND NOT CYGWIN)
-  set(CMAKE_INSTALL_PREFIX ${OLD_PREFIX})
-endif()
