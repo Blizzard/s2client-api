@@ -244,6 +244,25 @@ struct BuffData {
     std::string Log() const;
 };
 
+typedef std::vector<BuffData> Buffs;
+
+//! Effect data.
+struct EffectData {
+    //! Stable ID. This ID will not change between patches.
+    uint32_t effect_id;
+    //! Effect name, corresponds to the game's catalog.
+    std::string name;
+    //! A more recognizable name of the effect.
+    std::string friendly_name;
+    //! Size of the circle the effect impacts.
+    float radius;
+
+    void ReadFromProto(const SC2APIProtocol::EffectData& effect_data);
+    std::string Log() const;
+};
+
+typedef std::vector<EffectData> Effects;
+
 //! Power source information for Protoss.
 struct PowerSource {
     PowerSource(const Point2D in_position, float in_radius, Tag in_tag) :
@@ -259,7 +278,16 @@ struct PowerSource {
     Tag tag;
 };
 
-typedef std::vector<BuffData> Buffs;
+//! The visuals of a persistent ability on the map. (eg. Psistorm)
+struct Effect {
+    //! Type of the effect
+    uint32_t effect_id;
+    //! All the positions that this effect is impacting on the map.
+    //! eg. The Lurker's attack impacts multiple positions in a line.
+    std::vector<Point2D> positions;
+
+    void ReadFromProto(const SC2APIProtocol::Effect& effect);
+};
 
 AbilityID GetGeneralizedAbilityID(uint32_t ability_id, const ObservationInterface& observation);
 
