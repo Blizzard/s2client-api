@@ -38,6 +38,7 @@ public:
     RawActions raw_actions_;
     SpatialActions feature_layer_actions_;
     std::vector<PowerSource> power_sources_;
+    std::vector<Effect> effects_;
     std::vector<UpgradeID> upgrades_;
     std::vector<UpgradeID> upgrades_previous_;
 
@@ -65,6 +66,7 @@ public:
     mutable UnitTypes unit_types_;
     mutable Upgrades upgrade_ids_;
     mutable Buffs buff_ids_;
+    mutable Effects effect_ids_;
 
     // Score.
     Score score_;
@@ -74,6 +76,7 @@ public:
     mutable bool unit_types_cached;
     mutable bool upgrades_cached_;
     mutable bool buffs_cached_;
+    mutable bool effects_cached_;
 
     ObservationImp(ProtoInterface& proto, ObservationPtr& observation, ResponseObservationPtr& response, ControlInterface& control);
     void ClearFlags();
@@ -87,12 +90,14 @@ public:
     const RawActions& GetRawActions() const final { return raw_actions_; }
     const SpatialActions& GetFeatureLayerActions() const final { return feature_layer_actions_; };
     const std::vector<PowerSource>& GetPowerSources() const final { return power_sources_; }
+    const std::vector<Effect>& GetEffects() const final { return effects_; }
     const std::vector<UpgradeID>& GetUpgrades() const final { return upgrades_; }
     const Score& GetScore() const final { return score_; }
     const Abilities& GetAbilityData(bool force_refresh = false) const final;
     const UnitTypes& GetUnitTypeData(bool force_refresh = false) const final;
     const Upgrades& GetUpgradeData(bool force_refresh = false) const final;
     const Buffs& GetBuffData(bool force_refresh = false) const final;
+    const Effects& GetEffectData(bool force_refresh = false) const final;
     const GameInfo& GetGameInfo() const final;
     bool HasCreep(const Point2D& point) const final;
     Visibility GetVisibility(const Point2D& point) const final;
@@ -132,6 +137,9 @@ void ObservationImp::ClearFlags() {
     game_info_cached_ = false;
     abilities_cached_ = false;
     unit_types_cached = false;
+    upgrades_cached_ = false;
+    buffs_cached_ = false;
+    effects_cached_ = false;
 }
 
 Units ObservationImp::GetUnits() const {
@@ -350,6 +358,45 @@ const Buffs& ObservationImp::GetBuffData(bool force_refresh) const {
     return buff_ids_;
 }
 
+const Effects& ObservationImp::GetEffectData(bool force_refresh) const {
+    if (force_refresh || effect_ids_.size() < 1) {
+        effects_cached_ = false;
+    }
+
+    if (effects_cached_) {
+        return effect_ids_;
+    }
+
+    effect_ids_.clear();
+
+    GameRequestPtr request = proto_.MakeRequest();
+    SC2APIProtocol::RequestData* request_data = request->mutable_data();
+    request_data->set_effect_id(true);
+
+    if (!proto_.SendRequest(request)) {
+        return effect_ids_;
+    }
+
+    GameResponsePtr response = control_.WaitForResponse();
+    ResponseDataPtr response_data;
+    SET_MESSAGE_RESPONSE(response_data, response, data);
+    if (response_data.HasErrors()) {
+        return effect_ids_;
+    }
+
+    if (response_data.HasErrors() || response_data->effects_size() == 0) {
+        return effect_ids_;
+    }
+
+    effect_ids_.resize(response_data->effects_size());
+    for (int i = 0; i < response_data->effects_size(); ++i) {
+        effect_ids_[i].ReadFromProto(response_data->effects(i));
+    }
+
+    effects_cached_ = true;
+    return effect_ids_;
+}
+
 const GameInfo& ObservationImp::GetGameInfo() const {
     if (game_info_cached_) {
         return game_info_;
@@ -540,6 +587,12 @@ bool ObservationImp::UpdateObservation() {
             }
         }
     });
+
+    effects_.clear();
+    effects_.resize(observation_raw->effects_size());
+    for (int i = 0; i < observation_raw->effects_size(); ++i) {
+        effects_[i].ReadFromProto(observation_raw->effects(i));
+    }
 
     if (!observation_raw->has_player()) {
         return false;

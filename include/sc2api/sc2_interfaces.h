@@ -90,6 +90,10 @@ public:
     //!< \return List of power sources.
     virtual const std::vector<PowerSource>& GetPowerSources() const = 0;
 
+    //! Gets all active effects in vision of the current player.
+    //!< \return List of effects.
+    virtual const std::vector<Effect>& GetEffects() const = 0;
+
     //! Gets all upgrades.
     //!< \return List of upgrades.
     virtual const std::vector<UpgradeID>& GetUpgrades() const = 0;
@@ -117,6 +121,11 @@ public:
     //!< \param force_refresh forces a full query from the game, may otherwise cache data from a previous call.
     //!< \return Data about all buffs possible for the current game session.
     virtual const Buffs& GetBuffData(bool force_refresh = false) const = 0;
+
+    //! Gets metadata of effects. Array can be indexed directly by EffectID.
+    //!< \param force_refresh forces a full query from the game, may otherwise cache data from a previous call.
+    //!< \return Data about all effects possible for the current game session.
+    virtual const Effects& GetEffectData(bool force_refresh = false) const = 0;
 
     //! Gets the GameInfo struct for the current map.
     //!< \return The current GameInfo struct.

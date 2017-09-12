@@ -350,6 +350,27 @@ std::string BuffData::Log() const {
     return str_out;
 }
 
+void EffectData::ReadFromProto(const SC2APIProtocol::EffectData& effect_data) {
+    effect_id = effect_data.effect_id();
+    name = effect_data.name();
+    friendly_name = effect_data.friendly_name();
+    radius = effect_data.radius();
+}
+
+std::string EffectData::Log() const {
+    std::string str_out;
+
+    return str_out;
+}
+
+void Effect::ReadFromProto(const SC2APIProtocol::Effect& effect) {
+    effect_id = effect.effect_id();
+    for (int i = 0; i < effect.pos_size(); ++i) {
+        const SC2APIProtocol::Point2D& pos = effect.pos(i);
+        positions.push_back(Point2D(pos.x(), pos.y()));
+    }
+}
+
 AbilityID GetGeneralizedAbilityID(uint32_t ability_id, const ObservationInterface& observation) {
     if (ability_id == 0) {
         return AbilityID(ability_id);
