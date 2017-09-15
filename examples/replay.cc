@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+//this can either be the path to an individual replay or a folder containing replays
 const char* kReplayFolder = "E:/Replays/";
 
 class Replay : public sc2::ReplayObserver {
@@ -14,21 +15,23 @@ public:
         sc2::ReplayObserver() {
     }
 
+    
+
+    //Called once when the game is started (or restarted)
     void OnGameStart() final {
-        const sc2::ObservationInterface* obs = Observation();
-        assert(obs->GetUnitTypeData().size() > 0);
-        count_units_built_.resize(obs->GetUnitTypeData().size());
-        std::fill(count_units_built_.begin(), count_units_built_.end(), 0);
     }
     
+    //Called when a unit is created by the player being observed
     void OnUnitCreated(const sc2::Unit& unit) final {
-        assert(uint32_t(unit.unit_type) < count_units_built_.size());
-        ++count_units_built_[unit.unit_type];
+
     }
 
+    //This is called when stepping through the game, and will not be called if the real time flag is passed to the coordinator.
+    //In a realtime game, call GetObservation() instead. 
     void OnStep() final {
     }
 
+    //Called when the game ends.
     void OnGameEnd() final {
         std::cout << "Units created:" << std::endl;
         const sc2::ObservationInterface* obs = Observation();
@@ -42,24 +45,78 @@ public:
         }
         std::cout << "Finished" << std::endl;
     }
+
+    //Given metadata about a replay, determine if it meets the criteria for replaying.
+    //Common criteria: high mrr games, certain maps, certain match ups
+    void IgnoreReplay(const ReplayInfo &replay_info, uint32_t &player_id)
+    {
+        //filter based on number of players 
+        if (replay_info.num_players != 2)
+        {
+            return true;
+        }
+
+        //check stats about each individual player in the game
+        for (unsigned int i = 0; i < replay_info.num_players; i++)
+        {
+            //filter based on mrr
+            if (replay_info.players[i].mmr < 3800)
+            {
+                return true;
+            }
+
+            //filter based on match up
+            //This will cause only terran vs terran replays
+            if (replay_info.players[i].race == sc2::Terran)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        //filter by map
+        if (replay_info.map_name == sc2::kMapBelShirVestigeLE)
+        {
+            return true;
+        }
+        
+        //if all the tests passed, observe the replay
+        return false;
+    }
 };
 
 
 int main(int argc, char* argv[]) {
     sc2::Coordinator coordinator;
+
+    //Make sure to pass the appropriate arguemnts when running the program.
     if (!coordinator.LoadSettings(argc, argv)) {
         return 1;
     }
 
+    //load in the replay file or folder or replays
     if (!coordinator.SetReplayPath(kReplayFolder)) {
-        std::cout << "Unable to find replays." << std::endl;
+        std::cout << "Unable to load replay(s)." << std::endl;
         return 1;
     }
 
-    Replay replay_observer;
+    //Keep processing replays until there are none left to process
+    while (coordinator.HasReplays())
+    {
+        Replay* replay_observer = new Replay();
 
-    coordinator.AddReplayObserver(&replay_observer);
+        //if you want to play process multiple replays simultaneously, call coordinator.AddReplayObserver(replay_observer).
+        //Be sure to use a unique instance of replay_observer when doing this.
+        coordinator.AddReplayObserver(replay_observer);
 
-    while (coordinator.Update());
-    while (!sc2::PollKeyPress());
+        //while there is a game to update, update it
+        while (coordinator.Update());
+        while (!sc2::PollKeyPress());
+
+        //clean up memory for the next iteration
+        delete replay_observer;
+    }
 }
