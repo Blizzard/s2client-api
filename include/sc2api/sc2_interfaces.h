@@ -82,9 +82,13 @@ public:
     //!< \return List of raw actions.
     virtual const RawActions& GetRawActions() const = 0;
 
-    //! Gets a list of actions performed as abilities applied to the current selection. For use with the feature layer or rendered options.
+    //! Gets a list of actions performed. For use with the feature layer options.
     //!< \return List of actions.
     virtual const SpatialActions& GetFeatureLayerActions() const = 0;
+
+    //! Gets a list of actions performed. For use with the rendered options.
+    //!< \return List of actions.
+    virtual const SpatialActions& GetRenderedActions() const = 0;
 
     //! Gets all power sources associated with the current player.
     //!< \return List of power sources.

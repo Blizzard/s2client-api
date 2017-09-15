@@ -37,6 +37,7 @@ public:
     uint32_t previous_game_loop;
     RawActions raw_actions_;
     SpatialActions feature_layer_actions_;
+    SpatialActions rendered_actions_;
     std::vector<PowerSource> power_sources_;
     std::vector<Effect> effects_;
     std::vector<UpgradeID> upgrades_;
@@ -89,6 +90,7 @@ public:
     const Unit* GetUnit(Tag tag) const final;
     const RawActions& GetRawActions() const final { return raw_actions_; }
     const SpatialActions& GetFeatureLayerActions() const final { return feature_layer_actions_; };
+    const SpatialActions& GetRenderedActions() const final { return rendered_actions_; }
     const std::vector<PowerSource>& GetPowerSources() const final { return power_sources_; }
     const std::vector<Effect>& GetEffects() const final { return effects_; }
     const std::vector<UpgradeID>& GetUpgrades() const final { return upgrades_; }
@@ -547,21 +549,33 @@ bool ObservationImp::UpdateObservation() {
     if (is_new_frame) {
         raw_actions_.clear();
         feature_layer_actions_ = SpatialActions();
+        rendered_actions_ = SpatialActions();
     }
 
-    Convert(response_, raw_actions_);
-    Convert(response_, feature_layer_actions_);
+    ConvertRawActions(response_, raw_actions_);
+    ConvertFeatureLayerActions(response_, feature_layer_actions_);
+    ConvertRenderedActions(response_, rendered_actions_);
 
     // Remap ability ids.
     {
-        if (use_generalized_ability_) {
-            for (ActionRaw& action : raw_actions_) {
-                action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
-            }
-            for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
-                spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
-            }
+        for (ActionRaw& action : raw_actions_) {
+            action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
         }
+        for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
+            spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+        }
+        for (SpatialUnitCommand& spatial_action : rendered_actions_.unit_commands) {
+            spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+        }
+    }
+
+    // Get units.
+    if (is_new_frame) {
+        units_previous_map_.clear();
+        for (size_t i = 0, e = units_.size(); i < e; ++i) {
+            units_previous_map_[units_[i].tag] = i;
+        }
+        units_previous_ = units_;
     }
 
     ObservationRawPtr observation_raw;

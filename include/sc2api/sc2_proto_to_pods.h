@@ -19,9 +19,11 @@ typedef MessageResponsePtr<SC2APIProtocol::ResponseQuery> ResponseQueryPtr;
 bool Convert(const ObservationPtr& observation_ptr, Score& score);
 bool Convert(const ObservationRawPtr& observation_ptr, UnitPool& unit_pool, uint32_t game_loop);
 bool Convert(const ObservationPtr& observation_ptr, RenderedFrame& render);
-bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions& actions);
-bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions);
 bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_info);
+
+void ConvertRawActions(const ResponseObservationPtr& response_observation_ptr, RawActions& actions);
+void ConvertFeatureLayerActions(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions);
+void ConvertRenderedActions(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions);
 
 Race ConvertRaceFromProto(SC2APIProtocol::Race race);
 GameResult ConvertGameResultFromProto(SC2APIProtocol::Result result);
