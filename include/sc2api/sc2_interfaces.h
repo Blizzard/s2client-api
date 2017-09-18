@@ -58,7 +58,7 @@ public:
 
     //! Get a list of all known units in the game.
     //!< \return List of all ally and visible enemy and neutral units.
-    virtual const Units& GetUnits() const = 0;
+    virtual Units GetUnits() const = 0;
 
     //! Get all units belonging to a certain alliance and meet the conditions provided by the filter. The unit structure is const data only.
     //! Therefore editing that data will not change any in game state. See the ActionInterface for changing Unit state.
@@ -77,23 +77,6 @@ public:
     //!< \param tag Unique tag of the unit.
     //!< \return Pointer to the Unit object.
     virtual const Unit* GetUnit(Tag tag) const = 0;
-
-    //! Get the unit state as represented by the the call to GetObservation from the previous frame. This is useful for calculating deltas between Unit states.
-    //! It is unsafe to assume GetUnit and GetPreviousUnit will both necessarily return a Unit given the same tag. The Unit may have been created or
-    //! destroyed in the last step.
-    //!< \param tag Unique tag of the unit.
-    //!< \return Pointer to the Unit object.
-    virtual const Unit* GetPreviousUnit(Tag tag) const = 0;
-
-    //! Gets a list of units added in the previous step. You could also hook into the OnUnitCreated event for this data on a per Unit basis.
-    //!< \sa OnUnitCreated()
-    virtual const Units& GetUnitsAdded() const = 0;
-
-    //! Gets a list of units added in the previous step. You could also hook into the OnUnitCreated event for this data on a per Unit basis.
-    //! Ally units disappear because they are destroyed. Enemy units may disappear because they move out of visibility, or because they are destroyed.
-    //!< \return A list of units that were removed from the observation.
-    //!< \sa OnUnitCreated()
-    virtual const Units& GetUnitsRemoved() const = 0;
 
     //! Gets a list of actions performed as abilities applied to units. For use with the raw option.
     //!< \return List of raw actions.
@@ -236,13 +219,13 @@ public:
     //!< \param tag Tag of unit.
     //!< \param ignore_resource_requirements Ignores food, mineral and gas costs, as well as cooldowns.
     //!< \return Abilities for the unit.
-    virtual AvailableAbilities GetAbilitiesForUnit(Tag tag, bool ignore_resource_requirements = false) = 0;
+    virtual AvailableAbilities GetAbilitiesForUnit(const Unit* unit, bool ignore_resource_requirements = false) = 0;
     //! Issues multiple available abilities queries.
     //! Batch version.
     //!< \param tag Tags of units.
     //!< \param ignore_resource_requirements Ignores food, mineral and gas costs, as well as cooldowns.
     //!< \return Abilities for the units.
-    virtual std::vector<AvailableAbilities> GetAbilitiesForUnits(const std::vector<Tag>& tags, bool ignore_resource_requirements = false) = 0;
+    virtual std::vector<AvailableAbilities> GetAbilitiesForUnits(const Units& units, bool ignore_resource_requirements = false) = 0;
 
     //! Returns pathing distance between two locations. Takes into account unit movement properties (e.g. Flying).
     //!< \param start Starting point.
@@ -254,7 +237,7 @@ public:
     //!< \param start Starting points.
     //!< \param end End points.
     //!< \return Distances between the two points.
-    virtual float PathingDistance(const Tag& start_unit_tag, const Point2D& end) = 0;
+    virtual float PathingDistance(const Unit* start, const Point2D& end) = 0;
 
     struct PathingQuery {
         Tag start_unit_tag_ = NullTag;
@@ -271,7 +254,7 @@ public:
     //!< \param end target_pos Position to attempt placement on.
     //!< \param placing_unit_tag_ (Optional) The unit that is moving, if moving a structure.
     //!< \return If placement is possible.
-    virtual bool Placement(const AbilityID& ability, const Point2D& target_pos, Tag placing_unit_tag_ = NullTag) = 0;
+    virtual bool Placement(const AbilityID& ability, const Point2D& target_pos, const Unit* unit = nullptr) = 0;
 
     struct PlacementQuery {
         PlacementQuery() = default;
@@ -306,30 +289,30 @@ public:
      */
 
     //! Issues a command to a unit. Self targeting.
-    //!< \param unit_tag The unit to send the command to.
+    //!< \param unit The unit to send the command to.
     //!< \param ability The ability id of the command.
-    virtual void UnitCommand(Tag unit_tag, AbilityID ability) = 0;
+    virtual void UnitCommand(const Unit* unit, AbilityID ability) = 0;
 
     //! Issues a command to a unit. Targets a point.
-    //!< \param unit_tag The unit to send the command to.
+    //!< \param unit The unit to send the command to.
     //!< \param ability The ability id of the command.
     //!< \param point The 2D world position to target.
-    virtual void UnitCommand(Tag unit_tag, AbilityID ability, const Point2D& point) = 0;
+    virtual void UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point) = 0;
 
     //! Issues a command to a unit. Targets another unit.
-    //!< \param unit_tag The unit to send the command to.
+    //!< \param unit The unit to send the command to.
     //!< \param ability The ability id of the command.
-    //!< \param target_tag The unit that is a target of the unit getting the command.
-    virtual void UnitCommand(Tag unit_tag, AbilityID ability, Tag target_tag) = 0;
+    //!< \param target The unit that is a target of the unit getting the command.
+    virtual void UnitCommand(const Unit* unit, AbilityID ability, const Unit* target) = 0;
 
-    //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Tag, AbilityID).
-    virtual void UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability) = 0;
+    //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID).
+    virtual void UnitCommand(const Units& units, AbilityID ability) = 0;
 
-    //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Tag, AbilityID, Point2D).
-    virtual void UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability, const Point2D& point) = 0;
+    //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID, Point2D).
+    virtual void UnitCommand(const Units& units, AbilityID ability, const Point2D& point) = 0;
 
-    //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Tag, AbilityID, Tag).
-    virtual void UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability, Tag target_tag) = 0;
+    //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID, Unit).
+    virtual void UnitCommand(const Units& units, AbilityID ability, const Unit* target) = 0;
 
     //! Returns a list of unit tags that have sent commands out in the last call to SendActions. This will be used to determine
     //! if a unit actually has a command when the observation is received.
@@ -439,7 +422,7 @@ public:
 
     //! Destroy a unit.
     //!< \param tag Unit to destroy.
-    virtual void DebugKillUnit(Tag tag) = 0;
+    virtual void DebugKillUnit(const Unit* unit) = 0;
 
     //! Makes the entire map visible, i.e., removes the fog-of-war.
     virtual void DebugShowMap() = 0;
@@ -471,15 +454,15 @@ public:
     //! Sets the energy level on a unit.
     //!< \param value The new energy level.
     //!< \param tag The unit.
-    virtual void DebugSetEnergy(float value, Tag tag) = 0;
+    virtual void DebugSetEnergy(float value, const Unit* unit) = 0;
     //! Sets the life on a unit.
     //!< \param value The new life.
     //!< \param tag The unit.
-    virtual void DebugSetLife(float value, Tag tag) = 0;
+    virtual void DebugSetLife(float value, const Unit* unit) = 0;
     //! Sets shields on a unit.
     //!< \param value The new shields.
     //!< \param tag The unit.
-    virtual void DebugSetShields(float value, Tag tag) = 0;
+    virtual void DebugSetShields(float value, const Unit* unit) = 0;
 
     //! Sets the position of the camera.
     //!< \param pos The camera position in world space.

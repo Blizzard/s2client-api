@@ -31,11 +31,8 @@ public:
     uint32_t player_id_;
 
     // Game state info.
-    Units units_;
-    Units units_previous_;
-    UnitIdxMap units_previous_map_;
-    mutable Units units_added_;
-    mutable Units units_removed_;
+    UnitPool unit_pool_;
+    std::unordered_map<Tag, Unit> units_previous_map_;
     uint32_t current_game_loop_;
     uint32_t previous_game_loop;
     RawActions raw_actions_;
@@ -43,7 +40,6 @@ public:
     std::vector<PowerSource> power_sources_;
     std::vector<UpgradeID> upgrades_;
     std::vector<UpgradeID> upgrades_previous_;
-    std::set<Tag> units_created_;
 
     // Game info.
     mutable GameInfo game_info_;
@@ -84,13 +80,10 @@ public:
 
     uint32_t GetPlayerID() const { return player_id_; }
     uint32_t GetGameLoop() const final { return current_game_loop_; }
-    const Units& GetUnits() const final { return units_; }
+    Units GetUnits() const final;
     Units GetUnits(Filter filter) const final;
     Units GetUnits(Unit::Alliance alliance, Filter filter = {}) const final;
     const Unit* GetUnit(Tag tag) const final;
-    const Unit* GetPreviousUnit(Tag tag) const final;
-    const Units& GetUnitsAdded() const final;
-    const Units& GetUnitsRemoved() const final;
     const RawActions& GetRawActions() const final { return raw_actions_; }
     const SpatialActions& GetFeatureLayerActions() const final { return feature_layer_actions_; };
     const std::vector<PowerSource>& GetPowerSources() const final { return power_sources_; }
@@ -141,90 +134,40 @@ void ObservationImp::ClearFlags() {
     unit_types_cached = false;
 }
 
-const Unit* ObservationImp::GetUnit(Tag tag) const {
-    for (const Unit& unit : units_) {
-        if (unit.tag == tag) {
-            return &unit;
-        }
-    }
-
-    return nullptr;
+Units ObservationImp::GetUnits() const {
+    Units units;
+    unit_pool_.ForEachExistingUnit([&](Unit& unit) {
+        units.push_back(&unit);
+    });
+    return units;
 }
 
-const Unit* ObservationImp::GetPreviousUnit(Tag tag) const {
-    for (const Unit& unit : units_previous_) {
-        if (unit.tag == tag) {
-            return &unit;
-        }
-    }
-
-    return nullptr;
+const Unit* ObservationImp::GetUnit(Tag tag) const {
+    return unit_pool_.GetExistingUnit(tag);
 }
 
 Units ObservationImp::GetUnits(Unit::Alliance alliance, Filter filter) const {
     Units units;
-    for (auto& u : units_) {
-        if (u.alliance == alliance) {
-            if (!filter) {
-                units.push_back(u);
-            }
-            else if (filter(u)) {
-                units.push_back(u);
-            }
+    unit_pool_.ForEachExistingUnit([&](Unit& unit) {
+        if (unit.alliance != alliance) {
+            return;
         }
-    }
+
+        if (!filter || filter(unit)) {
+            units.push_back(&unit);
+        }
+    });
     return units;
 }
 
 Units ObservationImp::GetUnits(Filter filter) const {
     Units units;
-    for (auto& u : units_) {
-        if (!filter) {
-            units.push_back(u);
+    unit_pool_.ForEachExistingUnit([&](Unit& unit) {
+        if (!filter || filter(unit)) {
+            units.push_back(&unit);
         }
-        else if (filter(u)) {
-            units.push_back(u);
-        }
-    }
+    });
     return units;
-}
-
-const Units& ObservationImp::GetUnitsAdded() const {
-    units_added_.clear();
-
-    // Create the searchable set of previous units.
-    std::set<Tag> previous_set;
-    for (const Unit& unit : units_previous_) {
-        previous_set.insert(unit.tag);
-    }
-
-    // If there are units not in the set, they are new.
-    for (const Unit& unit : units_) {
-        if (previous_set.find(unit.tag) == previous_set.end()) {
-            units_added_.push_back(unit);
-        }
-    }
-
-    return units_added_;
-}
-
-const Units& ObservationImp::GetUnitsRemoved() const {
-    units_removed_.clear();
-
-    // Create the searchable set of current units.
-    std::set<Tag> current_set;
-    for (const Unit& unit : units_) {
-        current_set.insert(unit.tag);
-    }
-
-    // If there are units not in the set, they have been removed.
-    for (const Unit& unit : units_previous_) {
-        if (current_set.find(unit.tag) == current_set.end()) {
-            units_removed_.push_back(unit);
-        }
-    }
-
-    return units_removed_;
 }
 
 const Abilities& ObservationImp::GetAbilityData(bool force_refresh) const {
@@ -559,8 +502,8 @@ bool ObservationImp::UpdateObservation() {
         feature_layer_actions_ = SpatialActions();
     }
 
-    Convert(response_, raw_actions_, units_, player_id_);
-    Convert(response_, feature_layer_actions_, units_, player_id_);
+    Convert(response_, raw_actions_);
+    Convert(response_, feature_layer_actions_);
 
     // Remap ability ids.
     {
@@ -574,31 +517,29 @@ bool ObservationImp::UpdateObservation() {
         }
     }
 
-    // Get units.
-    if (is_new_frame) {
-        units_previous_map_.clear();
-        for (size_t i = 0, e = units_.size(); i < e; ++i) {
-            units_previous_map_[units_[i].tag] = i;
-        }
-        units_previous_ = units_;
-    }
-
     ObservationRawPtr observation_raw;
     SET_SUBMESSAGE_RESPONSE(observation_raw, observation_, raw_data);
     if (observation_raw.HasErrors()) {
         return false;
     }
 
-    Convert(observation_raw, units_);
+    units_previous_map_.clear();
+    unit_pool_.ForEachExistingUnit([&](Unit& unit) {
+        units_previous_map_[unit.tag] = unit;
+    });
+
+    unit_pool_.ClearExisting();
+
+    Convert(observation_raw, unit_pool_, current_game_loop_);
 
     // Remap ability ids in orders.
-    for (Unit& unit : units_) {
+    unit_pool_.ForEachExistingUnit([&](Unit& unit) {
         for (UnitOrder& unit_order : unit.orders) {
             if (use_generalized_ability_) {
                 unit_order.ability_id = GetGeneralizedAbilityID(unit_order.ability_id, *this);
             }
         }
-    }
+    });
 
     if (!observation_raw->has_player()) {
         return false;
@@ -644,14 +585,14 @@ public:
 
     QueryImp(ProtoInterface& proto, ControlInterface& control, ObservationInterface& observation);
 
-    AvailableAbilities GetAbilitiesForUnit(Tag tag, bool ignore_resource_requirements) final;
-    std::vector<AvailableAbilities> GetAbilitiesForUnits(const std::vector<Tag>& tags, bool ignore_resource_requirements) final;
+    AvailableAbilities GetAbilitiesForUnit(const Unit* unit, bool ignore_resource_requirements) final;
+    std::vector<AvailableAbilities> GetAbilitiesForUnits(const Units& tags, bool ignore_resource_requirements) final;
 
     float PathingDistance(const Point2D& start, const Point2D& end) final;
-    float PathingDistance(const Tag& start_unit_tag, const Point2D& end) final;
+    float PathingDistance(const Unit* start_unit, const Point2D& end) final;
     std::vector<float> PathingDistance(const std::vector<PathingQuery>& queries) final;
 
-    bool Placement(const AbilityID& ability, const Point2D& target_pos, Tag placing_unit_tag_ = NullTag) final;
+    bool Placement(const AbilityID& ability, const Point2D& target_pos, const Unit* unit = nullptr) final;
     std::vector<bool> Placement(const std::vector<PlacementQuery>& queries) final;
 };
 
@@ -661,10 +602,8 @@ QueryImp::QueryImp(ProtoInterface& proto, ControlInterface& control, Observation
     observation_(observation) {
 }
 
-AvailableAbilities QueryImp::GetAbilitiesForUnit(Tag tag, bool ignore_resource_requirements) {
-    std::vector<Tag> tags;
-    tags.push_back(tag);
-    std::vector<AvailableAbilities> available_abilities = GetAbilitiesForUnits(tags, ignore_resource_requirements);
+AvailableAbilities QueryImp::GetAbilitiesForUnit(const Unit* unit, bool ignore_resource_requirements) {
+    std::vector<AvailableAbilities> available_abilities = GetAbilitiesForUnits({ unit }, ignore_resource_requirements);
     control_.ErrorIf(available_abilities.empty(), ClientError::NoAbilitiesForTag);
     if (available_abilities.size() < 1) {
         return AvailableAbilities();
@@ -672,21 +611,21 @@ AvailableAbilities QueryImp::GetAbilitiesForUnit(Tag tag, bool ignore_resource_r
     return available_abilities[0];
 }
 
-std::vector<AvailableAbilities> QueryImp::GetAbilitiesForUnits(const std::vector<Tag>& tags, bool ignore_resource_requirements) {
+std::vector<AvailableAbilities> QueryImp::GetAbilitiesForUnits(const Units& units, bool ignore_resource_requirements) {
     std::vector<AvailableAbilities> available_abilities_out;
 
     // Make the request.
     {
-        if (tags.empty()) {
+        if (units.empty()) {
             return available_abilities_out;
         }
 
         GameRequestPtr request = proto_.MakeRequest();
         SC2APIProtocol::RequestQuery* query = request->mutable_query();
         query->set_ignore_resource_requirements(ignore_resource_requirements);
-        for (auto tag : tags) {
+        for (const auto unit : units) {
             SC2APIProtocol::RequestQueryAvailableAbilities* request_abilities = query->add_abilities();
-            request_abilities->set_unit_tag(tag);
+            request_abilities->set_unit_tag(unit->tag);
         }
 
         if (!proto_.SendRequest(request)) {
@@ -713,7 +652,7 @@ std::vector<AvailableAbilities> QueryImp::GetAbilitiesForUnits(const std::vector
         AvailableAbilities available_abilities_unit;
         available_abilities_unit.unit_tag = response_query_available_abilities.unit_tag();
         available_abilities_unit.unit_type_id = response_query_available_abilities.unit_type_id();
-        control_.ErrorIf(response_query_available_abilities.unit_tag() != tags[i], ClientError::ErrorSC2);
+        control_.ErrorIf(response_query_available_abilities.unit_tag() != units[i]->tag, ClientError::ErrorSC2);
         for (int j = 0; j < response_query_available_abilities.abilities_size(); ++j) {
             const SC2APIProtocol::AvailableAbility& ability = response_query_available_abilities.abilities(j);
             AvailableAbility available_ability;
@@ -740,11 +679,11 @@ float QueryImp::PathingDistance(const Point2D& start, const Point2D& end) {
     return distances[0];
 }
 
-float QueryImp::PathingDistance(const Tag& start_unit_tag, const Point2D& end) {
+float QueryImp::PathingDistance(const Unit* start_unit, const Point2D& end) {
     std::vector<PathingQuery> queries;
 
     PathingQuery query;
-    query.start_unit_tag_ = start_unit_tag;
+    query.start_unit_tag_ = start_unit->tag;
     query.end_ = end;
     queries.push_back(query);
 
@@ -798,13 +737,13 @@ std::vector<float> QueryImp::PathingDistance(const std::vector<PathingQuery>& qu
     return distances;
 }
 
-bool QueryImp::Placement(const AbilityID& ability, const Point2D& target_pos, Tag placing_unit_tag) {
+bool QueryImp::Placement(const AbilityID& ability, const Point2D& target_pos, const Unit* unit) {
     std::vector<PlacementQuery> queries;
 
     PlacementQuery query;
     query.ability = ability;
     query.target_pos= target_pos;
-    query.placing_unit_tag = placing_unit_tag;
+    query.placing_unit_tag = unit ? unit->tag : NullTag;
     queries.push_back(query);
 
     std::vector<bool> results = Placement(queries);
@@ -938,7 +877,7 @@ public:
     void DebugBoxOut(const Point3D& p_min, const Point3D& p_max, Color color = Colors::White) override;
     void DebugSphereOut(const Point3D& p, float r, Color color = Colors::White) override;
     void DebugCreateUnit(UnitTypeID unit_type, const Point2D& p, uint32_t player_id = 1, uint32_t count = 1) override;
-    void DebugKillUnit(Tag tag) override;
+    void DebugKillUnit(const Unit* unit) override;
     void DebugShowMap() override;
     void DebugEnemyControl() override;
     void DebugIgnoreFood() override;
@@ -952,9 +891,9 @@ public:
     void DebugFastBuild() override;
     void DebugSetScore(float score) override;
     void DebugEndGame(bool victory) override;
-    void DebugSetEnergy(float value, Tag tag) override;
-    void DebugSetLife(float value, Tag tag) override;
-    void DebugSetShields(float value, Tag tag) override;
+    void DebugSetEnergy(float value, const Unit* unit) override;
+    void DebugSetLife(float value, const Unit* unit) override;
+    void DebugSetShields(float value, const Unit* unit) override;
     void DebugMoveCamera(const Point2D& pos) override;
     void DebugTestApp(AppTest app_test, int delay_ms) override;
     void SendDebug() override;
@@ -1087,27 +1026,30 @@ void DebugImp::DebugEndGame(bool victory) {
     }
 }
 
-void DebugImp::DebugSetEnergy(float value, Tag tag) {
+void DebugImp::DebugSetEnergy(float value, const Unit* unit) {
+    if (!unit) return;
     DebugSetUnitValue unit_value;
     unit_value.unit_value = DebugSetUnitValue::UnitValue::Energy;
     unit_value.value = value;
-    unit_value.tag = tag;
+    unit_value.tag = unit->tag;
     debug_unit_values_.push_back(unit_value);
 }
 
-void DebugImp::DebugSetLife(float value, Tag tag) {
+void DebugImp::DebugSetLife(float value, const Unit* unit) {
+    if (!unit) return;
     DebugSetUnitValue unit_value;
     unit_value.unit_value = DebugSetUnitValue::UnitValue::Life;
     unit_value.value = value;
-    unit_value.tag = tag;
+    unit_value.tag = unit->tag;
     debug_unit_values_.push_back(unit_value);
 }
 
-void DebugImp::DebugSetShields(float value, Tag tag) {
+void DebugImp::DebugSetShields(float value, const Unit* unit) {
+    if (!unit) return;
     DebugSetUnitValue unit_value;
     unit_value.unit_value = DebugSetUnitValue::UnitValue::Shields;
     unit_value.value = value;
-    unit_value.tag = tag;
+    unit_value.tag = unit->tag;
     debug_unit_values_.push_back(unit_value);
 }
 
@@ -1120,8 +1062,9 @@ void DebugImp::DebugCreateUnit(UnitTypeID unit_type, const Point2D& p, uint32_t 
     debug_unit_.push_back(create_unit);
 }
 
-void DebugImp::DebugKillUnit(Tag tag) {
-    debug_kill_tag_.push_back(tag);
+void DebugImp::DebugKillUnit(const Unit* unit) {
+    if (!unit) return;
+    debug_kill_tag_.push_back(unit->tag);
 }
 
 void DebugImp::DebugMoveCamera(const Point2D& pos) {
@@ -1402,8 +1345,8 @@ public:
 
     void IssueUnitDestroyedEvents();
     void IssueUnitAddedEvents();
-    void IssueIdleEvent(const Unit& unit, const std::vector<Tag>& commands);
-    void IssueBuildingCompletedEvent(const Unit& unit);
+    void IssueIdleEvent(const Unit* unit, const std::vector<Tag>& commands);
+    void IssueBuildingCompletedEvent(const Unit* unit);
     void IssueAlertEvents();
     void IssueUpgradeEvents();
 
@@ -1955,6 +1898,7 @@ bool ControlImp::GetObservation() {
 }
 
 bool ControlImp::WaitJoinGame() {
+
     std::cout << "Waiting for the JoinGame response." << std::endl;
     GameResponsePtr response = WaitForResponse();
     if (!response.get()) {
@@ -2000,38 +1944,40 @@ void ControlImp::IssueUnitDestroyedEvents() {
     if (raw.has_event()) {
         const SC2APIProtocol::Event& event = raw.event();
         for (const auto& tag : event.dead_units()) {
-            const Unit* u = observation_imp_->GetPreviousUnit(tag);
-            if (!u) {
+            const Unit* unit = observation_imp_->unit_pool_.GetUnit(tag);
+
+            if (!unit) {
                 continue;
             }
-            client_.OnUnitDestroyed(*u);
+
+            observation_imp_->unit_pool_.MarkDead(tag);
+            client_.OnUnitDestroyed(unit);
         }
     }
 }
 
 void ControlImp::IssueUnitAddedEvents() {
-    const Units& added = observation_imp_->GetUnitsAdded();
-    for (const auto& add : added) {
-        if (add.alliance == Unit::Alliance::Self) {
-            std::set<Tag>::iterator it_found = observation_imp_->units_created_.find(add.tag);
-            if (it_found == observation_imp_->units_created_.end()) {
-                client_.OnUnitCreated(add);
-                observation_imp_->units_created_.insert(add.tag);
-            }
+    observation_imp_->unit_pool_.ForEachExistingUnit([&](sc2::Unit& unit) {
+        auto found = observation_imp_->units_previous_map_.find(unit.tag);
+        if (found != observation_imp_->units_previous_map_.end()) {
+            return;
         }
 
-        if (add.alliance == Unit::Alliance::Enemy && add.display_type == Unit::DisplayType::Visible) {
-            client_.OnUnitEnterVision(add);
+        if (unit.alliance == Unit::Alliance::Enemy && unit.display_type == Unit::DisplayType::Visible) {
+            client_.OnUnitEnterVision(&unit);
         }
-    }
+        else {
+            client_.OnUnitCreated(&unit);
+        }
+    });
 }
 
-void ControlImp::IssueIdleEvent(const Unit& unit, const std::vector<Tag>& commands) {
-    if (!unit.orders.empty() || unit.build_progress < 1.0f) {
+void ControlImp::IssueIdleEvent(const Unit* unit, const std::vector<Tag>& commands) {
+    if (!unit || !unit->orders.empty() || unit->build_progress < 1.0f) {
         return;
     }
     // Lookup unit from previous map.
-    UnitIdxMap::const_iterator found = observation_imp_->units_previous_map_.find(unit.tag);
+    auto found = observation_imp_->units_previous_map_.find(unit->tag);
 
     // If it's not in the previous map it's a new unit with new orders so trigger the OnIdle event.
     if (found == observation_imp_->units_previous_map_.end()) {
@@ -2040,7 +1986,7 @@ void ControlImp::IssueIdleEvent(const Unit& unit, const std::vector<Tag>& comman
     }
 
     // Otherwise get that unit from the previous list and verify it's state changed to idle.
-    const Unit& unit_previous = observation_imp_->units_previous_[found->second];
+    const Unit& unit_previous = found->second;
 
     if (!unit_previous.orders.empty()) {
         client_.OnUnitIdle(unit);
@@ -2056,26 +2002,26 @@ void ControlImp::IssueIdleEvent(const Unit& unit, const std::vector<Tag>& comman
     // Iterate the issued commands, if a unit exists in that list but does not currently have orders
     // the order must have failed. Reissue the OnUnitIdle event in that case.
     for (auto t : commands) {
-        if (t == unit.tag) {
+        if (t == unit->tag) {
             client_.OnUnitIdle(unit);
             break;
         }
     }
 }
 
-void ControlImp::IssueBuildingCompletedEvent(const Unit& unit) {
+void ControlImp::IssueBuildingCompletedEvent(const Unit* unit) {
     // If the units build progress is complete but it previously wasn't call construction complete
-    if (unit.build_progress < 1.0f) {
+    if (!unit || unit->build_progress < 1.0f) {
         return;
     }
 
-    UnitIdxMap::const_iterator found = observation_imp_->units_previous_map_.find(unit.tag);
+   auto found = observation_imp_->units_previous_map_.find(unit->tag);
 
     if (found == observation_imp_->units_previous_map_.end()) {
         return;
     }
 
-    const Unit& unit_previous = observation_imp_->units_previous_[found->second];
+    const Unit& unit_previous = found->second;
     if (unit_previous.build_progress < 1.0f) {
         client_.OnBuildingConstructionComplete(unit);
     }
@@ -2121,7 +2067,7 @@ bool ControlImp::IssueEvents(const std::vector<Tag>& commands) {
     IssueUnitDestroyedEvents();
     IssueUnitAddedEvents();
 
-    const Units& units = observation_imp_->GetUnits(Unit::Alliance::Self);
+    Units units = observation_imp_->GetUnits(Unit::Alliance::Self);
     for (const auto& unit : units) {
         IssueIdleEvent(unit, commands);
         IssueBuildingCompletedEvent(unit);
@@ -2137,20 +2083,18 @@ bool ControlImp::IssueEvents(const std::vector<Tag>& commands) {
 }
 
 void ControlImp::OnGameStart() {
-    const Units& units = observation_imp_->GetUnits(Unit::Alliance::Self, [](const Unit& unit) {
+    Units units = observation_imp_->GetUnits(Unit::Alliance::Self, [](const Unit& unit) {
         return unit.unit_type == UNIT_TYPEID::TERRAN_COMMANDCENTER ||
                 unit.unit_type == UNIT_TYPEID::PROTOSS_NEXUS ||
                 unit.unit_type == UNIT_TYPEID::ZERG_HATCHERY;
     });
-
-    observation_imp_->units_created_.clear();
 
     if (units.empty()) {
         return;
     }
 
     // For now, until the api supports allies, the first (and only) building in this list should be the start location
-    observation_imp_->start_location_ = units.begin()->pos;
+    observation_imp_->start_location_ = units[0]->pos;
 }
 
 void ControlImp::Error(ClientError error, const std::vector<std::string>& errors) {

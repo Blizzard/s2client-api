@@ -109,20 +109,20 @@ struct IsStructure {
 int CountUnitType(const ObservationInterface* observation, UnitTypeID unit_type) {
     int count = 0;
     Units my_units = observation->GetUnits(Unit::Alliance::Self);
-    for (const Unit& unit : my_units) {
-        if (unit.unit_type == unit_type)
+    for (const auto unit : my_units) {
+        if (unit->unit_type == unit_type)
             ++count;
     }
 
     return count;
 }
 
-bool FindEnemyStructure(const ObservationInterface* observation, Unit& enemy_unit) {
+bool FindEnemyStructure(const ObservationInterface* observation, const Unit*& enemy_unit) {
     Units my_units = observation->GetUnits(Unit::Alliance::Enemy);
-    for (const Unit& unit : my_units) {
-        if (unit.unit_type == UNIT_TYPEID::TERRAN_COMMANDCENTER ||
-            unit.unit_type == UNIT_TYPEID::TERRAN_SUPPLYDEPOT ||
-            unit.unit_type == UNIT_TYPEID::TERRAN_BARRACKS) {
+    for (const auto unit : my_units) {
+        if (unit->unit_type == UNIT_TYPEID::TERRAN_COMMANDCENTER ||
+            unit->unit_type == UNIT_TYPEID::TERRAN_SUPPLYDEPOT ||
+            unit->unit_type == UNIT_TYPEID::TERRAN_BARRACKS) {
             enemy_unit = unit;
             return true;
         }
@@ -131,11 +131,11 @@ bool FindEnemyStructure(const ObservationInterface* observation, Unit& enemy_uni
     return false;
 }
 
-bool GetRandomUnit(Unit& unit_out, const ObservationInterface* observation, UnitTypeID unit_type) {
+bool GetRandomUnit(const Unit*& unit_out, const ObservationInterface* observation, UnitTypeID unit_type) {
     Units my_units = observation->GetUnits(Unit::Alliance::Self);
     std::random_shuffle(my_units.begin(), my_units.end()); // Doesn't work, or doesn't work well.
-    for (const Unit& unit : my_units) {
-        if (unit.unit_type == unit_type) {
+    for (const auto unit : my_units) {
+        if (unit->unit_type == unit_type) {
             unit_out = unit;
             return true;
         }
@@ -167,11 +167,11 @@ size_t MultiplayerBot::CountUnitTypeBuilding(const ObservationInterface* observa
     Units buildings = observation->GetUnits(Unit::Self, IsUnit(production_building));
 
     for (const auto& building : buildings) {
-        if (building.orders.empty()) {
+        if (building->orders.empty()) {
             continue;
         }
 
-        for (const auto order : building.orders) {
+        for (const auto order : building->orders) {
             if (order.ability_id == ability) {
                 building_count++;
             }
@@ -193,7 +193,7 @@ size_t MultiplayerBot::CountUnitTypeTotal(const ObservationInterface* observatio
     return count + CountUnitTypeBuilding(observation, production, ability);
 }
 
-bool MultiplayerBot::GetRandomUnit(Unit& unit_out, const ObservationInterface* observation, UnitTypeID unit_type) {
+bool MultiplayerBot::GetRandomUnit(const Unit*& unit_out, const ObservationInterface* observation, UnitTypeID unit_type) {
     Units my_units = observation->GetUnits(Unit::Alliance::Self, IsUnit(unit_type));
     if (!my_units.empty()) {
         unit_out = GetRandomEntry(my_units);
@@ -202,28 +202,29 @@ bool MultiplayerBot::GetRandomUnit(Unit& unit_out, const ObservationInterface* o
     return false;
 }
 
-bool MultiplayerBot::FindNearestMineralPatch(const Point2D& start, Tag& target) {
+const Unit* MultiplayerBot::FindNearestMineralPatch(const Point2D& start) {
     Units units = Observation()->GetUnits(Unit::Alliance::Neutral);
     float distance = std::numeric_limits<float>::max();
+    const Unit* target = nullptr;
     for (const auto& u : units) {
-        if (u.unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
-            float d = DistanceSquared2D(u.pos, start);
+        if (u->unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+            float d = DistanceSquared2D(u->pos, start);
             if (d < distance) {
                 distance = d;
-                target = u.tag;
+                target = u;
             }
         }
     }
     //If we never found one return false;
     if (distance == std::numeric_limits<float>::max()) {
-        return false;
+        return target;
     }
-    return true;
+    return target;
 }
 
 // Tries to find a random location that can be pathed to on the map.
 // Returns 'true' if a new, random location has been found that is pathable by the unit.
-bool MultiplayerBot::FindEnemyPosition(Tag, Point2D& target_pos) {
+bool MultiplayerBot::FindEnemyPosition(Point2D& target_pos) {
     if (game_info_.enemy_start_locations.empty()) {
         return false;
     }
@@ -231,7 +232,7 @@ bool MultiplayerBot::FindEnemyPosition(Tag, Point2D& target_pos) {
     return true;
 }
 
-bool MultiplayerBot::TryFindRandomPathableLocation(Tag tag, Point2D& target_pos) {
+bool MultiplayerBot::TryFindRandomPathableLocation(const Unit* unit, Point2D& target_pos) {
     // First, find a random point inside the playable area of the map.
     float playable_w = game_info_.playable_max.x - game_info_.playable_min.x;
     float playable_h = game_info_.playable_max.y - game_info_.playable_min.y;
@@ -249,7 +250,7 @@ bool MultiplayerBot::TryFindRandomPathableLocation(Tag tag, Point2D& target_pos)
     // but using a unit tag wherever possible will be more accurate.
     // Note: This query must communicate with the game to get a result which affects performance.
     // Ideally batch up the queries (using PathingDistanceBatched) and do many at once.
-    float distance = Query()->PathingDistance(tag, target_pos);
+    float distance = Query()->PathingDistance(unit, target_pos);
 
     return distance > 0.1f;
 }
@@ -261,21 +262,21 @@ void MultiplayerBot::AttackWithUnitType(UnitTypeID unit_type, const ObservationI
     }
 }
 
-void MultiplayerBot::AttackWithUnit(Unit unit, const ObservationInterface* observation) {
+void MultiplayerBot::AttackWithUnit(const Unit* unit, const ObservationInterface* observation) {
     //If unit isn't doing anything make it attack.
     Units enemy_units = observation->GetUnits(Unit::Alliance::Enemy);
     if (enemy_units.empty()) {
         return;
     }
 
-    if (unit.orders.empty()) {
-        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front().pos);
+    if (unit->orders.empty()) {
+        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front()->pos);
         return;
     }
 
     //If the unit is doing something besides attacking, make it attack.
-    if (unit.orders.front().ability_id != ABILITY_ID::ATTACK) {
-        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front().pos);
+    if (unit->orders.front().ability_id != ABILITY_ID::ATTACK) {
+        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front()->pos);
     }
 }
 
@@ -286,16 +287,16 @@ void MultiplayerBot::ScoutWithUnits(UnitTypeID unit_type, const ObservationInter
     }
 }
 
-void MultiplayerBot::ScoutWithUnit(Unit unit, const ObservationInterface* observation) {
+void MultiplayerBot::ScoutWithUnit(const Unit* unit, const ObservationInterface* observation) {
     Units enemy_units = observation->GetUnits(Unit::Alliance::Enemy, IsAttackable());
-    if (!unit.orders.empty()) {
+    if (!unit->orders.empty()) {
         return;
     }
     Point2D target_pos;
 
-    if (FindEnemyPosition(unit.tag, target_pos)) {
-        if (Distance2D(unit.pos, target_pos) < 20 && enemy_units.empty()) {
-            if (TryFindRandomPathableLocation(unit.tag, target_pos)) {
+    if (FindEnemyPosition(target_pos)) {
+        if (Distance2D(unit->pos, target_pos) < 20 && enemy_units.empty()) {
+            if (TryFindRandomPathableLocation(unit, target_pos)) {
                 Actions()->UnitCommand(unit, ABILITY_ID::SMART, target_pos);
                 return;
             }
@@ -308,7 +309,7 @@ void MultiplayerBot::ScoutWithUnit(Unit unit, const ObservationInterface* observ
         Actions()->UnitCommand(unit, ABILITY_ID::SMART, target_pos);
     }
     else {
-        if (TryFindRandomPathableLocation(unit.tag, target_pos)) {
+        if (TryFindRandomPathableLocation(unit, target_pos)) {
             Actions()->UnitCommand(unit, ABILITY_ID::SMART, target_pos);
         }
     }
@@ -327,7 +328,7 @@ bool MultiplayerBot::TryBuildStructure(AbilityID ability_type_for_structure, Uni
 
     // Check to see if there is already a worker heading out to build it
     for (const auto& worker : workers) {
-        for (const auto& order : worker.orders) {
+        for (const auto& order : worker->orders) {
             if (order.ability_id == ability_type_for_structure) {
                 return false;
             }
@@ -335,10 +336,10 @@ bool MultiplayerBot::TryBuildStructure(AbilityID ability_type_for_structure, Uni
     }
 
     // If no worker is already building one, get a random worker to build one
-    const Unit& unit = GetRandomEntry(workers);
+    const Unit* unit = GetRandomEntry(workers);
 
     // Check to see if unit can make it there
-    if (Query()->PathingDistance(unit.tag, location) < 0.1f) {
+    if (Query()->PathingDistance(unit, location) < 0.1f) {
         return false;
     }
     if (!isExpansion) {
@@ -350,7 +351,7 @@ bool MultiplayerBot::TryBuildStructure(AbilityID ability_type_for_structure, Uni
     }
     // Check to see if unit can build there
     if (Query()->Placement(ability_type_for_structure, location)) {
-        Actions()->UnitCommand(unit.tag, ability_type_for_structure, location);
+        Actions()->UnitCommand(unit, ability_type_for_structure, location);
         return true;
     }
     return false;
@@ -369,7 +370,7 @@ bool MultiplayerBot::TryBuildStructure(AbilityID ability_type_for_structure, Uni
 
     // Check to see if there is already a worker heading out to build it
     for (const auto& worker : workers) {
-        for (const auto& order : worker.orders) {
+        for (const auto& order : worker->orders) {
             if (order.ability_id == ability_type_for_structure) {
                 return false;
             }
@@ -377,11 +378,11 @@ bool MultiplayerBot::TryBuildStructure(AbilityID ability_type_for_structure, Uni
     }
 
     // If no worker is already building one, get a random worker to build one
-    const Unit& unit = GetRandomEntry(workers);
+    const Unit* unit = GetRandomEntry(workers);
 
     // Check to see if unit can build there
     if (Query()->Placement(ability_type_for_structure, target->pos)) {
-        Actions()->UnitCommand(unit.tag, ability_type_for_structure, location_tag);
+        Actions()->UnitCommand(unit, ability_type_for_structure, target);
         return true;
     }
     return false;
@@ -425,11 +426,11 @@ bool MultiplayerBot::TryBuildGas(AbilityID build_ability, UnitTypeID worker_type
     float minimum_distance = 15.0f;
     Tag closestGeyser = 0;
     for (const auto& geyser : geysers) {
-        float current_distance = Distance2D(base_location, geyser.pos);
+        float current_distance = Distance2D(base_location, geyser->pos);
         if (current_distance < minimum_distance) {
-            if (Query()->Placement(build_ability, geyser.pos)) {
+            if (Query()->Placement(build_ability, geyser->pos)) {
                 minimum_distance = current_distance;
-                closestGeyser = geyser.tag;
+                closestGeyser = geyser->tag;
             }
         }
     }
@@ -449,62 +450,62 @@ bool MultiplayerBot::TryBuildUnit(AbilityID ability_type_for_unit, UnitTypeID un
     if (observation->GetFoodUsed() >= observation->GetFoodCap() && ability_type_for_unit != ABILITY_ID::TRAIN_OVERLORD) {
         return false;
     }
-    Unit unit;
+    const Unit* unit = nullptr;
     if (!GetRandomUnit(unit, observation, unit_type)) {
         return false;
     }
-    if (!unit.orders.empty()) {
+    if (!unit->orders.empty()) {
         return false;
     }
 
-    if (unit.build_progress != 1) {
+    if (unit->build_progress != 1) {
         return false;
     }
 
-    Actions()->UnitCommand(unit.tag, ability_type_for_unit);
+    Actions()->UnitCommand(unit, ability_type_for_unit);
     return true;
 }
 
 // Mine the nearest mineral to Town hall.
 // If we don't do this, probes may mine from other patches if they stray too far from the base after building.
-void MultiplayerBot::MineIdleWorkers(Tag worker_tag, AbilityID worker_gather_command, UnitTypeID vespene_building_type) {
+void MultiplayerBot::MineIdleWorkers(const Unit* worker, AbilityID worker_gather_command, UnitTypeID vespene_building_type) {
     const ObservationInterface* observation = Observation();
     Units bases = observation->GetUnits(Unit::Alliance::Self, IsTownHall());
     Units geysers = observation->GetUnits(Unit::Alliance::Self, IsUnit(vespene_building_type));
 
-    Tag valid_mineral_patch;
+    const Unit* valid_mineral_patch = nullptr;
 
     if (bases.empty()) {
         return;
     }
 
     for (const auto& geyser : geysers) {
-        if (geyser.assigned_harvesters < geyser.ideal_harvesters) {
-            Actions()->UnitCommand(worker_tag, worker_gather_command, geyser.tag);
+        if (geyser->assigned_harvesters < geyser->ideal_harvesters) {
+            Actions()->UnitCommand(worker, worker_gather_command, geyser);
             return;
         }
     }
     //Search for a base that is missing workers.
     for (const auto& base : bases) {
         //If we have already mined out here skip the base.
-        if (base.ideal_harvesters == 0 || base.build_progress != 1) {
+        if (base->ideal_harvesters == 0 || base->build_progress != 1) {
             continue;
         }
-        if (base.assigned_harvesters < base.ideal_harvesters) {
-            FindNearestMineralPatch(base.pos, valid_mineral_patch);
-            Actions()->UnitCommand(worker_tag, worker_gather_command, valid_mineral_patch);
+        if (base->assigned_harvesters < base->ideal_harvesters) {
+            valid_mineral_patch = FindNearestMineralPatch(base->pos);
+            Actions()->UnitCommand(worker, worker_gather_command, valid_mineral_patch);
             return;
         }
     }
 
-    if (!observation->GetUnit(worker_tag)->orders.empty()) {
+    if (!worker->orders.empty()) {
         return;
     }
 
     //If all workers are spots are filled just go to any base.
-    const Unit& random_base = GetRandomEntry(bases);
-    FindNearestMineralPatch(random_base.pos, valid_mineral_patch);
-    Actions()->UnitCommand(worker_tag, worker_gather_command, valid_mineral_patch);
+    const Unit* random_base = GetRandomEntry(bases);
+    valid_mineral_patch = FindNearestMineralPatch(random_base->pos);
+    Actions()->UnitCommand(worker, worker_gather_command, valid_mineral_patch);
 }
 
 //An estimate of how many workers we should have based on what buildings we have
@@ -514,18 +515,18 @@ int MultiplayerBot::GetExpectedWorkers(UNIT_TYPEID vespene_building_type) {
     Units geysers = observation->GetUnits(Unit::Alliance::Self, IsUnit(vespene_building_type));
     int expected_workers = 0;
     for (const auto& base : bases) {
-        if (base.build_progress != 1) {
+        if (base->build_progress != 1) {
             continue;
         }
-        expected_workers += base.ideal_harvesters;
+        expected_workers += base->ideal_harvesters;
     }
 
     for (const auto& geyser : geysers) {
-        if (geyser.vespene_contents > 0) {
-            if (geyser.build_progress != 1) {
+        if (geyser->vespene_contents > 0) {
+            if (geyser->build_progress != 1) {
                 continue;
             }
-            expected_workers += geyser.ideal_harvesters;
+            expected_workers += geyser->ideal_harvesters;
         }
     }
 
@@ -544,18 +545,18 @@ void MultiplayerBot::ManageWorkers(UNIT_TYPEID worker_type, AbilityID worker_gat
 
     for (const auto& base : bases) {
         //If we have already mined out or still building here skip the base.
-        if (base.ideal_harvesters == 0 || base.build_progress != 1) {
+        if (base->ideal_harvesters == 0 || base->build_progress != 1) {
             continue;
         }
         //if base is
-        if (base.assigned_harvesters > base.ideal_harvesters) {
+        if (base->assigned_harvesters > base->ideal_harvesters) {
             Units workers = observation->GetUnits(Unit::Alliance::Self, IsUnit(worker_type));
 
             for (const auto& worker : workers) {
-                if (!worker.orders.empty()) {
-                    if (worker.orders.front().target_unit_tag == base.tag) {
+                if (!worker->orders.empty()) {
+                    if (worker->orders.front().target_unit_tag == base->tag) {
                         //This should allow them to be picked up by mineidleworkers()
-                        MineIdleWorkers(worker.tag, worker_gather_command,vespene_building_type);
+                        MineIdleWorkers(worker, worker_gather_command,vespene_building_type);
                         return;
                     }
                 }
@@ -564,31 +565,31 @@ void MultiplayerBot::ManageWorkers(UNIT_TYPEID worker_type, AbilityID worker_gat
     }
     Units workers = observation->GetUnits(Unit::Alliance::Self, IsUnit(worker_type));
     for (const auto& geyser : geysers) {
-        if (geyser.ideal_harvesters == 0 || geyser.build_progress != 1) {
+        if (geyser->ideal_harvesters == 0 || geyser->build_progress != 1) {
             continue;
         }
-        if (geyser.assigned_harvesters > geyser.ideal_harvesters) {
+        if (geyser->assigned_harvesters > geyser->ideal_harvesters) {
             for (const auto& worker : workers) {
-                if (!worker.orders.empty()) {
-                    if (worker.orders.front().target_unit_tag == geyser.tag) {
+                if (!worker->orders.empty()) {
+                    if (worker->orders.front().target_unit_tag == geyser->tag) {
                         //This should allow them to be picked up by mineidleworkers()
-                        MineIdleWorkers(worker.tag, worker_gather_command, vespene_building_type);
+                        MineIdleWorkers(worker, worker_gather_command, vespene_building_type);
                         return;
                     }
                 }
             }
         }
-        else if (geyser.assigned_harvesters < geyser.ideal_harvesters) {
+        else if (geyser->assigned_harvesters < geyser->ideal_harvesters) {
             for (const auto& worker : workers) {
-                if (!worker.orders.empty()) {
+                if (!worker->orders.empty()) {
                     //This should move a worker that isn't mining gas to gas
-                    const Unit* target = observation->GetUnit(worker.orders.front().target_unit_tag);
+                    const Unit* target = observation->GetUnit(worker->orders.front().target_unit_tag);
                     if (target == nullptr) {
                         continue;
                     }
                     if (target->unit_type != vespene_building_type) {
                         //This should allow them to be picked up by mineidleworkers()
-                        MineIdleWorkers(worker.tag, worker_gather_command, vespene_building_type);
+                        MineIdleWorkers(worker, worker_gather_command, vespene_building_type);
                         return;
                     }
                 }
@@ -605,22 +606,22 @@ void MultiplayerBot::RetreatWithUnits(UnitTypeID unit_type, Point2D retreat_posi
     }
 }
 
-void MultiplayerBot::RetreatWithUnit(Unit unit, Point2D retreat_position) {
-    float dist = Distance2D(unit.pos, retreat_position);
+void MultiplayerBot::RetreatWithUnit(const Unit* unit, Point2D retreat_position) {
+    float dist = Distance2D(unit->pos, retreat_position);
 
     if (dist < 10) {
-        if (unit.orders.empty()) {
+        if (unit->orders.empty()) {
             return;
         }
         Actions()->UnitCommand(unit, ABILITY_ID::STOP);
         return;
     }
 
-    if (unit.orders.empty() && dist > 14) {
+    if (unit->orders.empty() && dist > 14) {
         Actions()->UnitCommand(unit, ABILITY_ID::MOVE, retreat_position);
     }
-    else if (!unit.orders.empty() && dist > 14) {
-        if (unit.orders.front().ability_id != ABILITY_ID::MOVE) {
+    else if (!unit->orders.empty() && dist > 14) {
+        if (unit->orders.front().ability_id != ABILITY_ID::MOVE) {
             Actions()->UnitCommand(unit, ABILITY_ID::MOVE, retreat_position);
         }
     }
@@ -647,15 +648,15 @@ void ProtossMultiplayerBot::ManageArmy() {
     else if(!enemy_units.empty()){
         for (const auto& unit : army) {
             AttackWithUnit(unit, observation);
-            switch (unit.unit_type.ToType()) {
+            switch (unit->unit_type.ToType()) {
                 //Stalker blink micro, blinks back towards your base
                 case(UNIT_TYPEID::PROTOSS_OBSERVER): {
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, enemy_units.front().pos);
+                    Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front()->pos);
                     break;
                 }
                 case(UNIT_TYPEID::PROTOSS_STALKER): {
                     if (blink_reasearched_) {
-                        const Unit* old_unit = observation->GetPreviousUnit(unit.tag);
+                        /*const Unit* old_unit = observation->GetPreviousUnit(unit.tag);
                         const Unit* target_unit = observation->GetUnit(unit.engaged_target_tag);
                         if (old_unit == nullptr) {
                             break;
@@ -675,23 +676,23 @@ void ProtossMultiplayerBot::ManageArmy() {
                                 }
                                 Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_BLINK, blink_location);
                             }
-                        }
+                        }*/
                     }
                     break;
                 }
                 //Turns on guardian shell when close to an enemy
                 case (UNIT_TYPEID::PROTOSS_SENTRY): {
-                    if (!unit.orders.empty()) {
-                        if (unit.orders.front().ability_id == ABILITY_ID::ATTACK) {
+                    if (!unit->orders.empty()) {
+                        if (unit->orders.front().ability_id == ABILITY_ID::ATTACK) {
                             float distance = std::numeric_limits<float>::max();
                             for (const auto& u : enemy_units) {
-                                 float d = Distance2D(u.pos, unit.pos);
+                                 float d = Distance2D(u->pos, unit->pos);
                                  if (d < distance) {
                                      distance = d;
                                  }
                             }
-                            if (distance < 6 && unit.energy >= 75) {
-                                Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_GUARDIANSHIELD);
+                            if (distance < 6 && unit->energy >= 75) {
+                                Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_GUARDIANSHIELD);
                             }
                         }
                     }
@@ -699,17 +700,17 @@ void ProtossMultiplayerBot::ManageArmy() {
                 }
                 //Turns on Damage boost when close to an enemy
                 case (UNIT_TYPEID::PROTOSS_VOIDRAY): {
-                    if (!unit.orders.empty()) {
-                        if (unit.orders.front().ability_id == ABILITY_ID::ATTACK) {
+                    if (!unit->orders.empty()) {
+                        if (unit->orders.front().ability_id == ABILITY_ID::ATTACK) {
                             float distance = std::numeric_limits<float>::max();
                             for (const auto& u : enemy_units) {
-                                float d = Distance2D(u.pos, unit.pos);
+                                float d = Distance2D(u->pos, unit->pos);
                                 if (d < distance) {
                                     distance = d;
                                 }
                             }
                             if (distance < 8) {
-                                Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_VOIDRAYPRISMATICALIGNMENT);
+                                Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_VOIDRAYPRISMATICALIGNMENT);
                             }
                         }
                     }
@@ -717,16 +718,16 @@ void ProtossMultiplayerBot::ManageArmy() {
                 }
                 //Turns on oracle weapon when close to an enemy
                 case (UNIT_TYPEID::PROTOSS_ORACLE): {
-                    if (!unit.orders.empty()) {
+                    if (!unit->orders.empty()) {
                          float distance = std::numeric_limits<float>::max();
                          for (const auto& u : enemy_units) {
-                             float d = Distance2D(u.pos, unit.pos);
+                             float d = Distance2D(u->pos, unit->pos);
                              if (d < distance) {
                                  distance = d;
                              }
                          }
-                         if (distance < 6 && unit.energy >= 25) {
-                             Actions()->UnitCommand(unit.tag, ABILITY_ID::BEHAVIOR_PULSARBEAMON);
+                         if (distance < 6 && unit->energy >= 25) {
+                             Actions()->UnitCommand(unit, ABILITY_ID::BEHAVIOR_PULSARBEAMON);
                          }
                     }
                     break;
@@ -736,17 +737,17 @@ void ProtossMultiplayerBot::ManageArmy() {
                     float distance = std::numeric_limits<float>::max();
                     Point2D closest_unit;
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.pos;
+                            closest_unit = u->pos;
                         }
                     }
                     if (distance < 7) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_PURIFICATIONNOVA, closest_unit);
+                        Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_PURIFICATIONNOVA, closest_unit);
                     }
                     else {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, closest_unit);
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, closest_unit);
                     }
                     break;
                 }
@@ -755,16 +756,16 @@ void ProtossMultiplayerBot::ManageArmy() {
                             float distance = std::numeric_limits<float>::max();
                             Point2D closest_unit;
                             for (const auto& u : enemy_units) {
-                                if (u.is_flying) {
+                                if (u->is_flying) {
                                     continue;
                                 }
-                                float d = DistanceSquared2D(u.pos, unit.pos);
+                                float d = DistanceSquared2D(u->pos, unit->pos);
                                 if (d < distance) {
                                     distance = d;
-                                    closest_unit = u.pos;
+                                    closest_unit = u->pos;
                                 }
                             }
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::MOVE, closest_unit);
+                            Actions()->UnitCommand(unit, ABILITY_ID::MOVE, closest_unit);
                     break;
                 }
                 default:
@@ -806,9 +807,9 @@ bool ProtossMultiplayerBot::TryBuildArmy() {
     size_t carrier_count = CountUnitType(observation, UNIT_TYPEID::PROTOSS_CARRIER);
     Units templar = observation->GetUnits(Unit::Alliance::Self, IsUnit(UNIT_TYPEID::PROTOSS_HIGHTEMPLAR));
     if (templar.size() > 1) {
-        std::vector<Tag> templar_merge;
+        Units templar_merge;
         for (int i = 0; i < 2; ++i) {
-            templar_merge.push_back(templar.at(i).tag);
+            templar_merge.push_back(templar.at(i));
         }
         Actions()->UnitCommand(templar_merge, ABILITY_ID::MORPH_ARCHON);
     }
@@ -1085,11 +1086,11 @@ bool ProtossMultiplayerBot::TryWarpInUnit(ABILITY_ID ability_type_for_unit) {
     }
 
     for (const auto& warpgate : warpgates) {
-        if (warpgate.build_progress == 1) {
-            AvailableAbilities abilities = Query()->GetAbilitiesForUnit(warpgate.tag);
+        if (warpgate->build_progress == 1) {
+            AvailableAbilities abilities = Query()->GetAbilitiesForUnit(warpgate);
             for (const auto& ability : abilities.abilities) {
                 if (ability.ability_id == ability_type_for_unit) {
-                    Actions()->UnitCommand(warpgate.tag, ability_type_for_unit, build_location);
+                    Actions()->UnitCommand(warpgate, ability_type_for_unit, build_location);
                     return true;
                 }
             }
@@ -1104,8 +1105,8 @@ void ProtossMultiplayerBot::ConvertGateWayToWarpGate() {
 
     if (warpgate_reasearched_) {
         for (const auto& gateway : gateways) {
-            if (gateway.build_progress == 1) {
-                Actions()->UnitCommand(gateway.tag, ABILITY_ID::MORPH_WARPGATE);
+            if (gateway->build_progress == 1) {
+                Actions()->UnitCommand(gateway, ABILITY_ID::MORPH_WARPGATE);
             }
         }
     }
@@ -1152,7 +1153,7 @@ bool ProtossMultiplayerBot::TryBuildPylon() {
     Units units = observation->GetUnits(Unit::Alliance::Self, IsUnit(UNIT_TYPEID::PROTOSS_PYLON));
     if (observation->GetFoodUsed() < 40) {
         for (const auto& unit : units) {
-            if (unit.build_progress != 1) {
+            if (unit->build_progress != 1) {
                     return false;
             }
         }
@@ -1175,9 +1176,9 @@ bool ProtossMultiplayerBot::TryBuildAssimilator() {
     }
 
     for (const auto& base : bases) {
-        if (base.assigned_harvesters >= base.ideal_harvesters) {
-            if (base.build_progress == 1) {
-                if (TryBuildGas(ABILITY_ID::BUILD_ASSIMILATOR, UNIT_TYPEID::PROTOSS_PROBE, base.pos)) {
+        if (base->assigned_harvesters >= base->ideal_harvesters) {
+            if (base->build_progress == 1) {
+                if (TryBuildGas(ABILITY_ID::BUILD_ASSIMILATOR, UNIT_TYPEID::PROTOSS_PROBE, base->pos)) {
                     return true;
                 }
             }
@@ -1222,7 +1223,7 @@ bool ProtossMultiplayerBot::TryBuildProbe() {
 
     for (const auto& base : bases) {
         //if there is a base with less than ideal workers
-        if (base.assigned_harvesters < base.ideal_harvesters && base.build_progress == 1) {
+        if (base->assigned_harvesters < base->ideal_harvesters && base->build_progress == 1) {
             if (observation->GetMinerals() >= 50) {
                 return TryBuildUnit(ABILITY_ID::TRAIN_PROBE, UNIT_TYPEID::PROTOSS_NEXUS);
             }
@@ -1291,10 +1292,10 @@ void ProtossMultiplayerBot::OnGameEnd() {
     std::cout << "Game Ended for: " << std::to_string(Control()->Proto().GetAssignedPort()) << std::endl;
 }
 
-void ProtossMultiplayerBot::OnUnitIdle(const Unit& unit) {
-    switch (unit.unit_type.ToType()) {
+void ProtossMultiplayerBot::OnUnitIdle(const Unit* unit) {
+    switch (unit->unit_type.ToType()) {
         case UNIT_TYPEID::PROTOSS_PROBE: {
-            MineIdleWorkers(unit.tag, ABILITY_ID::HARVEST_GATHER, UNIT_TYPEID::PROTOSS_ASSIMILATOR);
+            MineIdleWorkers(unit, ABILITY_ID::HARVEST_GATHER, UNIT_TYPEID::PROTOSS_ASSIMILATOR);
             break;
         }
         case UNIT_TYPEID::PROTOSS_CYBERNETICSCORE: {
@@ -1302,9 +1303,9 @@ void ProtossMultiplayerBot::OnUnitIdle(const Unit& unit) {
             Units nexus = observation->GetUnits(Unit::Alliance::Self, IsUnit(UNIT_TYPEID::PROTOSS_NEXUS));
 
             if (!warpgate_reasearched_) {
-                Actions()->UnitCommand(unit.tag, ABILITY_ID::RESEARCH_WARPGATE);
+                Actions()->UnitCommand(unit, ABILITY_ID::RESEARCH_WARPGATE);
                 if (!nexus.empty()) {
-                    Actions()->UnitCommand(nexus.front().tag, ABILITY_ID::EFFECT_TIMEWARP, unit.tag);
+                    Actions()->UnitCommand(nexus.front(), ABILITY_ID::EFFECT_TIMEWARP, unit);
                 }
             }
         }
@@ -1333,8 +1334,8 @@ bool ZergMultiplayerBot::TryBuildDrone() {
     size_t worker_count = CountUnitType(observation, UNIT_TYPEID::ZERG_DRONE);
     Units eggs = observation->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::ZERG_EGG));
     for (const auto& egg : eggs) {
-        if (!egg.orders.empty()) {
-            if (egg.orders.front().ability_id == ABILITY_ID::TRAIN_DRONE) {
+        if (!egg->orders.empty()) {
+            if (egg->orders.front().ability_id == ABILITY_ID::TRAIN_DRONE) {
                 worker_count++;
             }
         }
@@ -1353,10 +1354,8 @@ bool ZergMultiplayerBot::TryBuildDrone() {
 
     for (const auto& base : bases) {
         //if there is a base with less than ideal workers
-        if (base.assigned_harvesters < base.ideal_harvesters && base.build_progress == 1) {
+        if (base->assigned_harvesters < base->ideal_harvesters && base->build_progress == 1) {
             if (observation->GetMinerals() >= 50 && larva_count > 0) {
-                Tag mineral;
-                FindNearestMineralPatch(base.pos, mineral);
                 return TryBuildUnit(ABILITY_ID::TRAIN_DRONE, UNIT_TYPEID::ZERG_LARVA);
             }
         }
@@ -1387,15 +1386,15 @@ void ZergMultiplayerBot::BuildOrder() {
     Units hatcherys = observation->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::ZERG_HATCHERY));
     Units lairs = observation->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::ZERG_LAIR));
     for (const auto& hatchery : hatcherys) {
-        if (!hatchery.orders.empty()) {
-            if (hatchery.orders.front().ability_id == ABILITY_ID::MORPH_LAIR) {
+        if (!hatchery->orders.empty()) {
+            if (hatchery->orders.front().ability_id == ABILITY_ID::MORPH_LAIR) {
                 ++morphing_lair;
             }
         }
     }
     for (const auto& lair : lairs) {
-        if (!lair.orders.empty()) {
-            if (lair.orders.front().ability_id == ABILITY_ID::MORPH_HIVE) {
+        if (!lair->orders.empty()) {
+            if (lair->orders.front().ability_id == ABILITY_ID::MORPH_HIVE) {
                 ++morphing_hive;
             }
         }
@@ -1486,9 +1485,9 @@ void ZergMultiplayerBot::ManageArmy() {
 
     if (enemy_units.empty() && observation->GetFoodArmy() < wait_til_supply) {
         for (const auto& unit : army) {
-            switch (unit.unit_type.ToType()) {
+            switch (unit->unit_type.ToType()) {
                 case(UNIT_TYPEID::ZERG_LURKERMPBURROWED): {
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::BURROWUP);
+                    Actions()->UnitCommand(unit, ABILITY_ID::BURROWUP);
                 }
                 default:
                     RetreatWithUnit(unit, staging_location_);
@@ -1498,15 +1497,15 @@ void ZergMultiplayerBot::ManageArmy() {
     }
     else if (!enemy_units.empty()) {
         for (const auto& unit : army) {
-            switch (unit.unit_type.ToType()) {
+            switch (unit->unit_type.ToType()) {
                 case(UNIT_TYPEID::ZERG_CORRUPTOR) : {
                     Tag closest_unit;
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.tag;
+                            closest_unit = u->tag;
                         }
                     }
                     const Unit* enemy_unit = observation->GetUnit(closest_unit);
@@ -1514,11 +1513,11 @@ void ZergMultiplayerBot::ManageArmy() {
                     auto attributes = observation->GetUnitTypeData().at(enemy_unit->unit_type).attributes;
                     for (const auto& attribute : attributes) {
                         if (attribute == Attribute::Structure) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_CAUSTICSPRAY, enemy_unit->tag);
+                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_CAUSTICSPRAY, enemy_unit);
                         }
                     }
-                    if (!unit.orders.empty()) {
-                        if (unit.orders.front().ability_id == ABILITY_ID::EFFECT_CAUSTICSPRAY) {
+                    if (!unit->orders.empty()) {
+                        if (unit->orders.front().ability_id == ABILITY_ID::EFFECT_CAUSTICSPRAY) {
                             break;
                         }
                     }
@@ -1526,50 +1525,50 @@ void ZergMultiplayerBot::ManageArmy() {
                     break;
                }
                 case(UNIT_TYPEID::ZERG_OVERSEER): {
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, enemy_units.front());
+                    Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front());
                     break;
                 }
                 case(UNIT_TYPEID::ZERG_RAVAGER): {
                     Point2D closest_unit;
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.pos;
+                            closest_unit = u->pos;
                         }
                     }
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_CORROSIVEBILE, closest_unit);
+                    Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_CORROSIVEBILE, closest_unit);
                     AttackWithUnit(unit, observation);
                 }
                 case(UNIT_TYPEID::ZERG_LURKERMP): {
                     Point2D closest_unit;
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.pos;
+                            closest_unit = u->pos;
                         }
                     }
                     if (distance < 7) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::BURROWDOWN);
+                        Actions()->UnitCommand(unit, ABILITY_ID::BURROWDOWN);
                     }
                     else {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, closest_unit);
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, closest_unit);
                     }
                     break;
                 }
                 case(UNIT_TYPEID::ZERG_LURKERMPBURROWED): {
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
                         }
                     }
                     if (distance > 9) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::BURROWUP);
+                        Actions()->UnitCommand(unit, ABILITY_ID::BURROWUP);
                     }
                     break;
                 }
@@ -1577,14 +1576,14 @@ void ZergMultiplayerBot::ManageArmy() {
                     Point2D closest_unit;
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.pos;
+                            closest_unit = u->pos;
                         }
                     }
                     if (distance < 15) {
-                        const auto abilities = Query()->GetAbilitiesForUnit(unit.tag).abilities;
+                        const auto abilities = Query()->GetAbilitiesForUnit(unit).abilities;
                         bool ability_available = false;
                         for (const auto& ability : abilities) {
                             if (ability.ability_id == ABILITY_ID::EFFECT_SPAWNLOCUSTS) {
@@ -1592,14 +1591,14 @@ void ZergMultiplayerBot::ManageArmy() {
                             }
                         }
                         if (ability_available) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_SPAWNLOCUSTS, closest_unit);
+                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_SPAWNLOCUSTS, closest_unit);
                         }
                         else {
                             RetreatWithUnit(unit, staging_location_);
                         }
                     }
                     else {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, closest_unit);
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, closest_unit);
                     }
                     break;
                 }
@@ -1607,32 +1606,32 @@ void ZergMultiplayerBot::ManageArmy() {
                     Point2D closest_unit;
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.pos;
+                            closest_unit = u->pos;
                         }
                     }
                     if (distance < 9) {
-                        const auto abilities = Query()->GetAbilitiesForUnit(unit.tag).abilities;
-                        if (unit.energy > 75) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_FUNGALGROWTH, closest_unit);
+                        const auto abilities = Query()->GetAbilitiesForUnit(unit).abilities;
+                        if (unit->energy > 75) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_FUNGALGROWTH, closest_unit);
                         }
                         else {
                             RetreatWithUnit(unit, staging_location_);
                         }
                     }
                     else {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, closest_unit);
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, closest_unit);
                     }
                     break;
                 }
                 case(UNIT_TYPEID::ZERG_VIPER): {
-                    Tag closest_unit;
+                    const Unit* closest_unit;
                     bool is_flying = false;
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        auto attributes = observation->GetUnitTypeData().at(u.unit_type).attributes;
+                        auto attributes = observation->GetUnitTypeData().at(u->unit_type).attributes;
                         bool is_structure = false;
                         for (const auto& attribute : attributes) {
                             if (attribute == Attribute::Structure) {
@@ -1642,20 +1641,19 @@ void ZergMultiplayerBot::ManageArmy() {
                         if (is_structure) {
                             continue;
                         }
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
-                            closest_unit = u.tag;
-                            is_flying = u.is_flying;
+                            closest_unit = u;
+                            is_flying = u->is_flying;
                         }
                     }
                     if (distance < 10) {
-                        if (is_flying && unit.energy > 124) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_PARASITICBOMB, closest_unit);
+                        if (is_flying && unit->energy > 124) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_PARASITICBOMB, closest_unit);
                         }
-                        else if (!is_flying && unit.energy > 100) {
-                            Point2D target = observation->GetUnit(closest_unit)->pos;
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_BLINDINGCLOUD, target);
+                        else if (!is_flying && unit->energy > 100) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_BLINDINGCLOUD, closest_unit);
                         }
                         else {
                             RetreatWithUnit(unit, startLocation_);
@@ -1663,16 +1661,16 @@ void ZergMultiplayerBot::ManageArmy() {
 
                     }
                     else {
-                        if (unit.energy > 124) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, enemy_units.front());
+                        if (unit->energy > 124) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_units.front());
                         }
                         else {
-                            if (!unit.orders.empty()) {
-                                if (unit.orders.front().ability_id != ABILITY_ID::EFFECT_VIPERCONSUME) {
+                            if (!unit->orders.empty()) {
+                                if (unit->orders.front().ability_id != ABILITY_ID::EFFECT_VIPERCONSUME) {
                                     Units extractors = observation->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::ZERG_EXTRACTOR));
                                     for (const auto& extractor : extractors) {
-                                        if (extractor.health > 200) {
-                                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_VIPERCONSUME, extractor.tag);
+                                        if (extractor->health > 200) {
+                                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_VIPERCONSUME, extractor);
                                         }
                                         else {
                                             continue;
@@ -1680,13 +1678,13 @@ void ZergMultiplayerBot::ManageArmy() {
                                     }
                                 }
                                 else {
-                                    if (observation->GetUnit(unit.orders.front().target_unit_tag)->health < 100) {
-                                        Actions()->UnitCommand(unit.tag, ABILITY_ID::STOP);
+                                    if (observation->GetUnit(unit->orders.front().target_unit_tag)->health < 100) {
+                                        Actions()->UnitCommand(unit, ABILITY_ID::STOP);
                                     }
                                 }
                             }
                             else {
-                                Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, closest_unit);
+                                Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, closest_unit);
                             }
                         }
                     }
@@ -1700,9 +1698,9 @@ void ZergMultiplayerBot::ManageArmy() {
     }
     else {
         for (const auto& unit : army) {
-            switch (unit.unit_type.ToType()){
+            switch (unit->unit_type.ToType()){
                 case(UNIT_TYPEID::ZERG_LURKERMPBURROWED): {
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::BURROWUP);
+                    Actions()->UnitCommand(unit, ABILITY_ID::BURROWUP);
                 }
                 default:
                     ScoutWithUnit(unit, observation);
@@ -1946,10 +1944,10 @@ bool ZergMultiplayerBot::TryBuildOverlord() {
     if (observation->GetFoodUsed() < 30) {
         Units units = observation->GetUnits(Unit::Alliance::Self, IsUnit(UNIT_TYPEID::ZERG_EGG));
         for (const auto& unit : units) {
-            if (unit.orders.empty()) {
+            if (unit->orders.empty()) {
                 return false;
             }
-            if (unit.orders.front().ability_id == ABILITY_ID::TRAIN_OVERLORD) {
+            if (unit->orders.front().ability_id == ABILITY_ID::TRAIN_OVERLORD) {
                 return false;
             }
         }
@@ -1973,15 +1971,15 @@ void ZergMultiplayerBot::TryInjectLarva() {
         for (size_t j = 0; j < hatcheries.size(); ++j) {
 
             //if hatchery isn't complete ignore it
-            if (hatcheries.at(j).build_progress != 1) {
+            if (hatcheries.at(j)->build_progress != 1) {
                 continue;
             }
             else {
 
                 //Inject larva and move onto next available queen
                 if (i < queens.size()) {
-                    if (queens.at(i).energy >= 25 && queens.at(i).orders.empty()) {
-                        Actions()->UnitCommand(queens.at(i).tag, ABILITY_ID::EFFECT_INJECTLARVA, hatcheries.at(j).tag);
+                    if (queens.at(i)->energy >= 25 && queens.at(i)->orders.empty()) {
+                        Actions()->UnitCommand(queens.at(i), ABILITY_ID::EFFECT_INJECTLARVA, hatcheries.at(j));
                     }
                     ++i;
                 }
@@ -2017,9 +2015,9 @@ bool ZergMultiplayerBot::BuildExtractor() {
     }
 
     for (const auto& base : bases) {
-        if (base.assigned_harvesters >= base.ideal_harvesters) {
-            if (base.build_progress == 1) {
-                if (TryBuildGas(ABILITY_ID::BUILD_EXTRACTOR, UNIT_TYPEID::ZERG_DRONE, base.pos)) {
+        if (base->assigned_harvesters >= base->ideal_harvesters) {
+            if (base->build_progress == 1) {
+                if (TryBuildGas(ABILITY_ID::BUILD_EXTRACTOR, UNIT_TYPEID::ZERG_DRONE, base->pos)) {
                     return true;
                 }
             }
@@ -2083,10 +2081,10 @@ void ZergMultiplayerBot::OnStep() {
     }
 }
 
-void ZergMultiplayerBot::OnUnitIdle(const Unit& unit) {
-    switch (unit.unit_type.ToType()) {
+void ZergMultiplayerBot::OnUnitIdle(const Unit* unit) {
+    switch (unit->unit_type.ToType()) {
         case UNIT_TYPEID::ZERG_DRONE: {
-            MineIdleWorkers(unit.tag, ABILITY_ID::HARVEST_GATHER,UNIT_TYPEID::ZERG_EXTRACTOR);
+            MineIdleWorkers(unit, ABILITY_ID::HARVEST_GATHER,UNIT_TYPEID::ZERG_EXTRACTOR);
             break;
         }
         default:
@@ -2099,10 +2097,9 @@ bool TerranMultiplayerBot::TryBuildSCV() {
     Units bases = observation->GetUnits(Unit::Alliance::Self, IsTownHall());
 
     for (const auto& base : bases) {
-        if (base.unit_type == UNIT_TYPEID::TERRAN_ORBITALCOMMAND && base.energy > 50) {
-            Tag mineral;
-            if (FindNearestMineralPatch(base.pos, mineral)) {
-                Actions()->UnitCommand(base.tag, ABILITY_ID::EFFECT_CALLDOWNMULE, mineral);
+        if (base->unit_type == UNIT_TYPEID::TERRAN_ORBITALCOMMAND && base->energy > 50) {
+            if (FindNearestMineralPatch(base->pos)) {
+                Actions()->UnitCommand(base, ABILITY_ID::EFFECT_CALLDOWNMULE);
             }
         }
     }
@@ -2121,9 +2118,9 @@ bool TerranMultiplayerBot::TryBuildSCV() {
 
     for (const auto& base : bases) {
         //if there is a base with less than ideal workers
-        if (base.assigned_harvesters < base.ideal_harvesters && base.build_progress == 1) {
+        if (base->assigned_harvesters < base->ideal_harvesters && base->build_progress == 1) {
             if (observation->GetMinerals() >= 50) {
-                return TryBuildUnit(ABILITY_ID::TRAIN_SCV, base.unit_type);
+                return TryBuildUnit(ABILITY_ID::TRAIN_SCV, base->unit_type);
             }
         }
     }
@@ -2146,7 +2143,7 @@ bool TerranMultiplayerBot::TryBuildSupplyDepot()  {
     Units units = observation->GetUnits(Unit::Alliance::Self, IsUnits(supply_depot_types));
     if (observation->GetFoodUsed() < 40) {
         for (const auto& unit : units) {
-            if (unit.build_progress != 1) {
+            if (unit->build_progress != 1) {
                 return false;
             }
         }
@@ -2189,7 +2186,7 @@ void TerranMultiplayerBot::BuildArmy() {
                 TryBuildUnit(ABILITY_ID::BUILD_NUKE, UNIT_TYPEID::TERRAN_GHOSTACADEMY);
             }
             if (!ghosts.empty()) {
-                AvailableAbilities abilities = Query()->GetAbilitiesForUnit(ghosts.front().tag);
+                AvailableAbilities abilities = Query()->GetAbilitiesForUnit(ghosts.front());
                 for (const auto& ability : abilities.abilities) {
                     if (ability.ability_id == ABILITY_ID::EFFECT_NUKECALLDOWN) {
                         nuke_built = true;
@@ -2203,51 +2200,51 @@ void TerranMultiplayerBot::BuildArmy() {
 
     if (!starports.empty()) {
         for (const auto& starport : starports) {
-            if (observation->GetUnit(starport.add_on_tag) == nullptr) {
+            if (observation->GetUnit(starport->add_on_tag) == nullptr) {
                 if (mech_build_) {
-                    if (starport.orders.empty() && viking_count < 5) {
-                        Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_VIKINGFIGHTER);
+                    if (starport->orders.empty() && viking_count < 5) {
+                        Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_VIKINGFIGHTER);
                     }
                 }
                 else {
-                    if (starport.orders.empty() && medivac_count < 5) {
-                        Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_MEDIVAC);
+                    if (starport->orders.empty() && medivac_count < 5) {
+                        Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_MEDIVAC);
                     }
                 }
                 continue;
             }
             else {
-                if (observation->GetUnit(starport.add_on_tag)->unit_type == UNIT_TYPEID::TERRAN_STARPORTREACTOR) {
+                if (observation->GetUnit(starport->add_on_tag)->unit_type == UNIT_TYPEID::TERRAN_STARPORTREACTOR) {
                     if (mech_build_) {
-                        if (starport.orders.size() < 2 && viking_count < 5) {
-                            Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_VIKINGFIGHTER);
+                        if (starport->orders.size() < 2 && viking_count < 5) {
+                            Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_VIKINGFIGHTER);
                         }
                     }
                     else {
-                        if (starport.orders.size() < 2 && medivac_count < 5) {
-                            Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_MEDIVAC);
+                        if (starport->orders.size() < 2 && medivac_count < 5) {
+                            Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_MEDIVAC);
                         }
-                        if (starport.orders.size() < 2 && medivac_count < 3) {
-                            Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_MEDIVAC);
+                        if (starport->orders.size() < 2 && medivac_count < 3) {
+                            Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_MEDIVAC);
                         }
                     }
 
                 }
                 else {
-                    if (starport.orders.empty() && raven_count < 2) {
-                        Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_RAVEN);
+                    if (starport->orders.empty() && raven_count < 2) {
+                        Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_RAVEN);
                     }
                     if (!mech_build_) {
                         if (CountUnitType(observation, UNIT_TYPEID::TERRAN_FUSIONCORE) > 0) {
-                            if (starport.orders.empty() && battlecruiser_count < 2) {
-                                Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_BATTLECRUISER);
+                            if (starport->orders.empty() && battlecruiser_count < 2) {
+                                Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_BATTLECRUISER);
                                 if (battlecruiser_count < 1) {
                                     return;
                                 }
                             }
                         }
-                        if (starport.orders.empty() && banshee_count < 2) {
-                            Actions()->UnitCommand(starport.tag, ABILITY_ID::TRAIN_BANSHEE);
+                        if (starport->orders.empty() && banshee_count < 2) {
+                            Actions()->UnitCommand(starport, ABILITY_ID::TRAIN_BANSHEE);
                         }
                     }
                 }
@@ -2257,45 +2254,45 @@ void TerranMultiplayerBot::BuildArmy() {
 
     if (!barracks.empty()) {
         for (const auto& barrack : barracks) {
-            if (observation->GetUnit(barrack.add_on_tag) == nullptr) {
+            if (observation->GetUnit(barrack->add_on_tag) == nullptr) {
                 if (!mech_build_) {
-                    if (barrack.orders.empty() && marine_count < 20) {
-                        Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARINE);
+                    if (barrack->orders.empty() && marine_count < 20) {
+                        Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARINE);
                     }
-                    else if (barrack.orders.empty() && observation->GetMinerals() > 1000 && observation->GetVespene() < 300) {
-                        Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARINE);
+                    else if (barrack->orders.empty() && observation->GetMinerals() > 1000 && observation->GetVespene() < 300) {
+                        Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARINE);
                     }
                 }
             }
             else {
-                if (observation->GetUnit(barrack.add_on_tag)->unit_type == UNIT_TYPEID::TERRAN_BARRACKSREACTOR) {
+                if (observation->GetUnit(barrack->add_on_tag)->unit_type == UNIT_TYPEID::TERRAN_BARRACKSREACTOR) {
                     if (mech_build_) {
-                        if (barrack.orders.size() < 2 && marine_count < 5) {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARINE);
+                        if (barrack->orders.size() < 2 && marine_count < 5) {
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARINE);
                         }
                     }
                     else{
-                        if (barrack.orders.size() < 2 && marine_count < 20) {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARINE);
+                        if (barrack->orders.size() < 2 && marine_count < 20) {
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARINE);
                         }
                         else if (observation->GetMinerals() > 1000 && observation->GetVespene() < 300) {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARINE);
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARINE);
                         }
                     }
                 }
                 else {
-                    if (!mech_build_ && barrack.orders.empty()) {
+                    if (!mech_build_ && barrack->orders.empty()) {
                         if (reaper_count < 2) {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_REAPER);
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_REAPER);
                         }
                         else if (ghost_count < 4) {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_GHOST);
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_GHOST);
                         }
                         else if (marauder_count < 10) {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARAUDER);
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARAUDER);
                         }
                         else {
-                            Actions()->UnitCommand(barrack.tag, ABILITY_ID::TRAIN_MARINE);
+                            Actions()->UnitCommand(barrack, ABILITY_ID::TRAIN_MARINE);
                         }
                     }
                 }
@@ -2305,52 +2302,52 @@ void TerranMultiplayerBot::BuildArmy() {
 
     if (!factorys.empty()) {
         for (const auto& factory : factorys) {
-            if (observation->GetUnit(factory.add_on_tag) == nullptr) {
+            if (observation->GetUnit(factory->add_on_tag) == nullptr) {
                 if (mech_build_) {
-                    if (factory.orders.empty() && hellbat_count < 20) {
+                    if (factory->orders.empty() && hellbat_count < 20) {
                         if (CountUnitType(observation, UNIT_TYPEID::TERRAN_ARMORY) > 0) {
-                            Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_HELLBAT);
+                            Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_HELLBAT);
                         }
                         else {
-                            Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_HELLION);
+                            Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_HELLION);
                         }
                     }
                 }
             }
             else {
-                if (observation->GetUnit(factory.add_on_tag)->unit_type == UNIT_TYPEID::TERRAN_FACTORYREACTOR) {
-                    if (factory.orders.size() < 2 && widowmine_count < 4) {
-                        Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_WIDOWMINE);
+                if (observation->GetUnit(factory->add_on_tag)->unit_type == UNIT_TYPEID::TERRAN_FACTORYREACTOR) {
+                    if (factory->orders.size() < 2 && widowmine_count < 4) {
+                        Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_WIDOWMINE);
                     }
-                    if (mech_build_ && factory.orders.size() < 2) {
+                    if (mech_build_ && factory->orders.size() < 2) {
                         if (observation->GetMinerals() > 1000 && observation->GetVespene() < 300) {
-                            Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_HELLBAT);
+                            Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_HELLBAT);
                         }
                         if (hellbat_count < 20) {
                             if (CountUnitType(observation, UNIT_TYPEID::TERRAN_ARMORY) > 0) {
-                                Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_HELLBAT);
+                                Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_HELLBAT);
                             }
                             else {
-                                Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_HELLION);
+                                Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_HELLION);
                             }
                         }
                         if (CountUnitType(observation, UNIT_TYPEID::TERRAN_CYCLONE) < 6) {
-                            Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_CYCLONE);
+                            Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_CYCLONE);
                         }
                     }
                 }
                 else {
-                    if (mech_build_ && factory.orders.empty() && CountUnitType(observation, UNIT_TYPEID::TERRAN_ARMORY) > 0) {
+                    if (mech_build_ && factory->orders.empty() && CountUnitType(observation, UNIT_TYPEID::TERRAN_ARMORY) > 0) {
                         if (CountUnitType(observation, UNIT_TYPEID::TERRAN_THOR) < 4) {
-                            Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_THOR);
+                            Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_THOR);
                             return;
                         }
                     }
-                    if (!mech_build_ && factory.orders.empty() && siege_tank_count < 7) {
-                        Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_SIEGETANK);
+                    if (!mech_build_ && factory->orders.empty() && siege_tank_count < 7) {
+                        Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_SIEGETANK);
                     }
-                    if (mech_build_ && factory.orders.empty() && siege_tank_count < 10) {
-                        Actions()->UnitCommand(factory.tag, ABILITY_ID::TRAIN_SIEGETANK);
+                    if (mech_build_ && factory->orders.empty() && siege_tank_count < 10) {
+                        Actions()->UnitCommand(factory, ABILITY_ID::TRAIN_SIEGETANK);
                     }
                 }
             }
@@ -2375,50 +2372,50 @@ void TerranMultiplayerBot::BuildOrder() {
     }
 
     for (const auto& supply_depot : supply_depots) {
-        Actions()->UnitCommand(supply_depot.tag, ABILITY_ID::MORPH_SUPPLYDEPOT_LOWER);
+        Actions()->UnitCommand(supply_depot, ABILITY_ID::MORPH_SUPPLYDEPOT_LOWER);
     }
     if (!barracks.empty()) {
         for (const auto& base : bases) {
-            if (base.unit_type == UNIT_TYPEID::TERRAN_COMMANDCENTER && observation->GetMinerals() > 150) {
-                Actions()->UnitCommand(base.tag, ABILITY_ID::MORPH_ORBITALCOMMAND);
+            if (base->unit_type == UNIT_TYPEID::TERRAN_COMMANDCENTER && observation->GetMinerals() > 150) {
+                Actions()->UnitCommand(base, ABILITY_ID::MORPH_ORBITALCOMMAND);
             }
         }
     }
 
     for (const auto& barrack : barracks) {
-        if (!barrack.orders.empty() || barrack.build_progress != 1) {
+        if (!barrack->orders.empty() || barrack->build_progress != 1) {
             continue;
         }
-        if (observation->GetUnit(barrack.add_on_tag) == nullptr) {
+        if (observation->GetUnit(barrack->add_on_tag) == nullptr) {
             if (barracks_tech.size() < barracks.size() / 2 || barracks_tech.empty()) {
-                TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_BARRACKS, barrack.tag);
+                TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_BARRACKS, barrack->tag);
             }
             else {
-                TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_BARRACKS, barrack.tag);
+                TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_BARRACKS, barrack->tag);
             }
         }
     }
 
     for (const auto& factory : factorys) {
-        if (!factory.orders.empty()) {
+        if (!factory->orders.empty()) {
             continue;
         }
 
-        if (observation->GetUnit(factory.add_on_tag) == nullptr) {
+        if (observation->GetUnit(factory->add_on_tag) == nullptr) {
             if (mech_build_) {
                 if (factorys_tech.size() < factorys.size() / 2) {
-                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_FACTORY, factory.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_FACTORY, factory->tag);
                 }
                 else {
-                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_FACTORY, factory.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_FACTORY, factory->tag);
                 }
             }
             else {
                 if (CountUnitType(observation, UNIT_TYPEID::TERRAN_BARRACKSREACTOR) < 1) {
-                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_FACTORY, factory.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_FACTORY, factory->tag);
                 }
                 else {
-                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_FACTORY, factory.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_FACTORY, factory->tag);
                 }
             }
 
@@ -2426,24 +2423,24 @@ void TerranMultiplayerBot::BuildOrder() {
     }
 
     for (const auto& starport : starports) {
-        if (!starport.orders.empty()) {
+        if (!starport->orders.empty()) {
             continue;
         }
-        if (observation->GetUnit(starport.add_on_tag) == nullptr) {
+        if (observation->GetUnit(starport->add_on_tag) == nullptr) {
             if (mech_build_) {
                 if (CountUnitType(observation,UNIT_TYPEID::TERRAN_STARPORTREACTOR) < 2) {
-                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_STARPORT, starport.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_STARPORT, starport->tag);
                 }
                 else {
-                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_STARPORT, starport.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_STARPORT, starport->tag);
                 }
             }
             else {
                 if (CountUnitType(observation, UNIT_TYPEID::TERRAN_STARPORTREACTOR) < 1) {
-                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_STARPORT, starport.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_REACTOR_STARPORT, starport->tag);
                 }
                 else {
-                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_STARPORT, starport.tag);
+                    TryBuildAddOn(ABILITY_ID::BUILD_TECHLAB_STARPORT, starport->tag);
                 }
                 
             }
@@ -2517,14 +2514,14 @@ bool TerranMultiplayerBot::TryBuildAddOn(AbilityID ability_type_for_structure, T
  
     Units units = Observation()->GetUnits(Unit::Self, IsStructure(Observation()));
 
-    if (Query()->Placement(ability_type_for_structure, unit->pos, unit->tag)) {
-        Actions()->UnitCommand(base_structure, ability_type_for_structure);
+    if (Query()->Placement(ability_type_for_structure, unit->pos, unit)) {
+        Actions()->UnitCommand(unit, ability_type_for_structure);
         return true;
     }
 
     float distance = std::numeric_limits<float>::max();
     for (const auto& u : units) {
-        float d = Distance2D(u.pos, build_location);
+        float d = Distance2D(u->pos, build_location);
         if (d < distance) {
             distance = d;
         }
@@ -2533,8 +2530,8 @@ bool TerranMultiplayerBot::TryBuildAddOn(AbilityID ability_type_for_structure, T
         return false;
     }
 
-    if(Query()->Placement(ability_type_for_structure,build_location,unit->tag)){
-        Actions()->UnitCommand(base_structure, ability_type_for_structure, build_location);
+    if(Query()->Placement(ability_type_for_structure, build_location, unit)){
+        Actions()->UnitCommand(unit, ability_type_for_structure, build_location);
         return true;
     }
     return false;
@@ -2549,10 +2546,10 @@ bool TerranMultiplayerBot::TryBuildStructureRandom(AbilityID ability_type_for_st
     Units units = Observation()->GetUnits(Unit::Self, IsStructure(Observation()));
     float distance = std::numeric_limits<float>::max();
     for (const auto& u : units) {
-        if (u.unit_type == UNIT_TYPEID::TERRAN_SUPPLYDEPOTLOWERED) {
+        if (u->unit_type == UNIT_TYPEID::TERRAN_SUPPLYDEPOTLOWERED) {
             continue;
         }
-        float d = Distance2D(u.pos, build_location);
+        float d = Distance2D(u->pos, build_location);
         if (d < distance) {
             distance = d;
         }
@@ -2645,9 +2642,9 @@ void TerranMultiplayerBot::ManageArmy() {
     Units nuke = observation->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::TERRAN_NUKE));
     for (const auto& unit : army) {
          if (enemy_units.empty() && observation->GetFoodArmy() < wait_til_supply) {
-            switch (unit.unit_type.ToType()) {
+            switch (unit->unit_type.ToType()) {
                 case UNIT_TYPEID::TERRAN_SIEGETANKSIEGED: {
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_UNSIEGE);
+                    Actions()->UnitCommand(unit, ABILITY_ID::MORPH_UNSIEGE);
                     break;
                 }
                 default:
@@ -2656,38 +2653,38 @@ void TerranMultiplayerBot::ManageArmy() {
             }
         }
         else if (!enemy_units.empty()) {
-            switch (unit.unit_type.ToType()) {
+            switch (unit->unit_type.ToType()) {
                 case UNIT_TYPEID::TERRAN_WIDOWMINE: {
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
                         }
                     }
                     if (distance < 6) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::BURROWDOWN);
+                        Actions()->UnitCommand(unit, ABILITY_ID::BURROWDOWN);
                     }
                     break;
                 }
                 case UNIT_TYPEID::TERRAN_MARINE: {
-                    if (stim_researched_ && !unit.orders.empty()) {
-                        if (unit.orders.front().ability_id == ABILITY_ID::ATTACK) {
+                    if (stim_researched_ && !unit->orders.empty()) {
+                        if (unit->orders.front().ability_id == ABILITY_ID::ATTACK) {
                             float distance = std::numeric_limits<float>::max();
                             for (const auto& u : enemy_units) {
-                                float d = Distance2D(u.pos, unit.pos);
+                                float d = Distance2D(u->pos, unit->pos);
                                 if (d < distance) {
                                     distance = d;
                                 }
                             }
                             bool has_stimmed = false;
-                            for (const auto& buff : unit.buffs) {
+                            for (const auto& buff : unit->buffs) {
                                 if (buff == BUFF_ID::STIMPACK) {
                                     has_stimmed = true;
                                 }
                             }
                             if (distance < 6 && !has_stimmed) {
-                                Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_STIM);
+                                Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_STIM);
                                 break;
                             }
                         }
@@ -2697,23 +2694,23 @@ void TerranMultiplayerBot::ManageArmy() {
                     break;
                 }
                 case UNIT_TYPEID::TERRAN_MARAUDER: {
-                    if (stim_researched_ && !unit.orders.empty()) {
-                        if (unit.orders.front().ability_id == ABILITY_ID::ATTACK) {
+                    if (stim_researched_ && !unit->orders.empty()) {
+                        if (unit->orders.front().ability_id == ABILITY_ID::ATTACK) {
                             float distance = std::numeric_limits<float>::max();
                             for (const auto& u : enemy_units) {
-                                float d = Distance2D(u.pos, unit.pos);
+                                float d = Distance2D(u->pos, unit->pos);
                                 if (d < distance) {
                                     distance = d;
                                 }
                             }
                             bool has_stimmed = false;
-                            for (const auto& buff : unit.buffs) {
+                            for (const auto& buff : unit->buffs) {
                                 if (buff == BUFF_ID::STIMPACK) {
                                     has_stimmed = true;
                                 }
                             }
                             if (distance < 7 && !has_stimmed) {
-                                Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_STIM);
+                                Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_STIM);
                                 break;
                             }
                         }
@@ -2723,26 +2720,26 @@ void TerranMultiplayerBot::ManageArmy() {
                 }
                 case UNIT_TYPEID::TERRAN_GHOST: {
                     float distance = std::numeric_limits<float>::max();
-                    Unit closest_unit;
+                    const Unit* closest_unit;
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
                             closest_unit = u;
                         }
                     }
                     if (ghost_cloak_researched_) {
-                        if (distance < 7 && unit.energy > 50) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::BEHAVIOR_CLOAKON);
+                        if (distance < 7 && unit->energy > 50) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::BEHAVIOR_CLOAKON);
                             break;
                         }
                     }
                     if (nuke_built) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_NUKECALLDOWN, closest_unit.pos);
+                        Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_NUKECALLDOWN, closest_unit->pos);
                     }
-                    else if (unit.energy > 50 && !unit.orders.empty()) {
-                        if(unit.orders.front().ability_id == ABILITY_ID::ATTACK)
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_GHOSTSNIPE, unit.engaged_target_tag);
+                    else if (unit->energy > 50 && !unit->orders.empty()) {
+                        if(unit->orders.front().ability_id == ABILITY_ID::ATTACK)
+                        Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_GHOSTSNIPE, unit);
                         break;
                     }
                     AttackWithUnit(unit, observation);
@@ -2751,13 +2748,13 @@ void TerranMultiplayerBot::ManageArmy() {
                 case UNIT_TYPEID::TERRAN_SIEGETANK: {
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
                         }
                     }
                     if (distance < 11) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_SIEGEMODE);
+                        Actions()->UnitCommand(unit, ABILITY_ID::MORPH_SIEGEMODE);
                     }
                     else {
                         AttackWithUnit(unit, observation);
@@ -2767,13 +2764,13 @@ void TerranMultiplayerBot::ManageArmy() {
                 case UNIT_TYPEID::TERRAN_SIEGETANKSIEGED: {
                     float distance = std::numeric_limits<float>::max();
                     for (const auto& u : enemy_units) {
-                        float d = Distance2D(u.pos, unit.pos);
+                        float d = Distance2D(u->pos, unit->pos);
                         if (d < distance) {
                             distance = d;
                         }
                     }
                     if (distance > 13) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_UNSIEGE);
+                        Actions()->UnitCommand(unit, ABILITY_ID::MORPH_UNSIEGE);
                     }
                     else {
                         AttackWithUnit(unit, observation);
@@ -2782,15 +2779,15 @@ void TerranMultiplayerBot::ManageArmy() {
                 }
                 case UNIT_TYPEID::TERRAN_MEDIVAC: {
                     Units bio_units = observation->GetUnits(Unit::Self, IsUnits(bio_types));
-                    if (unit.orders.empty()) {
+                    if (unit->orders.empty()) {
                         for (const auto& bio_unit : bio_units) {
-                            if (bio_unit.health < bio_unit.health_max) {
-                                Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_HEAL, bio_unit.tag);
+                            if (bio_unit->health < bio_unit->health_max) {
+                                Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_HEAL, bio_unit);
                                 break;
                             }
                         }
                         if (!bio_units.empty()) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, bio_units.front().tag);
+                            Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, bio_units.front());
                         }
                     }
                     break;
@@ -2798,17 +2795,17 @@ void TerranMultiplayerBot::ManageArmy() {
                 case UNIT_TYPEID::TERRAN_VIKINGFIGHTER: {
                     Units flying_units = observation->GetUnits(Unit::Enemy, IsFlying());
                     if (flying_units.empty()) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_VIKINGASSAULTMODE);
+                        Actions()->UnitCommand(unit, ABILITY_ID::MORPH_VIKINGASSAULTMODE);
                     }
                     else {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, flying_units.front());
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, flying_units.front());
                     }
                     break;
                 }
                 case UNIT_TYPEID::TERRAN_VIKINGASSAULT: {
                     Units flying_units = observation->GetUnits(Unit::Enemy, IsFlying());
                     if (!flying_units.empty()) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_VIKINGFIGHTERMODE);
+                        Actions()->UnitCommand(unit, ABILITY_ID::MORPH_VIKINGFIGHTERMODE);
                     }
                     else {
                         AttackWithUnit(unit, observation);
@@ -2817,12 +2814,12 @@ void TerranMultiplayerBot::ManageArmy() {
                 }
                 case UNIT_TYPEID::TERRAN_CYCLONE: {
                     Units flying_units = observation->GetUnits(Unit::Enemy, IsFlying());
-                    if (!flying_units.empty() && unit.orders.empty()) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_LOCKON, flying_units.front());
+                    if (!flying_units.empty() && unit->orders.empty()) {
+                        Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_LOCKON, flying_units.front());
                     }
-                    else if (!flying_units.empty() && !unit.orders.empty()) {
-                        if (unit.orders.front().ability_id != ABILITY_ID::EFFECT_LOCKON) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_LOCKON, flying_units.front());
+                    else if (!flying_units.empty() && !unit->orders.empty()) {
+                        if (unit->orders.front().ability_id != ABILITY_ID::EFFECT_LOCKON) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_LOCKON, flying_units.front());
                         }
                     }
                     else {
@@ -2832,7 +2829,7 @@ void TerranMultiplayerBot::ManageArmy() {
                 }
                 case UNIT_TYPEID::TERRAN_HELLION: {
                     if (CountUnitType(observation, UNIT_TYPEID::TERRAN_ARMORY) > 0) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_HELLBAT);
+                        Actions()->UnitCommand(unit, ABILITY_ID::MORPH_HELLBAT);
                     }
                     AttackWithUnit(unit, observation);
                     break;
@@ -2841,25 +2838,25 @@ void TerranMultiplayerBot::ManageArmy() {
                     if (banshee_cloak_researched_) {
                         float distance = std::numeric_limits<float>::max();
                         for (const auto& u : enemy_units) {
-                            float d = Distance2D(u.pos, unit.pos);
+                            float d = Distance2D(u->pos, unit->pos);
                             if (d < distance) {
                                 distance = d;
                             }
                         }
-                        if (distance < 7 && unit.energy > 50) {
-                            Actions()->UnitCommand(unit.tag, ABILITY_ID::BEHAVIOR_CLOAKON);
+                        if (distance < 7 && unit->energy > 50) {
+                            Actions()->UnitCommand(unit, ABILITY_ID::BEHAVIOR_CLOAKON);
                         }
                     }
                     AttackWithUnit(unit, observation);
                     break;
                 }
                 case UNIT_TYPEID::TERRAN_RAVEN: {
-                    if (unit.energy > 125) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::EFFECT_HUNTERSEEKERMISSILE, enemy_units.front());
+                    if (unit->energy > 125) {
+                        Actions()->UnitCommand(unit, ABILITY_ID::EFFECT_HUNTERSEEKERMISSILE, enemy_units.front());
                         break;
                     }
-                    if (unit.orders.empty()) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, army.front().pos);
+                    if (unit->orders.empty()) {
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, army.front()->pos);
                     }
                     break;
                 }
@@ -2869,15 +2866,15 @@ void TerranMultiplayerBot::ManageArmy() {
                 }
         }
         else {
-            switch (unit.unit_type.ToType()) {
+            switch (unit->unit_type.ToType()) {
                 case UNIT_TYPEID::TERRAN_SIEGETANKSIEGED: {
-                    Actions()->UnitCommand(unit.tag, ABILITY_ID::MORPH_UNSIEGE);
+                    Actions()->UnitCommand(unit, ABILITY_ID::MORPH_UNSIEGE);
                     break;
                 }
                 case UNIT_TYPEID::TERRAN_MEDIVAC: {
                     Units bio_units = observation->GetUnits(Unit::Self, IsUnits(bio_types));
-                    if (unit.orders.empty()) {
-                        Actions()->UnitCommand(unit.tag, ABILITY_ID::ATTACK, bio_units.front().pos);
+                    if (unit->orders.empty()) {
+                        Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, bio_units.front()->pos);
                     }
                     break;
                 }
@@ -2916,9 +2913,9 @@ bool TerranMultiplayerBot::BuildRefinery() {
     }
 
     for (const auto& base : bases) {
-        if (base.assigned_harvesters >= base.ideal_harvesters) {
-            if (base.build_progress == 1) {
-                if (TryBuildGas(ABILITY_ID::BUILD_REFINERY, UNIT_TYPEID::TERRAN_SCV, base.pos)) {
+        if (base->assigned_harvesters >= base->ideal_harvesters) {
+            if (base->build_progress == 1) {
+                if (TryBuildGas(ABILITY_ID::BUILD_REFINERY, UNIT_TYPEID::TERRAN_SCV, base->pos)) {
                     return true;
                 }
             }
@@ -2978,10 +2975,10 @@ void TerranMultiplayerBot::OnStep() {
     }
 }
 
-void TerranMultiplayerBot::OnUnitIdle(const Unit& unit) {
-    switch (unit.unit_type.ToType()) {
+void TerranMultiplayerBot::OnUnitIdle(const Unit* unit) {
+    switch (unit->unit_type.ToType()) {
         case UNIT_TYPEID::TERRAN_SCV: {
-            MineIdleWorkers(unit.tag, ABILITY_ID::HARVEST_GATHER, UNIT_TYPEID::TERRAN_REFINERY);
+            MineIdleWorkers(unit, ABILITY_ID::HARVEST_GATHER, UNIT_TYPEID::TERRAN_REFINERY);
             break;
         }
         default:
@@ -3017,7 +3014,7 @@ void TerranBot::OnGameStart() {
 
 // Tries to find a random location that can be pathed to on the map.
 // Returns 'true' if a new, random location has been found that is pathable by the unit.
-bool TerranBot::FindEnemyPosition(Tag, Point2D& target_pos) {
+bool TerranBot::FindEnemyPosition(Point2D& target_pos) {
     if (game_info_.enemy_start_locations.empty()) return false;
     target_pos = game_info_.enemy_start_locations.front();
     return true;
@@ -3027,24 +3024,23 @@ void TerranBot::ScoutWithMarines() {
 
     Units units = Observation()->GetUnits(Unit::Alliance::Self);
     for (const auto& unit : units) {
-        UnitTypeID unit_type(unit.unit_type);
+        UnitTypeID unit_type(unit->unit_type);
         if (unit_type != UNIT_TYPEID::TERRAN_MARINE)
             continue;
 
-        if (!unit.orders.empty())
+        if (!unit->orders.empty())
             continue;
 
         // Priority to attacking enemy structures.
-        Unit enemy_unit;
+        const Unit* enemy_unit = nullptr;
         if (FindEnemyStructure(Observation(), enemy_unit)) {
-            assert(enemy_unit.tag);
-            Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_unit.tag);
+            Actions()->UnitCommand(unit, ABILITY_ID::ATTACK, enemy_unit);
             return;
         }
 
         Point2D target_pos;
         // TODO: For efficiency, these queries should be batched.
-        if (FindEnemyPosition(unit.tag, target_pos)) {
+        if (FindEnemyPosition(target_pos)) {
             Actions()->UnitCommand(unit, ABILITY_ID::SMART, target_pos);
         }
     }
@@ -3056,7 +3052,7 @@ bool TerranBot::TryBuildStructure(AbilityID ability_type_for_structure, UnitType
     // If a unit already is building a supply structure of this type, do nothing.
     Units units = observation->GetUnits(Unit::Alliance::Self);
     for (const auto& unit : units) {
-        for (const auto& order : unit.orders) {
+        for (const auto& order : unit->orders) {
             if (order.ability_id == ability_type_for_structure) {
                 return false;
             }
@@ -3064,14 +3060,14 @@ bool TerranBot::TryBuildStructure(AbilityID ability_type_for_structure, UnitType
     }
 
     // Just try a random location near the unit.
-    Unit unit;
+    const Unit* unit = nullptr;
     if (!GetRandomUnit(unit, observation, unit_type))
         return false;
 
     float rx = GetRandomScalar();
     float ry = GetRandomScalar();
 
-    Actions()->UnitCommand(unit, ability_type_for_structure, Point2D(unit.pos.x + rx * 15.0f, unit.pos.y + ry * 15.0f));
+    Actions()->UnitCommand(unit, ability_type_for_structure, unit->pos + Point2D(rx, ry) * 15.0f);
     return true;
 }
 
@@ -3103,14 +3099,14 @@ bool TerranBot::TryBuildBarracks() {
 bool TerranBot::TryBuildUnit(AbilityID ability_type_for_unit, UnitTypeID unit_type) {
     const ObservationInterface* observation = Observation();
 
-    Unit unit;
+    const Unit* unit = nullptr;
     if (!GetRandomUnit(unit, observation, unit_type))
         return false;
 
-    if (!unit.orders.empty())
+    if (!unit->orders.empty())
         return false;
 
-    Actions()->UnitCommand(unit.tag, ability_type_for_unit);
+    Actions()->UnitCommand(unit, ability_type_for_unit);
     return true;
 }
 
@@ -3175,7 +3171,7 @@ void MarineMicroBot::OnStep() {
 
     Units units = observation->GetUnits(Unit::Alliance::Self);
     for (const auto& u : units) {
-        switch (static_cast<UNIT_TYPEID>(u.unit_type)) {
+        switch (static_cast<UNIT_TYPEID>(u->unit_type)) {
             case UNIT_TYPEID::TERRAN_MARINE: {
                 if (!move_back_) {
                     action->UnitCommand(u, ABILITY_ID::ATTACK, targeted_zergling_);
@@ -3196,8 +3192,8 @@ void MarineMicroBot::OnStep() {
     }
 }
 
-void MarineMicroBot::OnUnitDestroyed(const Unit& unit) {
-    if (unit.tag == targeted_zergling_) {
+void MarineMicroBot::OnUnitDestroyed(const Unit* unit) {
+    if (unit == targeted_zergling_) {
         Point2D mp, zp;
         if (!GetPosition(UNIT_TYPEID::TERRAN_MARINE, Unit::Alliance::Self, mp)) {
             return;
@@ -3229,15 +3225,13 @@ bool MarineMicroBot::GetPosition(UNIT_TYPEID unit_type, Unit::Alliance alliace, 
     unsigned int count = 0;
 
     for (const auto& u : units) {
-        if (u.unit_type == unit_type) {
-            position.x += u.pos.x;
-            position.y += u.pos.y;
+        if (u->unit_type == unit_type) {
+            position += u->pos;
             ++count;
         }
     }
 
-    position.x /= count;
-    position.y /= count;
+    position /= (float)count;
 
     return true;
 }
@@ -3252,11 +3246,11 @@ bool MarineMicroBot::GetNearestZergling(const Point2D& from) {
 
     float distance = std::numeric_limits<float>::max();
     for (const auto& u : units) {
-        if (u.unit_type == UNIT_TYPEID::ZERG_ZERGLING) {
-            float d = DistanceSquared2D(u.pos, from);
+        if (u->unit_type == UNIT_TYPEID::ZERG_ZERGLING) {
+            float d = DistanceSquared2D(u->pos, from);
             if (d < distance) {
                 distance = d;
-                targeted_zergling_ = u.tag;
+                targeted_zergling_ = u;
             }
         }
     }

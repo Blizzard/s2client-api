@@ -8,12 +8,12 @@
 
 class AnnoyingHelper : public sc2::Agent {
 public:
-    bool CanPathToLocation(sc2::Tag tag, sc2::Point2D& target_pos) {
+    bool CanPathToLocation(const sc2::Unit* unit, sc2::Point2D& target_pos) {
         // Send a pathing query from the unit to that point. Can also query from point to point,
         // but using a unit tag wherever possible will be more accurate.
         // Note: This query must communicate with the game to get a result which affects performance.
         // Ideally batch up the queries (using PathingDistanceBatched) and do many at once.
-        float distance = Query()->PathingDistance(tag, target_pos);
+        float distance = Query()->PathingDistance(unit, target_pos);
 
         return distance > 0.1f;
     }
@@ -27,10 +27,10 @@ public:
             return;
         }
 
-        const sc2::Unit& unit = sc2::GetRandomEntry(my_units);
+        const sc2::Unit* unit = sc2::GetRandomEntry(my_units);
 
         sc2::Point2D move_target = sc2::FindRandomLocation(observation->GetGameInfo());
-        if (!CanPathToLocation(unit.tag, move_target)) {
+        if (!CanPathToLocation(unit, move_target)) {
             return;
         }
 

@@ -46,7 +46,7 @@ namespace sc2 {
         KillAllUnits();
     }
 
-    void TestUnitCommand::OnUnitIdle(const Unit& unit) {
+    void TestUnitCommand::OnUnitIdle(const Unit* unit) {
         uint32_t current_game_loop = agent_->Observation()->GetGameLoop();
         if (current_game_loop >= order_on_game_loop_) {
             idled_units_.push_back(unit);
@@ -66,7 +66,7 @@ namespace sc2 {
     std::vector<Tag> TestUnitCommand::GetTagListFromUnits(Units units) {
         std::vector<Tag> tags;
         for (const auto& unit : units) {
-            tags.push_back(unit.tag);
+            tags.push_back(unit->tag);
         }
 
         return tags;
@@ -81,7 +81,7 @@ namespace sc2 {
         wait_game_loops_ = 150;
     }
 
-    void TestUnitCommand::VerifyUnitOrders(Tag unit_tag, ABILITY_ID test_ability) {
+    void TestUnitCommand::VerifyUnitOrders(const Unit* unit, ABILITY_ID test_ability) {
         bool order_found = false;
 
         const ObservationInterface* obs = agent_->Observation();
@@ -89,7 +89,6 @@ namespace sc2 {
             return;
         }
 
-        const Unit* unit = obs->GetUnit(unit_tag);
         if (!unit) {
             return;
         }
@@ -109,18 +108,18 @@ namespace sc2 {
 
     void TestUnitCommand::VerifyUnitExistsAndComplete(UNIT_TYPEID unit_type, bool verify_complete) {
         bool unit_exists = false;
-        Unit test_unit;
+        const Unit* test_unit;
 
         const ObservationInterface* obs = agent_->Observation();
         const Units& units = obs->GetUnits(Unit::Alliance::Self);
-        for (const Unit& unit : units) {
-            if (unit.unit_type == unit_type) {
+        for (const auto& unit : units) {
+            if (unit->unit_type == unit_type) {
                 unit_exists = true;
                 test_unit = unit;
             }
         }
 
-        if (test_unit.build_progress != 1.0f && verify_complete) {
+        if (test_unit && test_unit->build_progress != 1.0f && verify_complete) {
             ReportError("Unit building/training did not complete as expected.");
         }
 
@@ -132,8 +131,8 @@ namespace sc2 {
     void TestUnitCommand::VerifyUnitDoesNotExist(UNIT_TYPEID unit_type) {
         const ObservationInterface* obs = agent_->Observation();
         const Units& units = obs->GetUnits(Unit::Alliance::Self);
-        for (const Unit& unit : units) {
-            if (unit.unit_type == unit_type) {
+        for (const auto& unit : units) {
+            if (unit->unit_type == unit_type) {
                 ReportError("Unexpected unit exists when it should not.");
             }
         }
@@ -141,8 +140,8 @@ namespace sc2 {
 
     void TestUnitCommand::VerifyUnitIdleAfterOrder(UNIT_TYPEID unit_type) {
         bool unit_idled = false;
-        for (const Unit& unit : idled_units_) {
-            if (unit.unit_type == unit_type) {
+        for (const auto& unit : idled_units_) {
+            if (unit->unit_type == unit_type) {
                 unit_idled = true;
             }
         }
@@ -153,8 +152,8 @@ namespace sc2 {
     }
 
     void TestUnitCommand::VerifyOwnerOfUnits(Units units, int expected_owner) {
-        for (Unit unit : units) {
-            if (unit.owner != expected_owner) {
+        for (const auto& unit : units) {
+            if (unit->owner != expected_owner) {
                 ReportError("Owner of unit does not match expected value.");
             }
         }
@@ -195,21 +194,6 @@ namespace sc2 {
         }
     }
 
-    bool TestUnitCommand::GetTestUnit(Unit& test_unit) {
-        const ObservationInterface* obs = agent_->Observation();
-        if (!obs) {
-            return false;
-        }
-        const Unit* unit = obs->GetUnit(test_unit_);
-        if (!unit) {
-            return false;
-        }
-
-        test_unit = *unit;
-        return true;
-    }
-
-
     //
     // TestUnitCommandNoTarget
     //
@@ -222,7 +206,7 @@ namespace sc2 {
         VerifyOwnerOfUnits(test_units_);
 
         if (test_units_.size() > 1) {
-            act->UnitCommand(GetTagListFromUnits(test_units_), test_ability_);
+            act->UnitCommand(test_units_, test_ability_);
         }
         else {
             act->UnitCommand(test_unit_, test_ability_);
@@ -260,7 +244,7 @@ namespace sc2 {
         }
 
         if (test_units_.size() > 1) {
-            act->UnitCommand(GetTagListFromUnits(test_units_), test_ability_, target_point_);
+            act->UnitCommand(test_units_, test_ability_, target_point_);
         }
         else {
             act->UnitCommand(test_unit_, test_ability_, target_point_);
@@ -293,21 +277,21 @@ namespace sc2 {
         const ObservationInterface* obs = agent_->Observation();
         const Units& units = obs->GetUnits();
 
-        for (const Unit& unit : units) {
-            if (unit.unit_type == target_unit_type_) {
+        for (const auto& unit : units) {
+            if (unit->unit_type == target_unit_type_) {
                 target_unit_ = unit;
             }
         }
 
         VerifyOwnerOfUnits(test_units_);
 
-        if (placing_structure_ && !agent_->Query()->Placement(test_ability_, target_unit_.pos)) {
+        if (placing_structure_ && !agent_->Query()->Placement(test_ability_, target_unit_->pos)) {
             ReportError("Cannot place structure, location not valid.");
             return;
         }
 
         if (test_units_.size() > 1) {
-            act->UnitCommand(GetTagListFromUnits(test_units_), test_ability_, target_unit_);
+            act->UnitCommand(test_units_, test_ability_, target_unit_);
         }
         else {
             act->UnitCommand(test_unit_, test_ability_, target_unit_);

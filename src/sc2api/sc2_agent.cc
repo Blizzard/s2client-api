@@ -20,13 +20,13 @@ public:
 
     SC2APIProtocol::RequestAction* GetRequestAction();
 
-    void UnitCommand(Tag unit_tag, AbilityID ability) override;
-    void UnitCommand(Tag unit_tag, AbilityID ability, const Point2D& point) override;
-    void UnitCommand(Tag unit_tag, AbilityID ability, Tag target_tag) override;
+    void UnitCommand(const Unit* unit, AbilityID ability) override;
+    void UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point) override;
+    void UnitCommand(const Unit* unit, AbilityID ability, const Unit* target) override;
+    void UnitCommand(const Units& unit_tags, AbilityID ability) override;
+    void UnitCommand(const Units& unit_tags, AbilityID ability, const Point2D& point) override;
+    void UnitCommand(const Units& unit_tags, AbilityID ability, const Unit* target) override;
 
-    void UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability) override;
-    void UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability, const Point2D& point) override;
-    void UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability, Tag target_tag) override;
 
     const std::vector<Tag>& Commands() const override;
 
@@ -71,7 +71,7 @@ void ActionImp::SendActions() {
             const SC2APIProtocol::Action& action = request_action->actions(i);
             for (auto tag : action.action_raw().unit_command().unit_tags()) {
                 commands_.push_back(tag);
-            }
+            };
         }
     }
 
@@ -95,22 +95,22 @@ void ActionImp::ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID abil
     autocast->set_ability_id(ability);
 }
 
-void ActionImp::UnitCommand(Tag unit_tag, AbilityID ability) {
-    std::vector<Tag> tags = { unit_tag };
-    UnitCommand(tags, ability);
+void ActionImp::UnitCommand(const Unit* unit, AbilityID ability) {
+    if (!unit) return;
+    UnitCommand(Units({ unit }), ability);
 }
 
-void ActionImp::UnitCommand(Tag unit_tag, AbilityID ability, const Point2D& point) {
-    std::vector<Tag> tags = { unit_tag };
-    UnitCommand(tags, ability, point);
+void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point) {
+    if (!unit) return;
+    UnitCommand(Units({ unit }), ability, point);
 }
 
-void ActionImp::UnitCommand(Tag unit_tag, AbilityID ability, Tag target_tag) {
-    std::vector<Tag> tags = { unit_tag };
-    UnitCommand(tags, ability, target_tag);
+void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, const Unit* target) {
+    if (!unit || !target) return;
+    UnitCommand(Units({ unit }), ability, target);
 }
 
-void ActionImp::UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability) {
+void ActionImp::UnitCommand(const Units& units, AbilityID ability) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionRaw* action_raw = action->mutable_action_raw();
@@ -118,12 +118,13 @@ void ActionImp::UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability
 
     unit_command->set_ability_id(ability);
 
-    for (auto tag : unit_tags) {
-        unit_command->add_unit_tags(tag);
+    for (auto unit : units) {
+        if (!unit) continue;
+        unit_command->add_unit_tags(unit->tag);
     }
 }
 
-void ActionImp::UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability, const Point2D& point) {
+void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Point2D& point) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionRaw* action_raw = action->mutable_action_raw();
@@ -134,22 +135,24 @@ void ActionImp::UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability
     target_point->set_x(point.x);
     target_point->set_y(point.y);
 
-    for (auto tag : unit_tags) {
-        unit_command->add_unit_tags(tag);
+    for (auto unit : units) {
+        if (!unit) continue;
+        unit_command->add_unit_tags(unit->tag);
     }
 }
 
-void ActionImp::UnitCommand(const std::vector<Tag>& unit_tags, AbilityID ability, Tag target_tag) {
+void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Unit* target) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionRaw* action_raw = action->mutable_action_raw();
     SC2APIProtocol::ActionRawUnitCommand* unit_command = action_raw->mutable_unit_command();
 
     unit_command->set_ability_id(ability);
-    unit_command->set_target_unit_tag(target_tag);
+    unit_command->set_target_unit_tag(target->tag);
 
-    for (auto tag : unit_tags) {
-        unit_command->add_unit_tags(tag);
+    for (auto unit : units) {
+        if (!unit) continue;
+        unit_command->add_unit_tags(unit->tag);
     }
 }
 
