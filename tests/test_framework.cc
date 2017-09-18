@@ -28,11 +28,11 @@ void TestSequence::ReportError(const char* error) {
 }
 
 void TestSequence::KillAllUnits() {
-    const Units& units = agent_->Observation()->GetUnits();
-    for (const Unit& unit : units) {
-        agent_->Debug()->DebugKillUnit(unit.tag);
-        for (auto passenger : unit.passengers) {
-            agent_->Debug()->DebugKillUnit(passenger.tag);
+    Units units = agent_->Observation()->GetUnits();
+    for (const auto unit : units) {
+        agent_->Debug()->DebugKillUnit(unit);
+        for (const auto passenger : unit->passengers) {
+            agent_->Debug()->DebugKillUnit(agent_->Observation()->GetUnit(passenger.tag));
         }
     }
     agent_->Debug()->SendDebug();
@@ -106,25 +106,25 @@ void UnitTestBot::OnGameFullStart() {
     }
 }
 
-void UnitTestBot::OnUnitDestroyed(const Unit& unit) {
+void UnitTestBot::OnUnitDestroyed(const Unit* unit) {
     if (current_sequence_ < sequences_.size()) {
         sequences_[current_sequence_]->OnUnitDestroyed(unit);
     }
 }
 
-void UnitTestBot::OnUnitCreated(const Unit& unit) {
+void UnitTestBot::OnUnitCreated(const Unit* unit) {
     if (current_sequence_ < sequences_.size()) {
         sequences_[current_sequence_]->OnUnitCreated(unit);
     }
 }
 
-void UnitTestBot::OnUnitIdle(const Unit& unit) {
+void UnitTestBot::OnUnitIdle(const Unit* unit) {
     if (current_sequence_ < sequences_.size()) {
         sequences_[current_sequence_]->OnUnitIdle(unit);
     }
 }
 
-void UnitTestBot::OnUnitEnterVision(const Unit& unit) {
+void UnitTestBot::OnUnitEnterVision(const Unit* unit) {
     if (current_sequence_ < sequences_.size()) {
         sequences_[current_sequence_]->OnUnitEnterVision(unit);
     }
@@ -136,7 +136,7 @@ void UnitTestBot::OnUpgradeCompleted(UpgradeID upgrade) {
     }
 }
 
-void UnitTestBot::OnBuildingConstructionComplete(const Unit& unit) {
+void UnitTestBot::OnBuildingConstructionComplete(const Unit* unit) {
     if (current_sequence_ < sequences_.size()) {
         sequences_[current_sequence_]->OnBuildingConstructionComplete(unit);
     }

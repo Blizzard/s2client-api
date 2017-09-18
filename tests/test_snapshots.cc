@@ -17,7 +17,7 @@ public:
     Point2D base_pos_;
     Point2D mineral_pos_;
     Point2D scv_pos_;
-    Tag mineral_tag_;
+    const Unit* mineral_;
 
     SnapshotTestBot();
 
@@ -42,7 +42,7 @@ public:
         bot_(bot) {
     }
 
-    bool FindSCV(Unit& unit) {
+    bool FindSCV(const Unit*& unit) {
         assert(bot_);
         Units my_scvs = agent_->Observation()->GetUnits(Unit::Self, [](const Unit& unit){
                 return unit.unit_type == UNIT_TYPEID::TERRAN_SCV;
@@ -123,7 +123,7 @@ public:
             assert(0);
             return;
         }
-        bot_->mineral_tag_ = minerals[0].tag;
+        bot_->mineral_ = minerals[0];
 
         agent_->Debug()->DebugShowMap();
         agent_->Debug()->SendDebug();
@@ -138,7 +138,7 @@ public:
         assert(bot_);
         wait_game_loops_ = 10;
 
-        agent_->Debug()->DebugKillUnit(bot_->mineral_tag_);
+        agent_->Debug()->DebugKillUnit(bot_->mineral_);
         agent_->Debug()->SendDebug();
 
         const ObservationInterface* obs = agent_->Observation();
@@ -146,15 +146,15 @@ public:
 
         Point2D camera_world = obs->GetCameraPos();
 
-        Unit unit_scv;
+        const Unit* unit_scv = nullptr;
         if (!FindSCV(unit_scv)) {
             return;
         }
 
-        bot_->scv_pos_ = unit_scv.pos;
+        bot_->scv_pos_ = unit_scv->pos;
         Point2DI scv_pt = ConvertWorldToCamera(obs->GetGameInfo(), camera_world, bot_->scv_pos_);
         actions->Select(scv_pt, PointSelectionType::PtSelect);
-        std::cout << "Selecting an scv at world pt: " << std::to_string(unit_scv.pos.x) << ", " << std::to_string(unit_scv.pos.y) << std::endl;
+        std::cout << "Selecting an scv at world pt: " << std::to_string(unit_scv->pos.x) << ", " << std::to_string(unit_scv->pos.y) << std::endl;
         std::cout << "Selecting an scv at screen pt: " << std::to_string(scv_pt.x) << ", " << std::to_string(scv_pt.y) << std::endl;
     }
 };
@@ -177,12 +177,12 @@ public:
     }
 
     void OnTestFinish() override {
-        Unit unit_scv;
+        const Unit* unit_scv = nullptr;
         if (!FindSCV(unit_scv)) {
             return;
         }
 
-        if (!bot_->IsNearPos(bot_->scv_pos_, unit_scv.pos)) {
+        if (!bot_->IsNearPos(bot_->scv_pos_, unit_scv->pos)) {
             ReportError("The TERRAN_SCV should not have moved!");
             assert(0);
         }
@@ -205,12 +205,12 @@ public:
     }
 
     void OnTestFinish() override {
-        Unit unit_scv;
+        const Unit* unit_scv = nullptr;
         if (!FindSCV(unit_scv)) {
             return;
         }
 
-        if (bot_->IsNearPos(bot_->scv_pos_, unit_scv.pos)) {
+        if (bot_->IsNearPos(bot_->scv_pos_, unit_scv->pos)) {
             ReportError("The TERRAN_SCV should have moved!");
             assert(0);
         }
@@ -233,7 +233,7 @@ public:
 //
 
 SnapshotTestBot::SnapshotTestBot() :
-    mineral_tag_(NullTag) {
+    mineral_(nullptr) {
     Add(TestSnapshot1(this));    // Spawn TERRAN_SCV, mineral field and command center.
     Add(TestSnapshot2(this));    // Get the mineral field tag and toggle off vision.
     Add(TestSnapshot3(this));    // Destroy the mineral field and select the TERRAN_SCV.

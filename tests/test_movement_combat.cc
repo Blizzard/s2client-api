@@ -58,7 +58,7 @@ public:
             return;
 
         const Units& units = obs->GetUnits();
-        for (const Unit& unit : units) {
+        for (const auto& unit : units) {
             act->UnitCommand(unit, ABILITY_ID::SMART, battle_pt_);
         }
     }

@@ -177,13 +177,40 @@ public:
     //! Whether the unit is powered by a pylon.
     bool is_powered;
 
-    Unit();
+    //! Whether the unit is alive or not.
+    bool is_alive;
+    //! The last time the unit was seen.
+    uint32_t last_seen_game_loop;
 
-    operator Tag() const { return tag; }
+    Unit();
 };
 
-typedef std::vector<Unit> Units;
+typedef std::vector<const Unit*> Units;
 typedef std::unordered_map<Tag, size_t> UnitIdxMap;
+
+class UnitPool {
+public:
+    Unit* CreateUnit(Tag tag);
+    Unit* GetUnit(Tag tag) const;
+    Unit* GetExistingUnit(Tag tag) const;
+    void MarkDead(Tag tag);
+
+    //TODO: Change alive -> Exist
+    void ForEachExistingUnit(const std::function<void(Unit& unit)>& functor) const;
+    void ClearExisting();
+    bool UnitExists(Tag tag);
+
+private:
+    void IncrementIndex();
+
+    static const size_t ENTRY_SIZE = 1000;
+    typedef std::pair<size_t, size_t> PoolIndex;
+    // std::array<Unit, ENTRY_SIZE>
+    std::vector<std::vector<Unit> > unit_pool_;
+    PoolIndex available_index_;
+    std::unordered_map<Tag, Unit*> tag_to_unit_;
+    std::unordered_map<Tag, Unit*> tag_to_existing_unit_;
+};
 
 //! Determines if the unit matches the unit type.
 struct IsUnit {

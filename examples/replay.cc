@@ -21,9 +21,9 @@ public:
         std::fill(count_units_built_.begin(), count_units_built_.end(), 0);
     }
     
-    void OnUnitCreated(const sc2::Unit& unit) final {
-        assert(uint32_t(unit.unit_type) < count_units_built_.size());
-        ++count_units_built_[unit.unit_type];
+    void OnUnitCreated(const sc2::Unit* unit) final {
+        assert(uint32_t(unit->unit_type) < count_units_built_.size());
+        ++count_units_built_[unit->unit_type];
     }
 
     void OnStep() final {

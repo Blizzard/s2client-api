@@ -66,12 +66,12 @@ private:
 
     // Other forwarded events.
     void OnGameFullStart() final;
-    void OnUnitDestroyed(const Unit& unit) final;
-    void OnUnitCreated(const Unit& unit) final;
-    void OnUnitIdle(const Unit& unit) final;
-    void OnUnitEnterVision(const Unit& unit) final;
+    void OnUnitDestroyed(const Unit* unit) final;
+    void OnUnitCreated(const Unit* unit) final;
+    void OnUnitIdle(const Unit* unit) final;
+    void OnUnitEnterVision(const Unit* unit) final;
     void OnUpgradeCompleted(UpgradeID upgrade) final;
-    void OnBuildingConstructionComplete(const Unit& unit) final;
+    void OnBuildingConstructionComplete(const Unit* unit) final;
     void OnNydusDetected() final;
     void OnNuclearLaunchDetected() final;
 

@@ -36,7 +36,7 @@ std::vector<std::pair<Point3D, std::vector<Unit> > > Cluster(const Units& units,
     float squared_distance_apart = distance_apart * distance_apart;
     std::vector<std::pair<Point3D, std::vector<Unit> > > clusters;
     for (size_t i = 0, e = units.size(); i < e; ++i) {
-        const Unit& u = units[i];
+        const Unit& u = *units[i];
 
         float distance = std::numeric_limits<float>::max();
         std::pair<Point3D, std::vector<Unit> >* target_cluster = nullptr;

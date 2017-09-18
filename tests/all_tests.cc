@@ -36,17 +36,13 @@ int main(int argc, char* argv[]) {
 
     // Add tests here.
     TEST(sc2::TestAbilityRemap);
-    //TEST(sc2::TestApp);
     TEST(sc2::TestSnapshots);
     TEST(sc2::TestMultiplayer);
     TEST(sc2::TestMovementCombat);
     TEST(sc2::TestFastRestartSinglePlayer);
-    //TEST(sc2::TestFeatureLayers);
-    //TEST(sc2::TestFeatureLayersMP);
     TEST(sc2::TestUnitCommand);
     TEST(sc2::TestPerformance);
     TEST(sc2::TestObservationInterface);
-    //TEST(sc2::TestObservationActions);
     if (success)
         std::cout << "All tests succeeded!" << std::endl;
     else

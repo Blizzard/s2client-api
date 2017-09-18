@@ -21,13 +21,13 @@ public:
         command_center_pt_(24, 24) {
     }
 
-    Unit GetCommandCenter() {
+    const Unit* GetCommandCenter() {
         const ObservationInterface* obs = agent_->Observation();
         Units found_command_centers = obs->GetUnits(Unit::Alliance::Self, IsUnit(UNIT_TYPEID::TERRAN_COMMANDCENTER));
         if (found_command_centers.size() != 1) {
             ReportError("Could not find the command center");
             assert(0);
-            return Unit();
+            return nullptr;
         }
 
         return found_command_centers[0];
@@ -84,8 +84,8 @@ public:
     float current_progress;
 
     void OnTestStart() override {
-        Unit command_center = GetCommandCenter();
-        current_progress = command_center.build_progress;
+        const Unit* command_center = GetCommandCenter();
+        current_progress = command_center->build_progress;
         if (current_progress == 0.0f) {
             ReportError("Command center did not start building");
             assert(0);
@@ -100,8 +100,8 @@ public:
     }
 
     void OnTestFinish() override {
-        Unit command_center = GetCommandCenter();
-        if (current_progress != command_center.build_progress) {
+        const Unit* command_center = GetCommandCenter();
+        if (current_progress != command_center->build_progress) {
             ReportError("Command center building continued");
             assert(0);
             return;
@@ -114,16 +114,16 @@ public:
     float current_progress;
 
     void OnTestStart() override {
-        Unit command_center = GetCommandCenter();
-        current_progress = command_center.build_progress;
+        const Unit* command_center = GetCommandCenter();
+        current_progress = command_center->build_progress;
         ActionFeatureLayerInterface* action = agent_->ActionsFeatureLayer();
         action->UnitCommand(ABILITY_ID::SMART, command_center_pt_);
         wait_game_loops_ = 50;
     }
 
     void OnTestFinish() override {
-        Unit command_center = GetCommandCenter();
-        if (current_progress == command_center.build_progress) {
+        const Unit* command_center = GetCommandCenter();
+        if (current_progress == command_center->build_progress) {
             ReportError("Command center building would not continue");
             assert(0);
             return;
