@@ -790,6 +790,11 @@ void Coordinator::SetProcessPath(const std::string& path) {
     imp_->process_settings_.process_path = path;
 }
 
+void Coordinator::SetDataVersion(const std::string& version) {
+    assert(!imp_->starcraft_started_);
+    imp_->process_settings_.data_version = version;
+}
+
 void Coordinator::SetTimeoutMS(uint32_t timeout_ms) {
     imp_->process_settings_.timeout_ms = timeout_ms;
 }
