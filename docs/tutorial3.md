@@ -80,7 +80,7 @@ virtual void OnUnitIdle(const Unit* unit) final {
             break;
         }
         case UNIT_TYPEID::TERRAN_SCV: {
-			const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
+            const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
             if (!mineral_target) {
                 break;
             }
@@ -164,7 +164,7 @@ public:
                 break;
             }
             case UNIT_TYPEID::TERRAN_SCV: {
-				const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
+                const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
                 if (!mineral_target) {
                     break;
                 }
