@@ -24,8 +24,8 @@ Add the following code to your Bot class.
 
 ```C++
 // In your bot class.
-virtual void OnUnitIdle(const Unit& unit) final {
-    switch (unit.unit_type.ToType()) {
+virtual void OnUnitIdle(const Unit* unit) final {
+    switch (unit->unit_type.ToType()) {
         case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
             break;
@@ -63,17 +63,17 @@ bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_t
 
     // If a unit already is building a supply structure of this type, do nothing.
     // Also get an scv to build the structure.
-    Unit unit_to_build;
+    const Unit* unit_to_build = nullptr;
     Units units = observation->GetUnits(Unit::Alliance::Self);
     for (const auto& unit : units) {
-        for (const auto& order : unit.orders) {
+        for (const auto& order : unit->orders) {
             if (order.ability_id == ability_type_for_structure) {
                 return false;
             }
         }
 
-        if (unit.unit_type == unit_type) {
-            unit_to_build = unit;
+        if (unit->unit_type == unit_type) {
+           unit_to_build = unit;
         }
     }
 
@@ -82,7 +82,7 @@ bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_t
 
     Actions()->UnitCommand(unit_to_build,
         ability_type_for_structure,
-        Point2D(unit_to_build.pos.x + rx * 15.0f, unit_to_build.pos.y + ry * 15.0f));
+        Point2D(unit_to_build->pos.x + rx * 15.0f, unit_to_build->pos.y + ry * 15.0f));
 
     return true;
 }
@@ -109,15 +109,15 @@ We have already hooked into the on idle event for building SCVs, we can use that
 Refactor your OnUnitIdle function with the following.
 
 ```C++
-virtual void OnUnitIdle(const Unit& unit) final {
-    switch (unit.unit_type.ToType()) {
+virtual void OnUnitIdle(const Unit* unit) final {
+    switch (unit->unit_type.ToType()) {
         case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
             Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
             break;
         }
         case UNIT_TYPEID::TERRAN_SCV: {
-            uint64_t mineral_target;
-            if (!FindNearestMineralPatch(unit.pos, mineral_target)) {
+            const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
+            if (!mineral_target) {
                 break;
             }
             Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
@@ -135,24 +135,20 @@ virtual void OnUnitIdle(const Unit& unit) final {
 Now we just need to implement FindNearestMineralPatch and we can fix our lazy SCV.
 
 ```C++
-bool FindNearestMineralPatch(const Point2D& start, uint64_t& target) {
+const Unit* FindNearestMineralPatch(const Point2D& start) {
     Units units = Observation()->GetUnits(Unit::Alliance::Neutral);
     float distance = std::numeric_limits<float>::max();
+    const Unit* target = nullptr;
     for (const auto& u : units) {
-        if (u.unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
-            float d = DistanceSquared2D(u.pos, start);
+        if (u->unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+            float d = DistanceSquared2D(u->pos, start);
             if (d < distance) {
                 distance = d;
-                target = u.tag;
+                target = u;
             }
         }
     }
-
-    if (distance == std::numeric_limits<float>::max()) {
-        return false;
-    }
-
-    return true;
+    return target;
 }
 
 ```
@@ -173,7 +169,7 @@ Full Source Code
 ----------------
 
 ```C++
-#include "sc2api/sc2_api.h"
+#include <sc2api/sc2_api.h>
 
 #include <iostream>
 
@@ -185,19 +181,19 @@ public:
         std::cout << "Hello, World!" << std::endl;
     }
 
-    virtual void OnStep() {
+    virtual void OnStep() final {
         TryBuildSupplyDepot();
     }
 
-    virtual void OnUnitIdle(const Unit& unit) final {
-        switch (unit.unit_type.ToType()) {
+    virtual void OnUnitIdle(const Unit* unit) final {
+        switch (unit->unit_type.ToType()) {
             case UNIT_TYPEID::TERRAN_COMMANDCENTER: {
                 Actions()->UnitCommand(unit, ABILITY_ID::TRAIN_SCV);
                 break;
             }
             case UNIT_TYPEID::TERRAN_SCV: {
-                uint64_t mineral_target;
-                if (!FindNearestMineralPatch(unit.pos, mineral_target)) {
+                const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
+                if (!mineral_target) {
                     break;
                 }
                 Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
@@ -214,16 +210,16 @@ private:
 
         // If a unit already is building a supply structure of this type, do nothing.
         // Also get an scv to build the structure.
-        Unit unit_to_build;
+        const Unit* unit_to_build = nullptr;
         Units units = observation->GetUnits(Unit::Alliance::Self);
         for (const auto& unit : units) {
-            for (const auto& order : unit.orders) {
+            for (const auto& order : unit->orders) {
                 if (order.ability_id == ability_type_for_structure) {
                     return false;
                 }
             }
 
-            if (unit.unit_type == unit_type) {
+            if (unit->unit_type == unit_type) {
                 unit_to_build = unit;
             }
         }
@@ -233,7 +229,7 @@ private:
 
         Actions()->UnitCommand(unit_to_build,
             ability_type_for_structure,
-            Point2D(unit_to_build.pos.x + rx * 15.0f, unit_to_build.pos.y + ry * 15.0f));
+            Point2D(unit_to_build->pos.x + rx * 15.0f, unit_to_build->pos.y + ry * 15.0f));
 
         return true;
     }
@@ -249,24 +245,20 @@ private:
         return TryBuildStructure(ABILITY_ID::BUILD_SUPPLYDEPOT);
     }
 
-    bool FindNearestMineralPatch(const Point2D& start, uint64_t& target) {
+    const Unit* FindNearestMineralPatch(const Point2D& start) {
         Units units = Observation()->GetUnits(Unit::Alliance::Neutral);
         float distance = std::numeric_limits<float>::max();
+        const Unit* target = nullptr;
         for (const auto& u : units) {
-            if (u.unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
-                float d = DistanceSquared2D(u.pos, start);
+            if (u->unit_type == UNIT_TYPEID::NEUTRAL_MINERALFIELD) {
+                float d = DistanceSquared2D(u->pos, start);
                 if (d < distance) {
                     distance = d;
-                    target = u.tag;
+                    target = u;
                 }
             }
         }
-
-        if (distance == std::numeric_limits<float>::max()) {
-            return false;
-        }
-
-        return true;
+        return target;
     }
 };
 
