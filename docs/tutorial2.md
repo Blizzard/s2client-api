@@ -63,7 +63,7 @@ bool TryBuildStructure(ABILITY_ID ability_type_for_structure, UNIT_TYPEID unit_t
 
     // If a unit already is building a supply structure of this type, do nothing.
     // Also get an scv to build the structure.
-    const Unit* unit_to_build;
+    const Unit* unit_to_build = nullptr;
     Units units = observation->GetUnits(Unit::Alliance::Self);
     for (const auto& unit : units) {
         for (const auto& order : unit->orders) {
@@ -116,10 +116,11 @@ virtual void OnUnitIdle(const Unit* unit) final {
             break;
         }
         case UNIT_TYPEID::TERRAN_SCV: {
-            if (!FindNearestMineralPatch(unit->pos)) {
+			const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
+            if (!mineral_target) {
                 break;
             }
-            Actions()->UnitCommand(unit, ABILITY_ID::SMART, FindNearestMineralPatch(unit->pos));
+            Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
             break;
         }
         default: {
@@ -146,10 +147,6 @@ const Unit* FindNearestMineralPatch(const Point2D& start) {
                 target = u;
             }
         }
-    }
-    //If we never found one return false;
-    if (distance == std::numeric_limits<float>::max()) {
-        return target;
     }
     return target;
 }
@@ -195,10 +192,11 @@ public:
                 break;
             }
             case UNIT_TYPEID::TERRAN_SCV: {
-                if (!FindNearestMineralPatch(unit->pos)) {
+				const Unit* mineral_target = FindNearestMineralPatch(unit->pos);
+                if (!mineral_target) {
                     break;
                 }
-                Actions()->UnitCommand(unit, ABILITY_ID::SMART, FindNearestMineralPatch(unit->pos));
+                Actions()->UnitCommand(unit, ABILITY_ID::SMART, mineral_target);
                 break;
             }
             default: {
@@ -212,7 +210,7 @@ private:
 
         // If a unit already is building a supply structure of this type, do nothing.
         // Also get an scv to build the structure.
-        const Unit* unit_to_build;
+        const Unit* unit_to_build = nullptr;
         Units units = observation->GetUnits(Unit::Alliance::Self);
         for (const auto& unit : units) {
             for (const auto& order : unit->orders) {
@@ -259,10 +257,6 @@ private:
                     target = u;
                 }
             }
-        }
-        //If we never found one return false;
-        if (distance == std::numeric_limits<float>::max()) {
-            return target;
         }
         return target;
     }
