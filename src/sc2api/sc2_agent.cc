@@ -20,12 +20,12 @@ public:
 
     SC2APIProtocol::RequestAction* GetRequestAction();
 
-    void UnitCommand(const Unit* unit, AbilityID ability) override;
-    void UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point) override;
-    void UnitCommand(const Unit* unit, AbilityID ability, const Unit* target) override;
-    void UnitCommand(const Units& unit_tags, AbilityID ability) override;
-    void UnitCommand(const Units& unit_tags, AbilityID ability, const Point2D& point) override;
-    void UnitCommand(const Units& unit_tags, AbilityID ability, const Unit* target) override;
+    void UnitCommand(const Unit* unit, AbilityID ability, bool queued_command = false) override;
+    void UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point, bool queued_command = false) override;
+    void UnitCommand(const Unit* unit, AbilityID ability, const Unit* target, bool queued_command = false) override;
+    void UnitCommand(const Units& unit_tags, AbilityID ability, bool queued_command = false) override;
+    void UnitCommand(const Units& unit_tags, AbilityID ability, const Point2D& point, bool queued_command = false) override;
+    void UnitCommand(const Units& unit_tags, AbilityID ability, const Unit* target, bool queued_command = false) override;
 
 
     const std::vector<Tag>& Commands() const override;
@@ -95,28 +95,29 @@ void ActionImp::ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID abil
     autocast->set_ability_id(ability);
 }
 
-void ActionImp::UnitCommand(const Unit* unit, AbilityID ability) {
+void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, bool queued_command) {
     if (!unit) return;
-    UnitCommand(Units({ unit }), ability);
+    UnitCommand(Units({ unit }), ability, queued_command);
 }
 
-void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point) {
+void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point, bool queued_command) {
     if (!unit) return;
-    UnitCommand(Units({ unit }), ability, point);
+    UnitCommand(Units({ unit }), ability, point, queued_command);
 }
 
-void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, const Unit* target) {
+void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, const Unit* target, bool queued_command) {
     if (!unit || !target) return;
-    UnitCommand(Units({ unit }), ability, target);
+    UnitCommand(Units({ unit }), ability, target, queued_command);
 }
 
-void ActionImp::UnitCommand(const Units& units, AbilityID ability) {
+void ActionImp::UnitCommand(const Units& units, AbilityID ability, bool queued_command) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionRaw* action_raw = action->mutable_action_raw();
     SC2APIProtocol::ActionRawUnitCommand* unit_command = action_raw->mutable_unit_command();
 
     unit_command->set_ability_id(ability);
+    unit_command->set_queue_command(queued_command);
 
     for (auto unit : units) {
         if (!unit) continue;
@@ -124,7 +125,7 @@ void ActionImp::UnitCommand(const Units& units, AbilityID ability) {
     }
 }
 
-void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Point2D& point) {
+void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Point2D& point, bool queued_command) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionRaw* action_raw = action->mutable_action_raw();
@@ -134,6 +135,7 @@ void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Point2D
     SC2APIProtocol::Point2D* target_point = unit_command->mutable_target_world_space_pos();
     target_point->set_x(point.x);
     target_point->set_y(point.y);
+    unit_command->set_queue_command(queued_command);
 
     for (auto unit : units) {
         if (!unit) continue;
@@ -141,7 +143,7 @@ void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Point2D
     }
 }
 
-void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Unit* target) {
+void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Unit* target, bool queued_command) {
     SC2APIProtocol::RequestAction* request_action = GetRequestAction();
     SC2APIProtocol::Action* action = request_action->add_actions();
     SC2APIProtocol::ActionRaw* action_raw = action->mutable_action_raw();
@@ -149,6 +151,7 @@ void ActionImp::UnitCommand(const Units& units, AbilityID ability, const Unit* t
 
     unit_command->set_ability_id(ability);
     unit_command->set_target_unit_tag(target->tag);
+    unit_command->set_queue_command(queued_command);
 
     for (auto unit : units) {
         if (!unit) continue;
