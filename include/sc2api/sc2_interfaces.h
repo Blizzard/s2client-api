@@ -291,28 +291,28 @@ public:
     //! Issues a command to a unit. Self targeting.
     //!< \param unit The unit to send the command to.
     //!< \param ability The ability id of the command.
-    virtual void UnitCommand(const Unit* unit, AbilityID ability) = 0;
+    virtual void UnitCommand(const Unit* unit, AbilityID ability, bool queued_command = false) = 0;
 
     //! Issues a command to a unit. Targets a point.
     //!< \param unit The unit to send the command to.
     //!< \param ability The ability id of the command.
     //!< \param point The 2D world position to target.
-    virtual void UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point) = 0;
+    virtual void UnitCommand(const Unit* unit, AbilityID ability, const Point2D& point, bool queued_command = false) = 0;
 
     //! Issues a command to a unit. Targets another unit.
     //!< \param unit The unit to send the command to.
     //!< \param ability The ability id of the command.
     //!< \param target The unit that is a target of the unit getting the command.
-    virtual void UnitCommand(const Unit* unit, AbilityID ability, const Unit* target) = 0;
+    virtual void UnitCommand(const Unit* unit, AbilityID ability, const Unit* target, bool queued_command = false) = 0;
 
     //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID).
-    virtual void UnitCommand(const Units& units, AbilityID ability) = 0;
+    virtual void UnitCommand(const Units& units, AbilityID ability, bool queued_move = false) = 0;
 
     //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID, Point2D).
-    virtual void UnitCommand(const Units& units, AbilityID ability, const Point2D& point) = 0;
+    virtual void UnitCommand(const Units& units, AbilityID ability, const Point2D& point, bool queued_command = false) = 0;
 
     //! Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID, Unit).
-    virtual void UnitCommand(const Units& units, AbilityID ability, const Unit* target) = 0;
+    virtual void UnitCommand(const Units& units, AbilityID ability, const Unit* target, bool queued_command = false) = 0;
 
     //! Returns a list of unit tags that have sent commands out in the last call to SendActions. This will be used to determine
     //! if a unit actually has a command when the observation is received.
