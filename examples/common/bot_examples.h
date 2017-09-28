@@ -69,7 +69,7 @@ public:
 
     bool GetRandomUnit(const Unit*& unit_out, const ObservationInterface* observation, UnitTypeID unit_type);
 
-    const Unit* MultiplayerBot::FindNearestMineralPatch(const Point2D& start);
+    const Unit* FindNearestMineralPatch(const Point2D& start);
 
     // Tries to find a random location that can be pathed to on the map.
     // Returns 'true' if a new, random location has been found that is pathable by the unit.
