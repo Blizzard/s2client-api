@@ -80,9 +80,9 @@ public:
 
         // Find a selected unit. {
         const sc2::Unit* unit = nullptr;
-        for (const sc2::Unit& try_unit : obs->GetUnits()) {
-            if (try_unit.is_selected && try_unit.alliance == sc2::Unit::Self) {
-                unit = &try_unit;
+        for (const auto& try_unit : obs->GetUnits()) {
+            if (try_unit->is_selected && try_unit->alliance == sc2::Unit::Self) {
+                unit = try_unit;
                 break;
             }
         }
@@ -103,7 +103,7 @@ public:
             debug_txt += " (" + std::to_string(unit->unit_type) + ")";
         }
 
-        sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit->tag);
+        sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit);
         if (available_abilities.abilities.size() < 1) {
             std::cout << "No abilities available for this unit" << std::endl;
         }

@@ -17,10 +17,10 @@ typedef MessageResponsePtr<SC2APIProtocol::ResponseGameInfo> ResponseGameInfoPtr
 typedef MessageResponsePtr<SC2APIProtocol::ResponseQuery> ResponseQueryPtr;
 
 bool Convert(const ObservationPtr& observation_ptr, Score& score);
-bool Convert(const ObservationRawPtr& observation_ptr, Units& units);
+bool Convert(const ObservationRawPtr& observation_ptr, UnitPool& unit_pool, uint32_t game_loop);
 bool Convert(const ObservationPtr& observation_ptr, RenderedFrame& render);
-bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions& actions, const Units& units, uint32_t player_id);
-bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions, const Units& units, uint32_t player_id);
+bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions& actions);
+bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions);
 bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_info);
 
 Race ConvertRaceFromProto(SC2APIProtocol::Race race);

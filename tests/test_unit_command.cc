@@ -35,14 +35,12 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (test_unit.cloak != Unit::CloakState::Cloaked) {
-                    ReportError("Unit is not cloaked as expected.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && test_unit_->cloak != Unit::CloakState::Cloaked) {
+                ReportError("Unit is not cloaked as expected.");
             }
 
             VerifyUnitIdleAfterOrder(test_unit_type_);
@@ -132,10 +130,10 @@ namespace sc2 {
             }
 
             if (barracks_units.size() == 1 && techlab_units.size() == 1) {
-                if (barracks_units[0].add_on_tag == 0LL) {
+                if (barracks_units[0]->add_on_tag == 0LL) {
                     ReportError("Barracks does not have an add-on.");
                 }
-                if (barracks_units[0].add_on_tag != techlab_units[0].tag) {
+                if (barracks_units[0]->add_on_tag != techlab_units[0]->tag) {
                     ReportError("Barracks add on tag does not match tech lab tag.");
                 }
             }
@@ -174,10 +172,10 @@ namespace sc2 {
             }
 
             if (barracks_units.size() == 1 && techlab_units.size() == 1) {
-                if (barracks_units[0].add_on_tag == 0LL) {
+                if (barracks_units[0]->add_on_tag == 0LL) {
                     ReportError("Barracks does not have an add-on.");
                 }
-                if (barracks_units[0].add_on_tag != techlab_units[0].tag) {
+                if (barracks_units[0]->add_on_tag != techlab_units[0]->tag) {
                     ReportError("Barracks add on tag does not match tech lab tag.");
                 }
             }
@@ -217,10 +215,10 @@ namespace sc2 {
             }
 
             if (barracks_units.size() == 1 && techlab_units.size() == 1) {
-                if (barracks_units[0].add_on_tag == 0LL) {
+                if (barracks_units[0]->add_on_tag == 0LL) {
                     ReportError("Barracks does not have an add-on.");
                 }
-                if (barracks_units[0].add_on_tag != techlab_units[0].tag) {
+                if (barracks_units[0]->add_on_tag != techlab_units[0]->tag) {
                     ReportError("Barracks add on tag does not match tech lab tag.");
                 }
             }
@@ -394,7 +392,7 @@ namespace sc2 {
 
     class TestCancelBuildInProgressFactory : public TestUnitCommandNoTarget {
     public:
-        Unit test_factory_;
+        const Unit* test_factory_;
         bool factory_built_ = false;
 
         TestCancelBuildInProgressFactory() {
@@ -415,8 +413,8 @@ namespace sc2 {
             }
 
             const Units& units = obs->GetUnits(Unit::Alliance::Self);
-            for (const Unit& unit : units) {
-                if (unit.unit_type == test_unit_type_) {
+            for (const auto& unit : units) {
+                if (unit->unit_type == test_unit_type_) {
                     test_unit_ = unit;
                 }
             }
@@ -426,8 +424,8 @@ namespace sc2 {
                 factory_built_ = true;
             }
 
-            for (const Unit& unit : units) {
-                if (unit.unit_type == UNIT_TYPEID::TERRAN_FACTORY) {
+            for (const auto& unit : units) {
+                if (unit->unit_type == UNIT_TYPEID::TERRAN_FACTORY) {
                     test_factory_ = unit;
                 }
             }
@@ -481,9 +479,9 @@ namespace sc2 {
                 return;
             }
 
-            const Units& units = obs->GetUnits(Unit::Alliance::Self);
-            for (const Unit& unit : units) {
-                if (unit.unit_type == test_unit_type_) {
+            Units units = obs->GetUnits(Unit::Alliance::Self);
+            for (const auto& unit : units) {
+                if (unit->unit_type == test_unit_type_) {
                     test_unit_ = unit;
                 }
             }
@@ -558,14 +556,12 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (Point2D(test_unit.pos) != target_point_) {
-                    ReportError("New stalker location is incorrect, blink did not fire.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && Point2D(test_unit_->pos) != target_point_) {
+                ReportError("New stalker location is incorrect, blink did not fire.");
             }
 
             KillAllUnits();
@@ -601,8 +597,8 @@ namespace sc2 {
             ActionInterface* act = agent_->Actions();
             const Units& units = obs->GetUnits();
 
-            for (const Unit& unit : units) {
-                if (unit.unit_type == target_unit_type_) {
+            for (const auto& unit : units) {
+                if (unit->unit_type == target_unit_type_) {
                     target_unit_ = unit;
                 }
             }
@@ -621,7 +617,7 @@ namespace sc2 {
                 return;
             }
 
-            if (!ability_command_sent_ && target_unit_.health != 50) {
+            if (!ability_command_sent_ && target_unit_->health != 50) {
                 ReportError("Pre-ability target unit health is not correct.");
             }
 
@@ -637,7 +633,7 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            if (target_unit_.health != target_unit_.health_max) {
+            if (target_unit_->health != target_unit_->health_max) {
                 ReportError("Post-ability target unit health is not correct.");
             }
             KillAllUnits();
@@ -661,17 +657,15 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (test_unit.buffs.front() != BUFF_ID::STIMPACK) {
-                    ReportError("Stimpack buff is not present.");
-                }
-                if (test_unit.health == test_unit.health_max) {
-                    ReportError("Unit health at unexpected value, stimpack did not fire.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && test_unit_->buffs.front() != BUFF_ID::STIMPACK) {
+                ReportError("Stimpack buff is not present.");
+            }
+            if (test_unit_ && test_unit_->health == test_unit_->health_max) {
+                ReportError("Unit health at unexpected value, stimpack did not fire.");
             }
 
             VerifyUnitIdleAfterOrder(test_unit_type_);
@@ -686,7 +680,7 @@ namespace sc2 {
 
     class TestEffectScan : public TestUnitCommandTargetingPoint {
     public:
-        Unit test_hatchery_;
+        const Unit* test_hatchery_;
         bool hatchery_spawned_ = false;
         bool verify_pre_scan_ = false;
         bool verify_post_scan_ = false;
@@ -723,25 +717,25 @@ namespace sc2 {
 
             Units units = obs->GetUnits();
 
-            Unit test_unit;
-            for (const Unit& unit : units) {
-                if (unit.unit_type == test_unit_type_) {
-                    test_unit_ = unit.tag;
+            const Unit* test_unit;
+            for (const auto& unit : units) {
+                if (unit->unit_type == test_unit_type_) {
+                    test_unit_ = unit;
                     test_unit = unit;
                 }
             }
 
-            for (const Unit& unit : units) {
-                if (unit.unit_type == UNIT_TYPEID::ZERG_HATCHERY) {
+            for (const auto& unit : units) {
+                if (unit->unit_type == UNIT_TYPEID::ZERG_HATCHERY) {
                     test_hatchery_ = unit;
                 }
             }
 
             if (!verify_pre_scan_) {
-                if (units.size() != 1 || units.front().unit_type != UNIT_TYPEID::TERRAN_ORBITALCOMMAND) {
+                if (units.size() != 1 || units.front()->unit_type != UNIT_TYPEID::TERRAN_ORBITALCOMMAND) {
                     ReportError("Enemy structure is not initially hidden.");
                 }
-                if (test_unit.energy < 50.30 || test_unit.energy > 50.32) {
+                if (test_unit->energy < 50.30 || test_unit->energy > 50.32) {
                     ReportError("Test pre-ability unit energy is not correct.");
                 }
                 verify_pre_scan_ = true;
@@ -767,19 +761,19 @@ namespace sc2 {
             }
 
             if (!verify_post_scan_) {
-                if (test_unit.energy < 0.83 || test_unit.energy > 0.85) {
+                if (test_unit->energy < 0.83 || test_unit->energy > 0.85) {
                     ReportError("Test post-ability unit energy is not correct.");
                 }
-                if (test_hatchery_.display_type != Unit::DisplayType::Visible) {
+                if (test_hatchery_->display_type != Unit::DisplayType::Visible) {
                     ReportError("Enemy structure is not visible.");
                 }
-                if (test_hatchery_.is_on_screen == true) {
+                if (test_hatchery_->is_on_screen == true) {
                     ReportError("Enemy structure on screen is true.");
                 }
-                if (test_hatchery_.alliance != Unit::Alliance::Enemy) {
+                if (test_hatchery_->alliance != Unit::Alliance::Enemy) {
                     ReportError("Enemy alliance is incorrect.");
                 }
-                if (test_hatchery_.owner != 2) {
+                if (test_hatchery_->owner != 2) {
                     ReportError("Owner of unit is incorrect.");
                 }
                 verify_post_scan_ = true;
@@ -787,10 +781,10 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            if (test_hatchery_.display_type != Unit::DisplayType::Snapshot) {
+            if (test_hatchery_->display_type != Unit::DisplayType::Snapshot) {
                 ReportError("On finish display type for hatchery is incorrect.");
             }
-            if (test_hatchery_.owner != 2) {
+            if (test_hatchery_->owner != 2) {
                 ReportError("Owner of unit is incorrect.");
             }
             KillAllUnits();
@@ -829,18 +823,16 @@ namespace sc2 {
                 return unit.unit_type == UNIT_TYPEID::PROTOSS_NEXUS;
             });
 
-            if (target_unit_.mineral_contents < 1400) {
+            if (target_unit_->mineral_contents < 1400) {
                 ReportError("Mineral patch does not contain any minerals.");
             }
 
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (test_unit.orders.front().ability_id != ABILITY_ID::HARVEST_RETURN) {
-                    ReportError("Unit does not have correct post-harvest ability in orders.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && test_unit_->orders.front().ability_id != ABILITY_ID::HARVEST_RETURN) {
+                ReportError("Unit does not have correct post-harvest ability in orders.");
             }
 
             // This issue is specific to debug spawns, so this may not be fixed, and this test is not valid.
@@ -892,20 +884,18 @@ namespace sc2 {
                     ReportError("Could not find any geysers.");
                 }
                 else {
-                    if (geysers[0].vespene_contents < 100){
+                    if (geysers[0]->vespene_contents < 100){
                         ReportError("Geyser patch does not contain any vespene.");
                     }
                 }
             }
 
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (test_unit.orders.front().ability_id != ABILITY_ID::HARVEST_RETURN) {
-                    ReportError("Unit does not have correct post-harvest ability in orders.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && test_unit_->orders.front().ability_id != ABILITY_ID::HARVEST_RETURN) {
+                ReportError("Unit does not have correct post-harvest ability in orders.");
             }
 
             // This issue is specific to debug spawns, so this may not be fixed, and this test is not valid.
@@ -1094,17 +1084,15 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (Point2D(test_unit.pos) != target_point_) {
-                    ReportError("Unit did not move to the target point.");
-                }
-                if (test_unit.facing < 3.09300422 || test_unit.facing > 3.19114877) {
-                    ReportError("Unit facing out of expected range after move.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && Point2D(test_unit_->pos) != target_point_) {
+                ReportError("Unit did not move to the target point.");
+            }
+            if (test_unit_ && test_unit_->facing < 3.09300422 || test_unit_->facing > 3.19114877) {
+                ReportError("Unit facing out of expected range after move.");
             }
 
             KillAllUnits();
@@ -1128,15 +1116,13 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                Point2D patrol_target = test_unit.orders.front().target_pos;
-                if ((patrol_target != target_point_) && (patrol_target != origin_pt_)) {
-                    ReportError("Unit no longer has target patrol point in orders.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            Point2D patrol_target = test_unit_->orders.front().target_pos;
+            if (test_unit_ && (patrol_target != target_point_) && (patrol_target != origin_pt_)) {
+                ReportError("Unit no longer has target patrol point in orders.");
             }
 
             KillAllUnits();
@@ -1170,9 +1156,9 @@ namespace sc2 {
                 return;
             }
 
-            const Units& units = obs->GetUnits(Unit::Alliance::Self);
-            for (const Unit& unit : units) {
-                if (unit.unit_type == test_unit_type_) {
+            Units units = obs->GetUnits(Unit::Alliance::Self);
+            for (const auto& unit : units) {
+                if (unit->unit_type == test_unit_type_) {
                     test_unit_ = unit;
                 }
             }
@@ -1202,7 +1188,7 @@ namespace sc2 {
                 return unit.unit_type == UNIT_TYPEID::TERRAN_MARINE;
             });
 
-            if (Point2D(test_marine_units.front().pos) != target_point_) {
+            if (Point2D(test_marine_units.front()->pos) != target_point_) {
                 ReportError("Trained marine is not at rally point.");
             }
 
@@ -1266,16 +1252,16 @@ namespace sc2 {
             const ObservationInterface* obs = agent_->Observation();
             const Units& target_units = obs->GetUnits(Unit::Alliance::Enemy);
 
-            if (target_units.front().is_blip != true) {
+            if (target_units.front()->is_blip != true) {
                 ReportError("Target unit is not a blip.");
             }
-            if (target_units.front().cloak != Unit::CloakState::Unknown) {
+            if (target_units.front()->cloak != Unit::CloakState::Unknown) {
                 ReportError("Target unit cloak state is incorrect.");
             }
-            if (target_units.front().display_type != Unit::DisplayType::Hidden) {
+            if (target_units.front()->display_type != Unit::DisplayType::Hidden) {
                 ReportError("Target unit is not hidden.");
             }
-            if (target_units.front().owner != 0) {
+            if (target_units.front()->owner != 0) {
                 ReportError("Owner of unit is incorrect.");
             }
 
@@ -1310,9 +1296,9 @@ namespace sc2 {
                 return unit.unit_type == test_unit_type_;
             });
 
-            Unit test_unit;
+            const Unit* test_unit = nullptr;
             if (test_units_.size() > 0) {
-                test_unit_ = test_units_.front().tag;
+                test_unit_ = test_units_.front();
                 test_unit = test_units_.front();
             }
 
@@ -1321,7 +1307,7 @@ namespace sc2 {
             }
 
             if (!test_unit_damaged_) {
-                if (test_unit.shield != 50) {
+                if (test_unit->shield != 50) {
                     ReportError("Pre-damage test unit shield is not correct.");
                 }
                 agent_->Debug()->DebugSetShields(25, test_unit_);
@@ -1334,7 +1320,7 @@ namespace sc2 {
             }
 
             if (!shields_verified_) {
-                if (test_unit.shield < 25 || test_unit.shield > 25.2) {
+                if (test_unit->shield < 25 || test_unit->shield > 25.2) {
                     ReportError("Post-damage test unit shield is not correct.");
                 }
                 shields_verified_ = true;
@@ -1380,14 +1366,14 @@ namespace sc2 {
                 return unit.unit_type == test_unit_type_;
             });
 
-            Unit test_unit;
+            const Unit* test_unit = nullptr;
             if (test_units_.size() > 0) {
-                test_unit_ = test_units_.front().tag;
+                test_unit_ = test_units_.front();
                 test_unit = test_units_.front();
             }
 
             if (!move_command_sent_) {
-                starting_point_ = Point2D(test_unit.pos);
+                starting_point_ = Point2D(test_unit->pos);
                 act->UnitCommand(test_unit_, ABILITY_ID::MOVE, target_point_);
                 move_command_sent_ = true;
             }
@@ -1400,20 +1386,18 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (Point2D(test_unit.pos) == starting_point_) {
-                    ReportError("Unit did not start moving as expected.");
-                }
-                if (Point2D(test_unit.pos) == target_point_) {
-                    ReportError("Unit did not stop moving as expected.");
-                }
-                if (test_unit.orders.size() != 0) {
-                     ReportError("Unit still has orders that were not stopped.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
+            }
+
+            if (test_unit_ && Point2D(test_unit_->pos) == starting_point_) {
+                ReportError("Unit did not start moving as expected.");
+            }
+            if (test_unit_ && Point2D(test_unit_->pos) == target_point_) {
+                ReportError("Unit did not stop moving as expected.");
+            }
+            if (test_unit_ && test_unit_->orders.size() != 0) {
+                    ReportError("Unit still has orders that were not stopped.");
             }
 
             KillAllUnits();
@@ -1454,7 +1438,7 @@ namespace sc2 {
                 return unit.unit_type == UNIT_TYPEID::PROTOSS_ZEALOT;
             });
 
-            if (Point2D(test_warped_zealot.front().pos) != target_point_) {
+            if (Point2D(test_warped_zealot.front()->pos) != target_point_) {
                 ReportError("Unit did not warp to target point.");
             }
             KillAllUnits();
@@ -1595,7 +1579,7 @@ namespace sc2 {
             });
 
             if (test_units_.size() > 0) {
-                test_unit_ = test_units_.front().tag;
+                test_unit_ = test_units_.front();
             }
 
             IssueUnitCommand(act);
@@ -1610,24 +1594,23 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (test_unit.passengers.front().tag != target_unit_.tag) {
-                    ReportError("Passenger tag does not match target unit tag.");
-                }
-                if (test_unit.passengers.size() != 1) {
-                    ReportError("Unit count in bunker is not 1.");
-                }
-                if (test_unit.cargo_space_max != 6) {
-                    ReportError("Bunker cargo space max is not correct.");
-                }
-                if (test_unit.cargo_space_taken != 2) {
-                    ReportError("Bunker cargo space taken is not correct.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
             }
+
+            if (test_unit_ && test_unit_->passengers.front().tag != target_unit_->tag) {
+                ReportError("Passenger tag does not match target unit tag.");
+            }
+            if (test_unit_ && test_unit_->passengers.size() != 1) {
+                ReportError("Unit count in bunker is not 1.");
+            }
+            if (test_unit_ && test_unit_->cargo_space_max != 6) {
+                ReportError("Bunker cargo space max is not correct.");
+            }
+            if (test_unit_ && test_unit_->cargo_space_taken != 2) {
+                ReportError("Bunker cargo space taken is not correct.");
+            }
+
 
             KillAllUnits();
         }
@@ -1670,9 +1653,9 @@ namespace sc2 {
                 return unit.unit_type == test_unit_type_;
             });
 
-            Unit test_unit;
+            const Unit* test_unit = nullptr;
             if (test_units_.size() > 0) {
-                test_unit_ = test_units_.front().tag;
+                test_unit_ = test_units_.front();
                 test_unit = test_units_.front();
             }
 
@@ -1681,7 +1664,7 @@ namespace sc2 {
             });
 
             if (!marauders_loaded_) {
-                act->UnitCommand(GetTagListFromUnits(test_marauder_units), ABILITY_ID::SMART, test_unit_);
+                act->UnitCommand(test_marauder_units, ABILITY_ID::SMART, test_unit_);
                 marauders_loaded_ = true;
             }
 
@@ -1689,7 +1672,7 @@ namespace sc2 {
                 return;
             }
 
-            if (!ability_command_sent_ && test_unit.cargo_space_taken != 6) {
+            if (!ability_command_sent_ && test_unit->cargo_space_taken != 6) {
                 ReportError("Units are not present in bunker as expected.");
             }
 
@@ -1697,21 +1680,20 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            Unit test_unit;
-            if (GetTestUnit(test_unit)) {
-                if (test_unit.passengers.size() != 0) {
-                    ReportError("Unit count in bunker is not 0.");
-                }
-                if (test_unit.cargo_space_max != 6) {
-                    ReportError("Bunker cargo space max is not correct.");
-                }
-                if (test_unit.cargo_space_taken != 0) {
-                    ReportError("Bunker cargo space taken is not correct.");
-                }
-            }
-            else {
+            if (!test_unit_) {
                 ReportError("Could not find the test unit.");
             }
+
+            if (test_unit_ && test_unit_->passengers.size() != 0) {
+                ReportError("Unit count in bunker is not 0.");
+            }
+            if (test_unit_ && test_unit_->cargo_space_max != 6) {
+                ReportError("Bunker cargo space max is not correct.");
+            }
+            if (test_unit_ && test_unit_->cargo_space_taken != 0) {
+                ReportError("Bunker cargo space taken is not correct.");
+            }
+
             KillAllUnits();
         }
     };

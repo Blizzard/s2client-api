@@ -140,92 +140,6 @@ namespace sc2 {
         }
     };
 
-    class TestGetPreviousUnit : public TestSequence {
-    public:
-        uint32_t starting_game_loop;
-        void OnTestStart() {
-            wait_game_loops_ = 10;
-            starting_game_loop = agent_->Observation()->GetGameLoop();
-            const GameInfo& game_info = agent_->Observation()->GetGameInfo();
-            Point2D origin_pt_ = FindCenterOfMap(game_info);
-            agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARINE, origin_pt_, agent_->Observation()->GetPlayerID(), 1);
-            agent_->Debug()->SendDebug();
-           
-        }
-
-        void OnStep() {
-            const ObservationInterface* obs = agent_->Observation();
-
-            //Throttle actions
-            if (obs->GetGameLoop() == starting_game_loop + 2) {
-                Units units = obs->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::TERRAN_MARINE));
-                if (units.empty()) {
-                    ReportError("No Unit Made");
-                }
-
-                agent_->Actions()->UnitCommand(units.front().tag, ABILITY_ID::EFFECT_STIM);
-            }
-
-            if (obs->GetGameLoop() == starting_game_loop + 3) {
-                Units units = obs->GetUnits(Unit::Self, IsUnit(UNIT_TYPEID::TERRAN_MARINE));
-                if (units.empty()) {
-                    ReportError("No Unit Made");
-                }
-
-                const Unit* previous_unit = obs->GetPreviousUnit(units.front().tag);
-                if (previous_unit->health != units.front().health_max && units.front().health != units.front().health_max - 10) {
-                    ReportError("Get Previous Unit did not return the correct unit");
-                }
-            }
-        }
-        void OnTestFinish() {
-            KillAllUnits();
-        }
-    };
-
-    class TestGetUnitQueries : public TestSequence {
-    public:
-        uint32_t starting_game_loop;
-        void OnTestStart() {
-            wait_game_loops_ = 10;
-            starting_game_loop = agent_->Observation()->GetGameLoop();
-
-        }
-
-        void OnStep() {
-            const ObservationInterface* obs = agent_->Observation();
-            const GameInfo& game_info = agent_->Observation()->GetGameInfo();
-            Point2D origin_pt_ = FindCenterOfMap(game_info);
-            //Throttle actions
-            if (obs->GetGameLoop() == starting_game_loop + 2) {
-                agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::PROTOSS_ZEALOT, origin_pt_, agent_->Observation()->GetPlayerID(), 1);
-                agent_->Debug()->SendDebug();
-            }
-            //Debug Messages take a while to send
-            if (obs->GetGameLoop() == starting_game_loop + 4) {
-                Units units_added = obs->GetUnitsAdded();
-                if (units_added.empty()) {
-                    ReportError("No units Reported from GetUnitsAdded() ");
-                }
-            }
-
-            if (obs->GetGameLoop() == starting_game_loop + 5) {
-                KillAllUnits();
-            }
-
-            if (obs->GetGameLoop() == starting_game_loop + 7) {
-                Units units_removed = obs->GetUnitsRemoved();
-                if (units_removed.empty()) {
-                    ReportError("No units returned from getUnitsRemoved()");
-                }
-            }
-        }
-
-        void OnTestFinish() {
-            KillAllUnits();
-        }
-    };
-
     class TestGetUnitData : public TestSequence {
         void OnTestStart() {
             const ObservationInterface* obs = agent_->Observation();
@@ -300,8 +214,6 @@ TestObservationBot::TestObservationBot() :
     Add(TestGetFoodCount());
     Add(TestGetBuffData());
     Add(TestGetResources());
-    Add(TestGetPreviousUnit());
-    Add(TestGetUnitQueries());
 }
 
 void TestObservationBot::OnTestsBegin() {

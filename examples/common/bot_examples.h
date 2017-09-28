@@ -10,13 +10,13 @@ class MarineMicroBot : public Agent {
 public:
     virtual void OnGameStart() final;
     virtual void OnStep() final;
-    virtual void OnUnitDestroyed(const Unit& unit) override;
+    virtual void OnUnitDestroyed(const Unit* unit) override;
 
 private:
     bool GetPosition(UNIT_TYPEID unit_type, Unit::Alliance alliace, Point2D& position);
     bool GetNearestZergling(const Point2D& from);
 
-    Tag targeted_zergling_;
+    const Unit* targeted_zergling_;
     bool move_back_;
     Point2D backup_target_;
     Point2D backup_start_;
@@ -38,7 +38,7 @@ public:
 
     // Tries to find a random location that can be pathed to on the map.
     // Returns 'true' if a new, random location has been found that is pathable by the unit.
-    bool FindEnemyPosition(Tag tag, Point2D& target_pos);
+    bool FindEnemyPosition(Point2D& target_pos);
     void ScoutWithMarines();
     bool TryBuildStructure(AbilityID ability_type_for_structure, UnitTypeID unit_type = UNIT_TYPEID::TERRAN_SCV);
     bool TryBuildSupplyDepot();
@@ -67,15 +67,15 @@ public:
 
     size_t CountUnitTypeTotal(const ObservationInterface* observation, std::vector<UNIT_TYPEID> unit_type, UNIT_TYPEID production, ABILITY_ID ability);
 
-    bool GetRandomUnit(Unit& unit_out, const ObservationInterface* observation, UnitTypeID unit_type);
+    bool GetRandomUnit(const Unit*& unit_out, const ObservationInterface* observation, UnitTypeID unit_type);
 
-    bool FindNearestMineralPatch(const Point2D& start, Tag& target);
+    const Unit* FindNearestMineralPatch(const Point2D& start);
 
     // Tries to find a random location that can be pathed to on the map.
     // Returns 'true' if a new, random location has been found that is pathable by the unit.
-    bool FindEnemyPosition(Tag tag, Point2D& target_pos);
+    bool FindEnemyPosition(Point2D& target_pos);
 
-    bool TryFindRandomPathableLocation(Tag tag, Point2D& target_pos);
+    bool TryFindRandomPathableLocation(const Unit* unit, Point2D& target_pos);
 
     void AttackWithUnitType(UnitTypeID unit_type, const ObservationInterface* observation);
 
@@ -83,11 +83,11 @@ public:
 
     void RetreatWithUnits(UnitTypeID unit_type, Point2D retreat_position);
 
-    void AttackWithUnit(Unit unit, const ObservationInterface* observation);
+    void AttackWithUnit(const Unit* unit, const ObservationInterface* observation);
 
-    void ScoutWithUnit(Unit unit, const ObservationInterface* observation);
+    void ScoutWithUnit(const Unit* unit, const ObservationInterface* observation);
 
-    void RetreatWithUnit(Unit unit, Point2D retreat_position);
+    void RetreatWithUnit(const Unit* unit, Point2D retreat_position);
 
     //Try build structure given a location. This is used most of the time
     bool TryBuildStructure(AbilityID ability_type_for_structure, UnitTypeID unit_type, Point2D location, bool isExpansion);
@@ -105,7 +105,7 @@ public:
 
     // Mine the nearest mineral to Town hall.
     // If we don't do this, probes may mine from other patches if they stray too far from the base after building.
-    void MineIdleWorkers(Tag worker_tag, AbilityID worker_gather_command, UnitTypeID vespene_building_type);
+    void MineIdleWorkers(const Unit* unit, AbilityID worker_gather_command, UnitTypeID vespene_building_type);
 
     //An estimate of how many workers we should have based on what buildings we have
     int GetExpectedWorkers(UNIT_TYPEID vespene_building_type);
@@ -163,7 +163,7 @@ public:
 
     virtual void OnGameEnd() final;
 
-    virtual void OnUnitIdle(const Unit& unit);
+    virtual void OnUnitIdle(const Unit* unit) override;
 
     virtual void OnUpgradeCompleted(UpgradeID upgrade) final;
 
@@ -201,7 +201,7 @@ public:
 
     virtual void OnStep() final;
 
-    virtual void OnUnitIdle(const Unit& unit) final;
+    virtual void OnUnitIdle(const Unit* unit) override;
 
 private:
     std::vector<UNIT_TYPEID> hatchery_types = { UNIT_TYPEID::ZERG_HATCHERY, UNIT_TYPEID::ZERG_HIVE, UNIT_TYPEID::ZERG_LAIR };
@@ -234,9 +234,9 @@ public:
 
     virtual void OnStep() final;
 
-    virtual void OnUnitIdle(const Unit& unit) final;
+    virtual void OnUnitIdle(const Unit* unit) override;
 
-    virtual void OnUpgradeCompleted(UpgradeID upgrade) final;
+    virtual void OnUpgradeCompleted(UpgradeID upgrade) override;
 
 private:
     std::vector<UNIT_TYPEID> barrack_types = { UNIT_TYPEID::TERRAN_BARRACKSFLYING, UNIT_TYPEID::TERRAN_BARRACKS };

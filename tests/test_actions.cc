@@ -22,10 +22,10 @@ public:
         const ObservationInterface* obs = agent_->Observation();
         ActionInterface* act = agent_->Actions();
 
-        for (const Unit& unit : obs->GetUnits()) {
+        for (const auto& unit : obs->GetUnits()) {
             sc2::Point2D target(
-               (unit.pos.x < 35.0f) ? 40.0f : 30.0f,
-                unit.pos.y
+               (unit->pos.x < 35.0f) ? 40.0f : 30.0f,
+                unit->pos.y
             );
 
             act->UnitCommand(unit, ABILITY_ID::PATROL, target);
@@ -43,11 +43,11 @@ public:
         const ObservationInterface* obs = agent_->Observation();
         ActionFeatureLayerInterface* act = agent_->ActionsFeatureLayer();
 
-        for (const Unit& unit : obs->GetUnits()) {
-            if (unit.is_selected)
+        for (const auto& unit : obs->GetUnits()) {
+            if (unit->is_selected)
                 continue;
 
-            target = ConvertWorldToCamera(obs->GetGameInfo(), obs->GetCameraPos(), unit.pos);
+            target = ConvertWorldToCamera(obs->GetGameInfo(), obs->GetCameraPos(), unit->pos);
             act->Select(target, PointSelectionType::PtSelect);
             return;
         }

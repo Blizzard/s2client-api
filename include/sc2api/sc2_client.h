@@ -58,18 +58,18 @@ public:
 
     //! Called whenever one of the player's units has been destroyed.
     //!< \param unit The destroyed unit.
-    virtual void OnUnitDestroyed(const Unit&) {}
+    virtual void OnUnitDestroyed(const Unit*) {}
 
     //! Called when a Unit has been created by the player.
     //!< \param unit The created unit.
-    virtual void OnUnitCreated(const Unit&) {}
+    virtual void OnUnitCreated(const Unit*) {}
 
     //! Called when a unit becomes idle, this will only occur as an event so will only be called when the unit becomes
     //! idle and not a second time. Being idle is defined by having orders in the previous step and not currently having
     //! orders or if it did not exist in the previous step and now does, a unit being created, for instance, will call both
     //! OnUnitCreated and OnUnitIdle if it does not have a rally set.
     //!< \param unit The idle unit.
-    virtual void OnUnitIdle(const Unit&) {}
+    virtual void OnUnitIdle(const Unit*) {}
 
     //! Called when an upgrade is finished, warp gate, ground weapons, baneling speed, etc.
     //!< \param upgrade The completed upgrade.
@@ -77,7 +77,7 @@ public:
 
     //! Called when the unit in the previous step had a build progress less than 1.0 but is greater than or equal to 1.0 in the current step.
     //!< \param unit The constructed unit.
-    virtual void OnBuildingConstructionComplete(const Unit&) {}
+    virtual void OnBuildingConstructionComplete(const Unit*) {}
 
     //! Called when a nydus is placed.
     virtual void OnNydusDetected() {}
@@ -87,7 +87,7 @@ public:
 
     //! Called when an enemy unit enters vision from out of fog of war.
     //!< \param unit The unit entering vision.
-    virtual void OnUnitEnterVision(const Unit&) {}
+    virtual void OnUnitEnterVision(const Unit*) {}
 
     //! Called for various errors the library can encounter. See ClientError enum for possible errors.
     virtual void OnError(const std::vector<ClientError>& /*client_errors*/, const std::vector<std::string>& /*protocol_errors*/ = {}) {}
