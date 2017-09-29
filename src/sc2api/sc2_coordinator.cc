@@ -274,10 +274,10 @@ void CoordinatorImp::StartReplay() {
 
         auto& replays = replay_settings_.replay_file;
         while (replays.size() != 0) {
-            const std::string& file = replay_settings_.replay_file.front();
+            const std::string& file = replay_settings_.replay_file.back();
 
             if (ShouldIgnore(r, file)) {
-                replays.erase(replays.begin());
+                replays.pop_back();
                 continue;
             }
 
@@ -286,7 +286,7 @@ void CoordinatorImp::StartReplay() {
             }
 
             bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
-            replays.erase(replays.begin());
+            replays.pop_back();
             if (launched)
                 break;
         }
