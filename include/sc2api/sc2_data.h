@@ -186,6 +186,8 @@ struct UnitTypeData {
     bool has_minerals;
     //! Whether the unit can have vespene (vespene geysers).
     bool has_vespene;
+    //! Range the unit reveals vision.
+    float sight_range;
 
     //! Units this is equivalent to in terms of satisfying tech requirements.
     std::vector<UnitTypeID> tech_alias;
