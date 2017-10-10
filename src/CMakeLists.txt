@@ -72,12 +72,6 @@ foreach (proto ${proto_files})
     get_filename_component(proto_name_we ${proto} NAME_WE)
     set(outputCC ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.cc)
     set(outputH ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name_we}.pb.h)
-<<<<<<< HEAD
-=======
-
-    message(${proto})
-    message(${proto_name_we})
->>>>>>> 8a1473f... Fixed protocol include paths.
 
     add_custom_command(
         DEPENDS protoc
