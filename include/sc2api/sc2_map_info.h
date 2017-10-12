@@ -67,6 +67,8 @@ struct PlayerInfo {
 
 //! Initial data for a game and map.
 struct GameInfo {
+    //! Plain text name of a map. Note that this may be different from the filename of the map.
+    std::string map_name;
     //! World width of a map.
     int width;
     //! World height of a map.
