@@ -457,6 +457,7 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
     if (!start_raw.has_map_size() || !start_raw.map_size().has_x() || !start_raw.map_size().has_y()) {
         return false;
     }
+    game_info.map_name = response_game_info_ptr->map_name();
     game_info.width = static_cast<int>(start_raw.map_size().x());
     game_info.height = static_cast<int>(start_raw.map_size().y());
 
