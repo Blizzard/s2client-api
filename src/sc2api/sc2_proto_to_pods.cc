@@ -458,6 +458,7 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
         return false;
     }
     game_info.map_name = response_game_info_ptr->map_name();
+    game_info.local_map_path = response_game_info_ptr->local_map_path();
     game_info.width = static_cast<int>(start_raw.map_size().x());
     game_info.height = static_cast<int>(start_raw.map_size().y());
 
