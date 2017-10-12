@@ -69,6 +69,8 @@ struct PlayerInfo {
 struct GameInfo {
     //! Plain text name of a map. Note that this may be different from the filename of the map.
     std::string map_name;
+    //! Filename of map. Includes the ".SC2Map" file extension.
+    std::string local_map_path;
     //! World width of a map.
     int width;
     //! World height of a map.
