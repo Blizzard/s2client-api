@@ -256,6 +256,7 @@ bool Convert(const ObservationRawPtr& observation_raw, UnitPool& unit_pool, uint
         unit->assigned_harvesters = observation_unit.assigned_harvesters();
         unit->ideal_harvesters = observation_unit.ideal_harvesters();
 
+        unit->buffs.clear();
         for (int buff_index = 0; buff_index < observation_unit.buff_ids_size(); ++buff_index) {
             unit->buffs.push_back(observation_unit.buff_ids(buff_index));
         }
