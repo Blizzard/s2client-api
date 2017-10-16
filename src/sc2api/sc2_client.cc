@@ -569,15 +569,6 @@ bool ObservationImp::UpdateObservation() {
         }
     }
 
-    // Get units.
-    if (is_new_frame) {
-        units_previous_map_.clear();
-        for (size_t i = 0, e = units_.size(); i < e; ++i) {
-            units_previous_map_[units_[i].tag] = i;
-        }
-        units_previous_ = units_;
-    }
-
     ObservationRawPtr observation_raw;
     SET_SUBMESSAGE_RESPONSE(observation_raw, observation_, raw_data);
     if (observation_raw.HasErrors()) {
