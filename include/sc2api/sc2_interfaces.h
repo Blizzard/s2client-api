@@ -402,12 +402,14 @@ public:
     //!< \param out The string of text to display.
     //!< \param pt_virtual_2D The screen position to draw text at.
     //!< \param color (Optional) Color of the text.
-    virtual void DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color = Colors::White) = 0;
+    //!< \param size (Optional) Pixel height of the text.
+    virtual void DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color = Colors::White, uint32_t size = 8) = 0;
     //! Outputs text at any 3D point in the game world. Map coordinates are used.
     //!< \param out The string of text to display.
     //!< \param pt3D The world position to draw text at.
     //!< \param color (Optional) Color of the text.
-    virtual void DebugTextOut(const std::string& out, const Point3D& pt3D, Color color = Colors::White) = 0;
+    //!< \param size (Optional) Pixel height of the text.
+    virtual void DebugTextOut(const std::string& out, const Point3D& pt3D, Color color = Colors::White, uint32_t size = 8) = 0;
     //! Outputs a line between two 3D points in the game world. Map coordinates are used.
     //!< \param p0 The starting position of the line.
     //!< \param p1 The ending position of the line.
