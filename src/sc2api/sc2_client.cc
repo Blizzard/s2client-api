@@ -2148,6 +2148,10 @@ void ControlImp::OnGameStart() {
 
     // For now, until the api supports allies, the first (and only) building in this list should be the start location
     observation_imp_->start_location_ = units[0]->pos;
+
+    // Clear start locations here since ControlImp::OnGameStart is called before the clients OnGameStart.
+    observation_imp_->game_info_.start_locations.clear();
+    observation_imp_->game_info_.start_locations.push_back(observation_imp_->start_location_);
 }
 
 void ControlImp::Error(ClientError error, const std::vector<std::string>& errors) {

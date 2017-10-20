@@ -492,6 +492,11 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
         game_info.enemy_start_locations.push_back(sc2::Point2D(pt.x(), pt.y()));
     }
 
+    // Players start location is calculated in ControlImp::OnGameStart and start_locations vector is cleared there as well.
+    game_info.start_locations.insert(game_info.start_locations.begin(), 
+        game_info.enemy_start_locations.begin(),
+        game_info.enemy_start_locations.end());
+
     for (const auto& player_info : response_game_info_ptr->player_info()) {
         game_info.player_info.push_back(sc2::PlayerInfo(
             static_cast<uint32_t>(player_info.player_id()),

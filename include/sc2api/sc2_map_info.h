@@ -87,6 +87,7 @@ struct GameInfo {
     Point2D playable_max;
     //! Positions of possible enemy starting locations.
     std::vector<Point2D> enemy_start_locations;
+    std::vector<Point2D> start_locations;
 
     //! Types of data that will be in observations.
     //!< \sa InterfaceOptions
