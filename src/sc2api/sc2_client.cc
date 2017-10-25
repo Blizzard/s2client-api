@@ -2019,7 +2019,7 @@ void ControlImp::IssueUnitAddedEvents() {
         if (unit.alliance == Unit::Alliance::Enemy && unit.display_type == Unit::DisplayType::Visible) {
             client_.OnUnitEnterVision(&unit);
         }
-        else {
+        else if (unit.alliance == Unit::Alliance::Self) {
             client_.OnUnitCreated(&unit);
         }
     });
