@@ -16,7 +16,7 @@ virtual uint32\+\_\+t \hyperlink{classsc2_1_1_observation_interface_a21c3f197fe6
 \item 
 virtual uint32\+\_\+t \hyperlink{classsc2_1_1_observation_interface_a19d85546124654418d00b736f0146218}{Get\+Game\+Loop} () const =0
 \item 
-virtual const Units \& \hyperlink{classsc2_1_1_observation_interface_ab08e71ba04b19d3b4048ce9da6838e00}{Get\+Units} () const =0
+virtual Units \hyperlink{classsc2_1_1_observation_interface_adf2e86998034eed0c91b558848b68f44}{Get\+Units} () const =0
 \item 
 virtual Units \hyperlink{classsc2_1_1_observation_interface_aa43cfa17a9ac893500bce33eb41e6171}{Get\+Units} (\hyperlink{classsc2_1_1_unit_a5a40e672e7599d73ef8ef5758bbd7461}{Unit\+::\+Alliance} alliance, \hyperlink{sc2__interfaces_8h_a5cc3d9751182ccd2b085f3e272bcc88b}{Filter} filter=\{\}) const =0
 \item 
@@ -24,17 +24,13 @@ virtual Units \hyperlink{classsc2_1_1_observation_interface_ab0d22edc6bd276b8e9d
 \item 
 virtual const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$ \hyperlink{classsc2_1_1_observation_interface_a0f766e5a6522a6966b4d2abf0a2daff2}{Get\+Unit} (Tag tag) const =0
 \item 
-virtual const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$ \hyperlink{classsc2_1_1_observation_interface_a59684d8b385941931e6175800eb4bbdb}{Get\+Previous\+Unit} (Tag tag) const =0
-\item 
-virtual const Units \& \hyperlink{classsc2_1_1_observation_interface_a30cdffc5d5c87797c5c154fe50bad768}{Get\+Units\+Added} () const =0
-\item 
-virtual const Units \& \hyperlink{classsc2_1_1_observation_interface_a656f51b87f1fafeeff37206345793476}{Get\+Units\+Removed} () const =0
-\item 
 virtual const Raw\+Actions \& \hyperlink{classsc2_1_1_observation_interface_aa247d650d50d3d1bfe81642df96b1360}{Get\+Raw\+Actions} () const =0
 \item 
 virtual const \hyperlink{structsc2_1_1_spatial_actions}{Spatial\+Actions} \& \hyperlink{classsc2_1_1_observation_interface_a1e0b5b6e6e6ce0a879c1854b696dcdb0}{Get\+Feature\+Layer\+Actions} () const =0
 \item 
 virtual const std\+::vector$<$ \hyperlink{structsc2_1_1_power_source}{Power\+Source} $>$ \& \hyperlink{classsc2_1_1_observation_interface_abf25ada67444ace346e57c1ad367ca8e}{Get\+Power\+Sources} () const =0
+\item 
+virtual const std\+::vector$<$ \hyperlink{structsc2_1_1_effect}{Effect} $>$ \& \hyperlink{classsc2_1_1_observation_interface_a1c558b2b552f4132938afedc309f7295}{Get\+Effects} () const =0
 \item 
 virtual const std\+::vector$<$ \hyperlink{classsc2_1_1_s_c2_type}{Upgrade\+ID} $>$ \& \hyperlink{classsc2_1_1_observation_interface_a0a794661f0072921a75d4c5851cfb9e9}{Get\+Upgrades} () const =0
 \item 
@@ -47,6 +43,8 @@ virtual const Unit\+Types \& \hyperlink{classsc2_1_1_observation_interface_ae80a
 virtual const Upgrades \& \hyperlink{classsc2_1_1_observation_interface_a10b0d3b3131951ad656cb091aaa2040d}{Get\+Upgrade\+Data} (bool force\+\_\+refresh=false) const =0
 \item 
 virtual const Buffs \& \hyperlink{classsc2_1_1_observation_interface_a1b891d52ce1fe82dac0288797ad3720a}{Get\+Buff\+Data} (bool force\+\_\+refresh=false) const =0
+\item 
+virtual const Effects \& \hyperlink{classsc2_1_1_observation_interface_a2b3bae3c5a9e88f1164a11eba12c037f}{Get\+Effect\+Data} (bool force\+\_\+refresh=false) const =0
 \item 
 virtual const \hyperlink{structsc2_1_1_game_info}{Game\+Info} \& \hyperlink{classsc2_1_1_observation_interface_a7b73eb640b052409b0095609a8136102}{Get\+Game\+Info} () const =0
 \item 
@@ -135,6 +133,29 @@ Data about all buffs possible for the current game session.
 
 Position of the center of the camera. \begin{DoxyReturn}{Returns}
 Camera position. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classsc2_1_1_observation_interface_a2b3bae3c5a9e88f1164a11eba12c037f}\label{classsc2_1_1_observation_interface_a2b3bae3c5a9e88f1164a11eba12c037f}} 
+\index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Effect\+Data@{Get\+Effect\+Data}}
+\index{Get\+Effect\+Data@{Get\+Effect\+Data}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
+\subsubsection{\texorpdfstring{Get\+Effect\+Data()}{GetEffectData()}}
+{\footnotesize\ttfamily virtual const Effects\& sc2\+::\+Observation\+Interface\+::\+Get\+Effect\+Data (\begin{DoxyParamCaption}\item[{bool}]{force\+\_\+refresh = {\ttfamily false} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Gets metadata of effects. Array can be indexed directly by Effect\+ID. 
+\begin{DoxyParams}{Parameters}
+{\em force\+\_\+refresh} & forces a full query from the game, may otherwise cache data from a previous call. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Data about all effects possible for the current game session. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classsc2_1_1_observation_interface_a1c558b2b552f4132938afedc309f7295}\label{classsc2_1_1_observation_interface_a1c558b2b552f4132938afedc309f7295}} 
+\index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Effects@{Get\+Effects}}
+\index{Get\+Effects@{Get\+Effects}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
+\subsubsection{\texorpdfstring{Get\+Effects()}{GetEffects()}}
+{\footnotesize\ttfamily virtual const std\+::vector$<$\hyperlink{structsc2_1_1_effect}{Effect}$>$\& sc2\+::\+Observation\+Interface\+::\+Get\+Effects (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Gets all active effects in vision of the current player. \begin{DoxyReturn}{Returns}
+List of effects. 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classsc2_1_1_observation_interface_a1e0b5b6e6e6ce0a879c1854b696dcdb0}\label{classsc2_1_1_observation_interface_a1e0b5b6e6e6ce0a879c1854b696dcdb0}} 
 \index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Feature\+Layer\+Actions@{Get\+Feature\+Layer\+Actions}}
@@ -247,20 +268,6 @@ The player ID.
 Gets all power sources associated with the current player. \begin{DoxyReturn}{Returns}
 List of power sources. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_observation_interface_a59684d8b385941931e6175800eb4bbdb}\label{classsc2_1_1_observation_interface_a59684d8b385941931e6175800eb4bbdb}} 
-\index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Previous\+Unit@{Get\+Previous\+Unit}}
-\index{Get\+Previous\+Unit@{Get\+Previous\+Unit}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
-\subsubsection{\texorpdfstring{Get\+Previous\+Unit()}{GetPreviousUnit()}}
-{\footnotesize\ttfamily virtual const \hyperlink{classsc2_1_1_unit}{Unit}$\ast$ sc2\+::\+Observation\+Interface\+::\+Get\+Previous\+Unit (\begin{DoxyParamCaption}\item[{Tag}]{tag }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
-
-Get the unit state as represented by the the call to Get\+Observation from the previous frame. This is useful for calculating deltas between \hyperlink{classsc2_1_1_unit}{Unit} states. It is unsafe to assume Get\+Unit and Get\+Previous\+Unit will both necessarily return a \hyperlink{classsc2_1_1_unit}{Unit} given the same tag. The \hyperlink{classsc2_1_1_unit}{Unit} may have been created or destroyed in the last step. 
-\begin{DoxyParams}{Parameters}
-{\em tag} & Unique tag of the unit. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Pointer to the \hyperlink{classsc2_1_1_unit}{Unit} object. 
-\end{DoxyReturn}
 \mbox{\Hypertarget{classsc2_1_1_observation_interface_aa247d650d50d3d1bfe81642df96b1360}\label{classsc2_1_1_observation_interface_aa247d650d50d3d1bfe81642df96b1360}} 
 \index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Raw\+Actions@{Get\+Raw\+Actions}}
 \index{Get\+Raw\+Actions@{Get\+Raw\+Actions}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
@@ -318,11 +325,11 @@ Get the unit state as represented by the last call to Get\+Observation.
 \begin{DoxyReturn}{Returns}
 Pointer to the \hyperlink{classsc2_1_1_unit}{Unit} object. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_observation_interface_ab08e71ba04b19d3b4048ce9da6838e00}\label{classsc2_1_1_observation_interface_ab08e71ba04b19d3b4048ce9da6838e00}} 
+\mbox{\Hypertarget{classsc2_1_1_observation_interface_adf2e86998034eed0c91b558848b68f44}\label{classsc2_1_1_observation_interface_adf2e86998034eed0c91b558848b68f44}} 
 \index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Units@{Get\+Units}}
 \index{Get\+Units@{Get\+Units}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Units()}{GetUnits()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
-{\footnotesize\ttfamily virtual const Units\& sc2\+::\+Observation\+Interface\+::\+Get\+Units (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual Units sc2\+::\+Observation\+Interface\+::\+Get\+Units (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Get a list of all known units in the game. \begin{DoxyReturn}{Returns}
 List of all ally and visible enemy and neutral units. 
@@ -357,27 +364,6 @@ Get all units belonging to self that meet the conditions provided by the filter.
 \begin{DoxyReturn}{Returns}
 A list of units that meet the conditions provided by the filter. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_observation_interface_a30cdffc5d5c87797c5c154fe50bad768}\label{classsc2_1_1_observation_interface_a30cdffc5d5c87797c5c154fe50bad768}} 
-\index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Units\+Added@{Get\+Units\+Added}}
-\index{Get\+Units\+Added@{Get\+Units\+Added}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
-\subsubsection{\texorpdfstring{Get\+Units\+Added()}{GetUnitsAdded()}}
-{\footnotesize\ttfamily virtual const Units\& sc2\+::\+Observation\+Interface\+::\+Get\+Units\+Added (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
-
-Gets a list of units added in the previous step. You could also hook into the On\+Unit\+Created event for this data on a per \hyperlink{classsc2_1_1_unit}{Unit} basis. \begin{DoxySeeAlso}{See also}
-On\+Unit\+Created() 
-\end{DoxySeeAlso}
-\mbox{\Hypertarget{classsc2_1_1_observation_interface_a656f51b87f1fafeeff37206345793476}\label{classsc2_1_1_observation_interface_a656f51b87f1fafeeff37206345793476}} 
-\index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Units\+Removed@{Get\+Units\+Removed}}
-\index{Get\+Units\+Removed@{Get\+Units\+Removed}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}
-\subsubsection{\texorpdfstring{Get\+Units\+Removed()}{GetUnitsRemoved()}}
-{\footnotesize\ttfamily virtual const Units\& sc2\+::\+Observation\+Interface\+::\+Get\+Units\+Removed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
-
-Gets a list of units added in the previous step. You could also hook into the On\+Unit\+Created event for this data on a per \hyperlink{classsc2_1_1_unit}{Unit} basis. Ally units disappear because they are destroyed. Enemy units may disappear because they move out of visibility, or because they are destroyed. \begin{DoxyReturn}{Returns}
-A list of units that were removed from the observation. 
-\end{DoxyReturn}
-\begin{DoxySeeAlso}{See also}
-On\+Unit\+Created() 
-\end{DoxySeeAlso}
 \mbox{\Hypertarget{classsc2_1_1_observation_interface_ae80acee23f67a2b5f67fa511dd158aca}\label{classsc2_1_1_observation_interface_ae80acee23f67a2b5f67fa511dd158aca}} 
 \index{sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}!Get\+Unit\+Type\+Data@{Get\+Unit\+Type\+Data}}
 \index{Get\+Unit\+Type\+Data@{Get\+Unit\+Type\+Data}!sc2\+::\+Observation\+Interface@{sc2\+::\+Observation\+Interface}}

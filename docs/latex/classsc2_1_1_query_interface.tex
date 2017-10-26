@@ -14,18 +14,18 @@ struct \hyperlink{structsc2_1_1_query_interface_1_1_placement_query}{Placement\+
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} \hyperlink{classsc2_1_1_query_interface_a6954d65b93a07bf14e2a8818f9df9b8c}{Get\+Abilities\+For\+Unit} (Tag tag, bool ignore\+\_\+resource\+\_\+requirements=false)=0
+virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} \hyperlink{classsc2_1_1_query_interface_a76a602ebb27600b636712bd0bf062201}{Get\+Abilities\+For\+Unit} (const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit, bool ignore\+\_\+resource\+\_\+requirements=false)=0
 \item 
-virtual std\+::vector$<$ \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} $>$ \hyperlink{classsc2_1_1_query_interface_a6add52c8b04f0e50efdd83955952b76f}{Get\+Abilities\+For\+Units} (const std\+::vector$<$ Tag $>$ \&tags, bool ignore\+\_\+resource\+\_\+requirements=false)=0
+virtual std\+::vector$<$ \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} $>$ \hyperlink{classsc2_1_1_query_interface_a8b50ebad97a2f1139045a61b85a3300d}{Get\+Abilities\+For\+Units} (const Units \&units, bool ignore\+\_\+resource\+\_\+requirements=false)=0
 \item 
 virtual float \hyperlink{classsc2_1_1_query_interface_adf72c7556e59e82e231d9c58bd093546}{Pathing\+Distance} (const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&start, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&end)=0
 \item 
-virtual float \hyperlink{classsc2_1_1_query_interface_a1a7216c7ad37273dc54e12a92fee7a64}{Pathing\+Distance} (const Tag \&start\+\_\+unit\+\_\+tag, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&end)=0
+virtual float \hyperlink{classsc2_1_1_query_interface_a757adb07f0f93e4b289ecf3ea0c4358b}{Pathing\+Distance} (const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$start, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&end)=0
 \item 
 \mbox{\Hypertarget{classsc2_1_1_query_interface_ae23848466df99bfb7c3da9fbabc7f47b}\label{classsc2_1_1_query_interface_ae23848466df99bfb7c3da9fbabc7f47b}} 
 virtual std\+::vector$<$ float $>$ \hyperlink{classsc2_1_1_query_interface_ae23848466df99bfb7c3da9fbabc7f47b}{Pathing\+Distance} (const std\+::vector$<$ \hyperlink{structsc2_1_1_query_interface_1_1_pathing_query}{Pathing\+Query} $>$ \&queries)=0
 \begin{DoxyCompactList}\small\item\em Issues multiple pathing queries. \end{DoxyCompactList}\item 
-virtual bool \hyperlink{classsc2_1_1_query_interface_ae78a9660fc9f03b1676bacf47c9a9180}{Placement} (const \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} \&ability, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&target\+\_\+pos, Tag placing\+\_\+unit\+\_\+tag\+\_\+=Null\+Tag)=0
+virtual bool \hyperlink{classsc2_1_1_query_interface_aa5ee0fbda6e0eac6f096710328484d2a}{Placement} (const \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} \&ability, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&target\+\_\+pos, const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit=nullptr)=0
 \item 
 virtual std\+::vector$<$ bool $>$ \hyperlink{classsc2_1_1_query_interface_a470e79785e2ffdb1a5c4636c8a070601}{Placement} (const std\+::vector$<$ \hyperlink{structsc2_1_1_query_interface_1_1_placement_query}{Placement\+Query} $>$ \&queries)=0
 \end{DoxyCompactItemize}
@@ -40,11 +40,11 @@ Performance note\+:
 \end{DoxyItemize}
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classsc2_1_1_query_interface_a6954d65b93a07bf14e2a8818f9df9b8c}\label{classsc2_1_1_query_interface_a6954d65b93a07bf14e2a8818f9df9b8c}} 
+\mbox{\Hypertarget{classsc2_1_1_query_interface_a76a602ebb27600b636712bd0bf062201}\label{classsc2_1_1_query_interface_a76a602ebb27600b636712bd0bf062201}} 
 \index{sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}!Get\+Abilities\+For\+Unit@{Get\+Abilities\+For\+Unit}}
 \index{Get\+Abilities\+For\+Unit@{Get\+Abilities\+For\+Unit}!sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Abilities\+For\+Unit()}{GetAbilitiesForUnit()}}
-{\footnotesize\ttfamily virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Unit (\begin{DoxyParamCaption}\item[{Tag}]{tag,  }\item[{bool}]{ignore\+\_\+resource\+\_\+requirements = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual \hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities} sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Unit (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit,  }\item[{bool}]{ignore\+\_\+resource\+\_\+requirements = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Returns a list of abilities represented as a uint32\+\_\+t see the A\+B\+I\+L\+I\+T\+Y\+\_\+\+ID enum for their corresponding, named, representations. 
 \begin{DoxyParams}{Parameters}
@@ -56,11 +56,11 @@ Returns a list of abilities represented as a uint32\+\_\+t see the A\+B\+I\+L\+I
 \begin{DoxyReturn}{Returns}
 Abilities for the unit. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_query_interface_a6add52c8b04f0e50efdd83955952b76f}\label{classsc2_1_1_query_interface_a6add52c8b04f0e50efdd83955952b76f}} 
+\mbox{\Hypertarget{classsc2_1_1_query_interface_a8b50ebad97a2f1139045a61b85a3300d}\label{classsc2_1_1_query_interface_a8b50ebad97a2f1139045a61b85a3300d}} 
 \index{sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}!Get\+Abilities\+For\+Units@{Get\+Abilities\+For\+Units}}
 \index{Get\+Abilities\+For\+Units@{Get\+Abilities\+For\+Units}!sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}}
 \subsubsection{\texorpdfstring{Get\+Abilities\+For\+Units()}{GetAbilitiesForUnits()}}
-{\footnotesize\ttfamily virtual std\+::vector$<$\hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities}$>$ sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Units (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Tag $>$ \&}]{tags,  }\item[{bool}]{ignore\+\_\+resource\+\_\+requirements = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual std\+::vector$<$\hyperlink{structsc2_1_1_available_abilities}{Available\+Abilities}$>$ sc2\+::\+Query\+Interface\+::\+Get\+Abilities\+For\+Units (\begin{DoxyParamCaption}\item[{const Units \&}]{units,  }\item[{bool}]{ignore\+\_\+resource\+\_\+requirements = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Issues multiple available abilities queries. Batch version. 
 \begin{DoxyParams}{Parameters}
@@ -88,11 +88,11 @@ Returns pathing distance between two locations. Takes into account unit movement
 \begin{DoxyReturn}{Returns}
 Distance between the two points. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_query_interface_a1a7216c7ad37273dc54e12a92fee7a64}\label{classsc2_1_1_query_interface_a1a7216c7ad37273dc54e12a92fee7a64}} 
+\mbox{\Hypertarget{classsc2_1_1_query_interface_a757adb07f0f93e4b289ecf3ea0c4358b}\label{classsc2_1_1_query_interface_a757adb07f0f93e4b289ecf3ea0c4358b}} 
 \index{sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}!Pathing\+Distance@{Pathing\+Distance}}
 \index{Pathing\+Distance@{Pathing\+Distance}!sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}}
 \subsubsection{\texorpdfstring{Pathing\+Distance()}{PathingDistance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily virtual float sc2\+::\+Query\+Interface\+::\+Pathing\+Distance (\begin{DoxyParamCaption}\item[{const Tag \&}]{start\+\_\+unit\+\_\+tag,  }\item[{const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual float sc2\+::\+Query\+Interface\+::\+Pathing\+Distance (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{start,  }\item[{const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Returns pathing distance between a unit and a target location. Takes into account unit movement properties (e.\+g. Flying). Batch version. 
 \begin{DoxyParams}{Parameters}
@@ -104,11 +104,11 @@ Returns pathing distance between a unit and a target location. Takes into accoun
 \begin{DoxyReturn}{Returns}
 Distances between the two points. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classsc2_1_1_query_interface_ae78a9660fc9f03b1676bacf47c9a9180}\label{classsc2_1_1_query_interface_ae78a9660fc9f03b1676bacf47c9a9180}} 
+\mbox{\Hypertarget{classsc2_1_1_query_interface_aa5ee0fbda6e0eac6f096710328484d2a}\label{classsc2_1_1_query_interface_aa5ee0fbda6e0eac6f096710328484d2a}} 
 \index{sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}!Placement@{Placement}}
 \index{Placement@{Placement}!sc2\+::\+Query\+Interface@{sc2\+::\+Query\+Interface}}
 \subsubsection{\texorpdfstring{Placement()}{Placement()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily virtual bool sc2\+::\+Query\+Interface\+::\+Placement (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} \&}]{ability,  }\item[{const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&}]{target\+\_\+pos,  }\item[{Tag}]{placing\+\_\+unit\+\_\+tag\+\_\+ = {\ttfamily NullTag} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual bool sc2\+::\+Query\+Interface\+::\+Placement (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} \&}]{ability,  }\item[{const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&}]{target\+\_\+pos,  }\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Returns whether a building can be placed at a location. The placing unit field is optional. This is only used for cases where the placing unit plays a role in the placement grid test (e.\+g. A flying barracks building an add-\/on requires room for both the barracks and add-\/on). 
 \begin{DoxyParams}{Parameters}

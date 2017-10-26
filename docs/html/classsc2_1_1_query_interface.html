@@ -84,20 +84,20 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6954d65b93a07bf14e2a8818f9df9b8c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a6954d65b93a07bf14e2a8818f9df9b8c">GetAbilitiesForUnit</a> (Tag tag, bool ignore_resource_requirements=false)=0</td></tr>
-<tr class="separator:a6954d65b93a07bf14e2a8818f9df9b8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6add52c8b04f0e50efdd83955952b76f"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a6add52c8b04f0e50efdd83955952b76f">GetAbilitiesForUnits</a> (const std::vector&lt; Tag &gt; &amp;tags, bool ignore_resource_requirements=false)=0</td></tr>
-<tr class="separator:a6add52c8b04f0e50efdd83955952b76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a602ebb27600b636712bd0bf062201"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a76a602ebb27600b636712bd0bf062201">GetAbilitiesForUnit</a> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit, bool ignore_resource_requirements=false)=0</td></tr>
+<tr class="separator:a76a602ebb27600b636712bd0bf062201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b50ebad97a2f1139045a61b85a3300d"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a8b50ebad97a2f1139045a61b85a3300d">GetAbilitiesForUnits</a> (const Units &amp;units, bool ignore_resource_requirements=false)=0</td></tr>
+<tr class="separator:a8b50ebad97a2f1139045a61b85a3300d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf72c7556e59e82e231d9c58bd093546"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#adf72c7556e59e82e231d9c58bd093546">PathingDistance</a> (const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;start, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;end)=0</td></tr>
 <tr class="separator:adf72c7556e59e82e231d9c58bd093546"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a7216c7ad37273dc54e12a92fee7a64"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a1a7216c7ad37273dc54e12a92fee7a64">PathingDistance</a> (const Tag &amp;start_unit_tag, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;end)=0</td></tr>
-<tr class="separator:a1a7216c7ad37273dc54e12a92fee7a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a757adb07f0f93e4b289ecf3ea0c4358b"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a757adb07f0f93e4b289ecf3ea0c4358b">PathingDistance</a> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *start, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;end)=0</td></tr>
+<tr class="separator:a757adb07f0f93e4b289ecf3ea0c4358b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae23848466df99bfb7c3da9fbabc7f47b"><td class="memItemLeft" align="right" valign="top"><a id="ae23848466df99bfb7c3da9fbabc7f47b"></a>
 virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#ae23848466df99bfb7c3da9fbabc7f47b">PathingDistance</a> (const std::vector&lt; <a class="el" href="structsc2_1_1_query_interface_1_1_pathing_query.html">PathingQuery</a> &gt; &amp;queries)=0</td></tr>
 <tr class="memdesc:ae23848466df99bfb7c3da9fbabc7f47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues multiple pathing queries. <br /></td></tr>
 <tr class="separator:ae23848466df99bfb7c3da9fbabc7f47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae78a9660fc9f03b1676bacf47c9a9180"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#ae78a9660fc9f03b1676bacf47c9a9180">Placement</a> (const <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> &amp;ability, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;target_pos, Tag placing_unit_tag_=NullTag)=0</td></tr>
-<tr class="separator:ae78a9660fc9f03b1676bacf47c9a9180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ee0fbda6e0eac6f096710328484d2a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#aa5ee0fbda6e0eac6f096710328484d2a">Placement</a> (const <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> &amp;ability, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;target_pos, const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit=nullptr)=0</td></tr>
+<tr class="separator:aa5ee0fbda6e0eac6f096710328484d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a470e79785e2ffdb1a5c4636c8a070601"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_query_interface.html#a470e79785e2ffdb1a5c4636c8a070601">Placement</a> (const std::vector&lt; <a class="el" href="structsc2_1_1_query_interface_1_1_placement_query.html">PlacementQuery</a> &gt; &amp;queries)=0</td></tr>
 <tr class="separator:a470e79785e2ffdb1a5c4636c8a070601"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -107,8 +107,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 <li>Always try and batch things up. These queries are effectively synchronous and will block until returned. </li>
 </ul>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6954d65b93a07bf14e2a8818f9df9b8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6954d65b93a07bf14e2a8818f9df9b8c">&#9670;&nbsp;</a></span>GetAbilitiesForUnit()</h2>
+<a id="a76a602ebb27600b636712bd0bf062201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76a602ebb27600b636712bd0bf062201">&#9670;&nbsp;</a></span>GetAbilitiesForUnit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -119,8 +119,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
         <tr>
           <td class="memname">virtual <a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a> sc2::QueryInterface::GetAbilitiesForUnit </td>
           <td>(</td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>tag</em>, </td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -151,8 +151,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 
 </div>
 </div>
-<a id="a6add52c8b04f0e50efdd83955952b76f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6add52c8b04f0e50efdd83955952b76f">&#9670;&nbsp;</a></span>GetAbilitiesForUnits()</h2>
+<a id="a8b50ebad97a2f1139045a61b85a3300d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b50ebad97a2f1139045a61b85a3300d">&#9670;&nbsp;</a></span>GetAbilitiesForUnits()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -163,8 +163,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
         <tr>
           <td class="memname">virtual std::vector&lt;<a class="el" href="structsc2_1_1_available_abilities.html">AvailableAbilities</a>&gt; sc2::QueryInterface::GetAbilitiesForUnits </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; Tag &gt; &amp;&#160;</td>
-          <td class="paramname"><em>tags</em>, </td>
+          <td class="paramtype">const Units &amp;&#160;</td>
+          <td class="paramname"><em>units</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -239,8 +239,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 
 </div>
 </div>
-<a id="a1a7216c7ad37273dc54e12a92fee7a64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a7216c7ad37273dc54e12a92fee7a64">&#9670;&nbsp;</a></span>PathingDistance() <span class="overload">[2/2]</span></h2>
+<a id="a757adb07f0f93e4b289ecf3ea0c4358b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a757adb07f0f93e4b289ecf3ea0c4358b">&#9670;&nbsp;</a></span>PathingDistance() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -251,8 +251,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
         <tr>
           <td class="memname">virtual float sc2::QueryInterface::PathingDistance </td>
           <td>(</td>
-          <td class="paramtype">const Tag &amp;&#160;</td>
-          <td class="paramname"><em>start_unit_tag</em>, </td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -283,8 +283,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
 
 </div>
 </div>
-<a id="ae78a9660fc9f03b1676bacf47c9a9180"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae78a9660fc9f03b1676bacf47c9a9180">&#9670;&nbsp;</a></span>Placement() <span class="overload">[1/2]</span></h2>
+<a id="aa5ee0fbda6e0eac6f096710328484d2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5ee0fbda6e0eac6f096710328484d2a">&#9670;&nbsp;</a></span>Placement() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,8 +307,8 @@ virtual std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bo
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>placing_unit_tag_</em> = <code>NullTag</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

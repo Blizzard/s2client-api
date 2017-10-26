@@ -7,21 +7,21 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-virtual void \hyperlink{classsc2_1_1_action_interface_ad401d286fabc349133f27e0fc29099f2}{Unit\+Command} (Tag unit\+\_\+tag, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability)=0
+virtual void \hyperlink{classsc2_1_1_action_interface_add138c6ebe9b1fcbeae393c03b7fdeb9}{Unit\+Command} (const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, bool queued\+\_\+command=false)=0
 \item 
-virtual void \hyperlink{classsc2_1_1_action_interface_a89d51301c22e6c28672be771a3db47e2}{Unit\+Command} (Tag unit\+\_\+tag, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&point)=0
+virtual void \hyperlink{classsc2_1_1_action_interface_a7387d718d7d87c69b8476ca0d8a9f86a}{Unit\+Command} (const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&point, bool queued\+\_\+command=false)=0
 \item 
-virtual void \hyperlink{classsc2_1_1_action_interface_a5aacde49d90f8d6637ff0b69891448c4}{Unit\+Command} (Tag unit\+\_\+tag, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, Tag target\+\_\+tag)=0
+virtual void \hyperlink{classsc2_1_1_action_interface_a63a3bb86851927cc58821afb0d21e1ab}{Unit\+Command} (const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$target, bool queued\+\_\+command=false)=0
 \item 
-\mbox{\Hypertarget{classsc2_1_1_action_interface_a23192496f856ac368d17da913cd97eac}\label{classsc2_1_1_action_interface_a23192496f856ac368d17da913cd97eac}} 
-virtual void \hyperlink{classsc2_1_1_action_interface_a23192496f856ac368d17da913cd97eac}{Unit\+Command} (const std\+::vector$<$ Tag $>$ \&unit\+\_\+tags, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability)=0
-\begin{DoxyCompactList}\small\item\em Issues a command to multiple units (prefer this where possible). Same as \hyperlink{classsc2_1_1_action_interface_ad401d286fabc349133f27e0fc29099f2}{Unit\+Command(\+Tag, Ability\+I\+D)}. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classsc2_1_1_action_interface_a9c68a84725771092f731061797c0de5d}\label{classsc2_1_1_action_interface_a9c68a84725771092f731061797c0de5d}} 
-virtual void \hyperlink{classsc2_1_1_action_interface_a9c68a84725771092f731061797c0de5d}{Unit\+Command} (const std\+::vector$<$ Tag $>$ \&unit\+\_\+tags, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&point)=0
-\begin{DoxyCompactList}\small\item\em Issues a command to multiple units (prefer this where possible). Same as Unit\+Command(\+Tag, Ability\+I\+D, Point2\+D). \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classsc2_1_1_action_interface_a3a5fd10e721f25ac756dd2fdb20ebd16}\label{classsc2_1_1_action_interface_a3a5fd10e721f25ac756dd2fdb20ebd16}} 
-virtual void \hyperlink{classsc2_1_1_action_interface_a3a5fd10e721f25ac756dd2fdb20ebd16}{Unit\+Command} (const std\+::vector$<$ Tag $>$ \&unit\+\_\+tags, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, Tag target\+\_\+tag)=0
-\begin{DoxyCompactList}\small\item\em Issues a command to multiple units (prefer this where possible). Same as \hyperlink{classsc2_1_1_action_interface_a5aacde49d90f8d6637ff0b69891448c4}{Unit\+Command(\+Tag, Ability\+I\+D, Tag)}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_action_interface_aa647e739696bc228f44f7e1224d21733}\label{classsc2_1_1_action_interface_aa647e739696bc228f44f7e1224d21733}} 
+virtual void \hyperlink{classsc2_1_1_action_interface_aa647e739696bc228f44f7e1224d21733}{Unit\+Command} (const Units \&units, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, bool queued\+\_\+move=false)=0
+\begin{DoxyCompactList}\small\item\em Issues a command to multiple units (prefer this where possible). Same as Unit\+Command(\+Unit, Ability\+I\+D). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_action_interface_aeea8f2ca32bfe3ee1835bddb9d1356f1}\label{classsc2_1_1_action_interface_aeea8f2ca32bfe3ee1835bddb9d1356f1}} 
+virtual void \hyperlink{classsc2_1_1_action_interface_aeea8f2ca32bfe3ee1835bddb9d1356f1}{Unit\+Command} (const Units \&units, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&point, bool queued\+\_\+command=false)=0
+\begin{DoxyCompactList}\small\item\em Issues a command to multiple units (prefer this where possible). Same as Unit\+Command(\+Unit, Ability\+I\+D, Point2\+D). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_action_interface_a4999034a61ca0ebb95b722af8e305a21}\label{classsc2_1_1_action_interface_a4999034a61ca0ebb95b722af8e305a21}} 
+virtual void \hyperlink{classsc2_1_1_action_interface_a4999034a61ca0ebb95b722af8e305a21}{Unit\+Command} (const Units \&units, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability, const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$target, bool queued\+\_\+command=false)=0
+\begin{DoxyCompactList}\small\item\em Issues a command to multiple units (prefer this where possible). Same as Unit\+Command(\+Unit, Ability\+I\+D, Unit). \end{DoxyCompactList}\item 
 virtual const std\+::vector$<$ Tag $>$ \& \hyperlink{classsc2_1_1_action_interface_a29a55f8dd4f9230864caa1deb228ae33}{Commands} () const =0
 \item 
 virtual void \hyperlink{classsc2_1_1_action_interface_a5f66f9b7eaf1d6a681694927b8605004}{Toggle\+Autocast} (Tag unit\+\_\+tag, \hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID} ability)=0
@@ -77,47 +77,47 @@ Enables or disables autocast of an ability on a list of units.
 {\em ability} & The ability to be toggled. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_action_interface_ad401d286fabc349133f27e0fc29099f2}\label{classsc2_1_1_action_interface_ad401d286fabc349133f27e0fc29099f2}} 
+\mbox{\Hypertarget{classsc2_1_1_action_interface_add138c6ebe9b1fcbeae393c03b7fdeb9}\label{classsc2_1_1_action_interface_add138c6ebe9b1fcbeae393c03b7fdeb9}} 
 \index{sc2\+::\+Action\+Interface@{sc2\+::\+Action\+Interface}!Unit\+Command@{Unit\+Command}}
 \index{Unit\+Command@{Unit\+Command}!sc2\+::\+Action\+Interface@{sc2\+::\+Action\+Interface}}
 \subsubsection{\texorpdfstring{Unit\+Command()}{UnitCommand()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Action\+Interface\+::\+Unit\+Command (\begin{DoxyParamCaption}\item[{Tag}]{unit\+\_\+tag,  }\item[{\hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID}}]{ability }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Action\+Interface\+::\+Unit\+Command (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit,  }\item[{\hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID}}]{ability,  }\item[{bool}]{queued\+\_\+command = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Issues a command to a unit. Self targeting. 
 \begin{DoxyParams}{Parameters}
-{\em unit\+\_\+tag} & The unit to send the command to. \\
+{\em unit} & The unit to send the command to. \\
 \hline
 {\em ability} & The ability id of the command. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_action_interface_a89d51301c22e6c28672be771a3db47e2}\label{classsc2_1_1_action_interface_a89d51301c22e6c28672be771a3db47e2}} 
+\mbox{\Hypertarget{classsc2_1_1_action_interface_a7387d718d7d87c69b8476ca0d8a9f86a}\label{classsc2_1_1_action_interface_a7387d718d7d87c69b8476ca0d8a9f86a}} 
 \index{sc2\+::\+Action\+Interface@{sc2\+::\+Action\+Interface}!Unit\+Command@{Unit\+Command}}
 \index{Unit\+Command@{Unit\+Command}!sc2\+::\+Action\+Interface@{sc2\+::\+Action\+Interface}}
 \subsubsection{\texorpdfstring{Unit\+Command()}{UnitCommand()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Action\+Interface\+::\+Unit\+Command (\begin{DoxyParamCaption}\item[{Tag}]{unit\+\_\+tag,  }\item[{\hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID}}]{ability,  }\item[{const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Action\+Interface\+::\+Unit\+Command (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit,  }\item[{\hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID}}]{ability,  }\item[{const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&}]{point,  }\item[{bool}]{queued\+\_\+command = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Issues a command to a unit. Targets a point. 
 \begin{DoxyParams}{Parameters}
-{\em unit\+\_\+tag} & The unit to send the command to. \\
+{\em unit} & The unit to send the command to. \\
 \hline
 {\em ability} & The ability id of the command. \\
 \hline
 {\em point} & The 2D world position to target. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_action_interface_a5aacde49d90f8d6637ff0b69891448c4}\label{classsc2_1_1_action_interface_a5aacde49d90f8d6637ff0b69891448c4}} 
+\mbox{\Hypertarget{classsc2_1_1_action_interface_a63a3bb86851927cc58821afb0d21e1ab}\label{classsc2_1_1_action_interface_a63a3bb86851927cc58821afb0d21e1ab}} 
 \index{sc2\+::\+Action\+Interface@{sc2\+::\+Action\+Interface}!Unit\+Command@{Unit\+Command}}
 \index{Unit\+Command@{Unit\+Command}!sc2\+::\+Action\+Interface@{sc2\+::\+Action\+Interface}}
 \subsubsection{\texorpdfstring{Unit\+Command()}{UnitCommand()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Action\+Interface\+::\+Unit\+Command (\begin{DoxyParamCaption}\item[{Tag}]{unit\+\_\+tag,  }\item[{\hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID}}]{ability,  }\item[{Tag}]{target\+\_\+tag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Action\+Interface\+::\+Unit\+Command (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit,  }\item[{\hyperlink{classsc2_1_1_s_c2_type}{Ability\+ID}}]{ability,  }\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{target,  }\item[{bool}]{queued\+\_\+command = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Issues a command to a unit. Targets another unit. 
 \begin{DoxyParams}{Parameters}
-{\em unit\+\_\+tag} & The unit to send the command to. \\
+{\em unit} & The unit to send the command to. \\
 \hline
 {\em ability} & The ability id of the command. \\
 \hline
-{\em target\+\_\+tag} & The unit that is a target of the unit getting the command. \\
+{\em target} & The unit that is a target of the unit getting the command. \\
 \hline
 \end{DoxyParams}
 

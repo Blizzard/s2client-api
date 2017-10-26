@@ -66,7 +66,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classsc2_1_1_unit-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -101,12 +100,6 @@ Public Types</h2></td></tr>
  }<tr class="memdesc:a03f99cfaa8ad4f9bba6cd0bc5586c943"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsc2_1_1_unit.html" title="A unit. Could be a structure, a worker or a military unit. ">Unit</a> cloak state.  <a href="classsc2_1_1_unit.html#a03f99cfaa8ad4f9bba6cd0bc5586c943">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a03f99cfaa8ad4f9bba6cd0bc5586c943"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:aca5722ffb5bc156d0e9d0b28a40fb7c1"><td class="memItemLeft" align="right" valign="top"><a id="aca5722ffb5bc156d0e9d0b28a40fb7c1"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Tag</b> () const</td></tr>
-<tr class="separator:aca5722ffb5bc156d0e9d0b28a40fb7c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -182,10 +175,18 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#ae5ee0c4d31a1266e31ac0a739bcc3d86">shield</a></td></tr>
 <tr class="memdesc:ae5ee0c4d31a1266e31ac0a739bcc3d86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shield of the unit. Not set for snapshots. <br /></td></tr>
 <tr class="separator:ae5ee0c4d31a1266e31ac0a739bcc3d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf79ea67a982c7d858abb0190cc0ac5c"><td class="memItemLeft" align="right" valign="top"><a id="aaf79ea67a982c7d858abb0190cc0ac5c"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#aaf79ea67a982c7d858abb0190cc0ac5c">shield_max</a></td></tr>
+<tr class="memdesc:aaf79ea67a982c7d858abb0190cc0ac5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max shield of the unit. Not set for snapshots. <br /></td></tr>
+<tr class="separator:aaf79ea67a982c7d858abb0190cc0ac5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2b194b8a5499b7591356dc6365c0cdc"><td class="memItemLeft" align="right" valign="top"><a id="aa2b194b8a5499b7591356dc6365c0cdc"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#aa2b194b8a5499b7591356dc6365c0cdc">energy</a></td></tr>
 <tr class="memdesc:aa2b194b8a5499b7591356dc6365c0cdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Energy of the unit. Not set for snapshots. <br /></td></tr>
 <tr class="separator:aa2b194b8a5499b7591356dc6365c0cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a746011af49f363075e4c595c384933ff"><td class="memItemLeft" align="right" valign="top"><a id="a746011af49f363075e4c595c384933ff"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#a746011af49f363075e4c595c384933ff">energy_max</a></td></tr>
+<tr class="memdesc:a746011af49f363075e4c595c384933ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max energy of the unit. Not set for snapshots. <br /></td></tr>
+<tr class="separator:a746011af49f363075e4c595c384933ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a689d7b7c9a68b3cd172f2333203423b9"><td class="memItemLeft" align="right" valign="top"><a id="a689d7b7c9a68b3cd172f2333203423b9"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#a689d7b7c9a68b3cd172f2333203423b9">mineral_contents</a></td></tr>
 <tr class="memdesc:a689d7b7c9a68b3cd172f2333203423b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Amount of minerals if the unit is a mineral field. Not set for snapshots. <br /></td></tr>
@@ -246,6 +247,14 @@ std::vector&lt; <a class="el" href="classsc2_1_1_s_c2_type.html">BuffID</a> &gt;
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#a13e408736f731902adb60d2725507dc9">is_powered</a></td></tr>
 <tr class="memdesc:a13e408736f731902adb60d2725507dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the unit is powered by a pylon. <br /></td></tr>
 <tr class="separator:a13e408736f731902adb60d2725507dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c39436632bf6f82f1a47df3eedbed5d"><td class="memItemLeft" align="right" valign="top"><a id="a5c39436632bf6f82f1a47df3eedbed5d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#a5c39436632bf6f82f1a47df3eedbed5d">is_alive</a></td></tr>
+<tr class="memdesc:a5c39436632bf6f82f1a47df3eedbed5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the unit is alive or not. <br /></td></tr>
+<tr class="separator:a5c39436632bf6f82f1a47df3eedbed5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af49caa7da174260e424ab4d0c5ae6c78"><td class="memItemLeft" align="right" valign="top"><a id="af49caa7da174260e424ab4d0c5ae6c78"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_unit.html#af49caa7da174260e424ab4d0c5ae6c78">last_seen_game_loop</a></td></tr>
+<tr class="memdesc:af49caa7da174260e424ab4d0c5ae6c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">The last time the unit was seen. <br /></td></tr>
+<tr class="separator:af49caa7da174260e424ab4d0c5ae6c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A unit. Could be a structure, a worker or a military unit. </p>

@@ -171,12 +171,20 @@ $(function() {
 
 
 <h3><a id="index_e"></a>- e -</h3><ul>
+<li>effect_id
+: <a class="el" href="structsc2_1_1_effect.html#a9662d93abf7bffd42ae9913df609ded4">sc2::Effect</a>
+, <a class="el" href="structsc2_1_1_effect_data.html#af58e509580b26fbaf610de33e6ac6c06">sc2::EffectData</a>
+</li>
 <li>enemy_start_locations
 : <a class="el" href="structsc2_1_1_game_info.html#a5b39c34817d8dd67e930d7628d9c32c1">sc2::GameInfo</a>
 </li>
 <li>energy
 : <a class="el" href="structsc2_1_1_passenger_unit.html#a1efad4d291286d5d8a7591fa4c12af4f">sc2::PassengerUnit</a>
 , <a class="el" href="classsc2_1_1_unit.html#aa2b194b8a5499b7591356dc6365c0cdc">sc2::Unit</a>
+</li>
+<li>energy_max
+: <a class="el" href="structsc2_1_1_passenger_unit.html#a9439fcc4557d238c254ba3b4c4329e5c">sc2::PassengerUnit</a>
+, <a class="el" href="classsc2_1_1_unit.html#a746011af49f363075e4c595c384933ff">sc2::Unit</a>
 </li>
 <li>engaged_target_tag
 : <a class="el" href="classsc2_1_1_unit.html#a0d1cc770a037ed2458bf944a787dcca5">sc2::Unit</a>
@@ -202,6 +210,7 @@ $(function() {
 </li>
 <li>friendly_name
 : <a class="el" href="structsc2_1_1_ability_data.html#a9d7420bdffeed5e35f28abb9d397b0de">sc2::AbilityData</a>
+, <a class="el" href="structsc2_1_1_effect_data.html#a2b82d974d199d9232c0f686019a451f4">sc2::EffectData</a>
 </li>
 </ul>
 
@@ -241,6 +250,9 @@ $(function() {
 <li>ideal_harvesters
 : <a class="el" href="classsc2_1_1_unit.html#a59c9e7c9c14f50f11d33b58716f664fe">sc2::Unit</a>
 </li>
+<li>is_alive
+: <a class="el" href="classsc2_1_1_unit.html#a5c39436632bf6f82f1a47df3eedbed5d">sc2::Unit</a>
+</li>
 <li>is_blip
 : <a class="el" href="classsc2_1_1_unit.html#aa730ea2bf474d4422e6c6a1e267945d4">sc2::Unit</a>
 </li>
@@ -269,16 +281,25 @@ $(function() {
 
 
 <h3><a id="index_l"></a>- l -</h3><ul>
+<li>last_seen_game_loop
+: <a class="el" href="classsc2_1_1_unit.html#af49caa7da174260e424ab4d0c5ae6c78">sc2::Unit</a>
+</li>
 <li>link_index
 : <a class="el" href="structsc2_1_1_ability_data.html#a915bb3b60f7b3a664c13636292c64aae">sc2::AbilityData</a>
 </li>
 <li>link_name
 : <a class="el" href="structsc2_1_1_ability_data.html#a32213c23964c6803cca16bc5055861ff">sc2::AbilityData</a>
 </li>
+<li>local_map_path
+: <a class="el" href="structsc2_1_1_game_info.html#ad40b7c438ccec00f09642ca3a298998b">sc2::GameInfo</a>
+</li>
 </ul>
 
 
 <h3><a id="index_m"></a>- m -</h3><ul>
+<li>map_name
+: <a class="el" href="structsc2_1_1_game_info.html#aac7b270ec70809ad1516d6eb232a6d50">sc2::GameInfo</a>
+</li>
 <li>map_resolution_x
 : <a class="el" href="structsc2_1_1_spatial_setup.html#a6b238b3ed5fd2d5d4f15dd096051d7ce">sc2::SpatialSetup</a>
 </li>
@@ -326,6 +347,7 @@ $(function() {
 <h3><a id="index_n"></a>- n -</h3><ul>
 <li>name
 : <a class="el" href="structsc2_1_1_buff_data.html#a8b97134b47f6cbe973fe1eba84bc3612">sc2::BuffData</a>
+, <a class="el" href="structsc2_1_1_effect_data.html#a23ec611a2d87a280ede5bb7a56b5be2f">sc2::EffectData</a>
 , <a class="el" href="structsc2_1_1_unit_type_data.html#aefb802f470411fdba19e6b4ecb503427">sc2::UnitTypeData</a>
 , <a class="el" href="structsc2_1_1_upgrade_data.html#a8d8a126e4bee8c434bad896d3ac2c9be">sc2::UpgradeData</a>
 </li>
@@ -370,6 +392,9 @@ $(function() {
 <li>position
 : <a class="el" href="structsc2_1_1_power_source.html#acbd869abcc7f5964aca0faeb5905ee3d">sc2::PowerSource</a>
 </li>
+<li>positions
+: <a class="el" href="structsc2_1_1_effect.html#ad7fdd1cf25fcc10aa577c9cfdaf74525">sc2::Effect</a>
+</li>
 <li>progress
 : <a class="el" href="structsc2_1_1_unit_order.html#a820bb8f79dcaebcd02475b5ac2c522cc">sc2::UnitOrder</a>
 </li>
@@ -396,7 +421,8 @@ $(function() {
 : <a class="el" href="classsc2_1_1_unit.html#a22e99532761f81474b7e666e08bf8727">sc2::Unit</a>
 </li>
 <li>radius
-: <a class="el" href="structsc2_1_1_power_source.html#ab26f1606de2400d63693272a501d4d2d">sc2::PowerSource</a>
+: <a class="el" href="structsc2_1_1_effect_data.html#a9f91e374d06072d55b6ea6077a0b3884">sc2::EffectData</a>
+, <a class="el" href="structsc2_1_1_power_source.html#ab26f1606de2400d63693272a501d4d2d">sc2::PowerSource</a>
 , <a class="el" href="classsc2_1_1_unit.html#a0c2d1fb9e6f150333d96cc8ce8f9e9bf">sc2::Unit</a>
 </li>
 <li>raw
@@ -433,6 +459,10 @@ $(function() {
 <li>shield
 : <a class="el" href="structsc2_1_1_passenger_unit.html#a8e79587e7907106cde23a76e2db4d1fd">sc2::PassengerUnit</a>
 , <a class="el" href="classsc2_1_1_unit.html#ae5ee0c4d31a1266e31ac0a739bcc3d86">sc2::Unit</a>
+</li>
+<li>shield_max
+: <a class="el" href="structsc2_1_1_passenger_unit.html#a5042ae0895025e2d4cced740b8c28571">sc2::PassengerUnit</a>
+, <a class="el" href="classsc2_1_1_unit.html#aaf79ea67a982c7d858abb0190cc0ac5c">sc2::Unit</a>
 </li>
 </ul>
 

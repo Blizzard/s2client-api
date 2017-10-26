@@ -1,0 +1,42 @@
+\hypertarget{structsc2_1_1_effect}{}\section{sc2\+:\+:Effect Struct Reference}
+\label{structsc2_1_1_effect}\index{sc2\+::\+Effect@{sc2\+::\+Effect}}
+
+
+The visuals of a persistent ability on the map. (eg. Psistorm)  
+
+
+
+
+{\ttfamily \#include $<$sc2\+\_\+data.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structsc2_1_1_effect_a581e59911e88973b8925d55c5850b8c5}\label{structsc2_1_1_effect_a581e59911e88973b8925d55c5850b8c5}} 
+void {\bfseries Read\+From\+Proto} (const S\+C2\+A\+P\+I\+Protocol\+::\+Effect \&effect)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structsc2_1_1_effect_a9662d93abf7bffd42ae9913df609ded4}\label{structsc2_1_1_effect_a9662d93abf7bffd42ae9913df609ded4}} 
+uint32\+\_\+t \hyperlink{structsc2_1_1_effect_a9662d93abf7bffd42ae9913df609ded4}{effect\+\_\+id}
+\begin{DoxyCompactList}\small\item\em Type of the effect. \end{DoxyCompactList}\item 
+std\+::vector$<$ \hyperlink{structsc2_1_1_point2_d}{Point2D} $>$ \hyperlink{structsc2_1_1_effect_ad7fdd1cf25fcc10aa577c9cfdaf74525}{positions}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The visuals of a persistent ability on the map. (eg. Psistorm) 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structsc2_1_1_effect_ad7fdd1cf25fcc10aa577c9cfdaf74525}\label{structsc2_1_1_effect_ad7fdd1cf25fcc10aa577c9cfdaf74525}} 
+\index{sc2\+::\+Effect@{sc2\+::\+Effect}!positions@{positions}}
+\index{positions@{positions}!sc2\+::\+Effect@{sc2\+::\+Effect}}
+\subsubsection{\texorpdfstring{positions}{positions}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{structsc2_1_1_point2_d}{Point2D}$>$ sc2\+::\+Effect\+::positions}
+
+All the positions that this effect is impacting on the map. eg. The Lurker\textquotesingle{}s attack impacts multiple positions in a line. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/sc2api/sc2\+\_\+data.\+h\end{DoxyCompactItemize}

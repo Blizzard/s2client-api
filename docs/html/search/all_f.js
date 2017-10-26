@@ -3,7 +3,7 @@ var searchData=
   ['race',['race',['../structsc2_1_1_unit_type_data.html#a579e162016f2fd46c8428a711be3ac3a',1,'sc2::UnitTypeData::race()'],['../structsc2_1_1_player_setup.html#aaa5c79519707f78fbe6f9f6d3580a051',1,'sc2::PlayerSetup::race()'],['../structsc2_1_1_replay_player_info.html#a4ab3c2d0a8d9d784be2404c671f1d143',1,'sc2::ReplayPlayerInfo::race()']]],
   ['race_5fselected',['race_selected',['../structsc2_1_1_replay_player_info.html#ad8061fc9f5910207eff1faa2437cdfae',1,'sc2::ReplayPlayerInfo']]],
   ['radar_5frange',['radar_range',['../classsc2_1_1_unit.html#a22e99532761f81474b7e666e08bf8727',1,'sc2::Unit']]],
-  ['radius',['radius',['../structsc2_1_1_power_source.html#ab26f1606de2400d63693272a501d4d2d',1,'sc2::PowerSource::radius()'],['../classsc2_1_1_unit.html#a0c2d1fb9e6f150333d96cc8ce8f9e9bf',1,'sc2::Unit::radius()']]],
+  ['radius',['radius',['../structsc2_1_1_effect_data.html#a9f91e374d06072d55b6ea6077a0b3884',1,'sc2::EffectData::radius()'],['../structsc2_1_1_power_source.html#ab26f1606de2400d63693272a501d4d2d',1,'sc2::PowerSource::radius()'],['../classsc2_1_1_unit.html#a0c2d1fb9e6f150333d96cc8ce8f9e9bf',1,'sc2::Unit::radius()']]],
   ['raw',['raw',['../structsc2_1_1_interface_options.html#a363b3c8fc3dade64fe6dc14c095b324e',1,'sc2::InterfaceOptions']]],
   ['readfromproto',['ReadFromProto',['../structsc2_1_1_ability_data.html#a974e180b290ad684b2806232ccb55b5c',1,'sc2::AbilityData::ReadFromProto()'],['../structsc2_1_1_unit_type_data.html#a4d05b07420d5c202b9f397968428254d',1,'sc2::UnitTypeData::ReadFromProto()']]],
   ['receive',['Receive',['../classsc2_1_1_connection.html#a383d7968897ccc2e35c2716bb110584f',1,'sc2::Connection']]],

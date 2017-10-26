@@ -29,12 +29,6 @@ enum \hyperlink{classsc2_1_1_unit_a03f99cfaa8ad4f9bba6cd0bc5586c943}{Cloak\+Stat
 \hyperlink{classsc2_1_1_unit_a03f99cfaa8ad4f9bba6cd0bc5586c943a2cf1dac1fc0a53735ae998f1cd437446}{Unknown} = 4
  \}\begin{DoxyCompactList}\small\item\em \hyperlink{classsc2_1_1_unit}{Unit} cloak state. \end{DoxyCompactList}
 \end{DoxyCompactItemize}
-\subsection*{Public Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\Hypertarget{classsc2_1_1_unit_aca5722ffb5bc156d0e9d0b28a40fb7c1}\label{classsc2_1_1_unit_aca5722ffb5bc156d0e9d0b28a40fb7c1}} 
-{\bfseries operator Tag} () const
-\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -92,9 +86,15 @@ float \hyperlink{classsc2_1_1_unit_a9903ceca120d82cacc49dee00150fe67}{health\+\_
 \mbox{\Hypertarget{classsc2_1_1_unit_ae5ee0c4d31a1266e31ac0a739bcc3d86}\label{classsc2_1_1_unit_ae5ee0c4d31a1266e31ac0a739bcc3d86}} 
 float \hyperlink{classsc2_1_1_unit_ae5ee0c4d31a1266e31ac0a739bcc3d86}{shield}
 \begin{DoxyCompactList}\small\item\em Shield of the unit. Not set for snapshots. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_unit_aaf79ea67a982c7d858abb0190cc0ac5c}\label{classsc2_1_1_unit_aaf79ea67a982c7d858abb0190cc0ac5c}} 
+float \hyperlink{classsc2_1_1_unit_aaf79ea67a982c7d858abb0190cc0ac5c}{shield\+\_\+max}
+\begin{DoxyCompactList}\small\item\em Max shield of the unit. Not set for snapshots. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classsc2_1_1_unit_aa2b194b8a5499b7591356dc6365c0cdc}\label{classsc2_1_1_unit_aa2b194b8a5499b7591356dc6365c0cdc}} 
 float \hyperlink{classsc2_1_1_unit_aa2b194b8a5499b7591356dc6365c0cdc}{energy}
 \begin{DoxyCompactList}\small\item\em Energy of the unit. Not set for snapshots. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_unit_a746011af49f363075e4c595c384933ff}\label{classsc2_1_1_unit_a746011af49f363075e4c595c384933ff}} 
+float \hyperlink{classsc2_1_1_unit_a746011af49f363075e4c595c384933ff}{energy\+\_\+max}
+\begin{DoxyCompactList}\small\item\em Max energy of the unit. Not set for snapshots. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classsc2_1_1_unit_a689d7b7c9a68b3cd172f2333203423b9}\label{classsc2_1_1_unit_a689d7b7c9a68b3cd172f2333203423b9}} 
 int \hyperlink{classsc2_1_1_unit_a689d7b7c9a68b3cd172f2333203423b9}{mineral\+\_\+contents}
 \begin{DoxyCompactList}\small\item\em Amount of minerals if the unit is a mineral field. Not set for snapshots. \end{DoxyCompactList}\item 
@@ -139,7 +139,13 @@ std\+::vector$<$ \hyperlink{classsc2_1_1_s_c2_type}{Buff\+ID} $>$ \hyperlink{cla
 \begin{DoxyCompactList}\small\item\em Buffs on this unit. Only valid for this player\textquotesingle{}s units. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classsc2_1_1_unit_a13e408736f731902adb60d2725507dc9}\label{classsc2_1_1_unit_a13e408736f731902adb60d2725507dc9}} 
 bool \hyperlink{classsc2_1_1_unit_a13e408736f731902adb60d2725507dc9}{is\+\_\+powered}
-\begin{DoxyCompactList}\small\item\em Whether the unit is powered by a pylon. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Whether the unit is powered by a pylon. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_unit_a5c39436632bf6f82f1a47df3eedbed5d}\label{classsc2_1_1_unit_a5c39436632bf6f82f1a47df3eedbed5d}} 
+bool \hyperlink{classsc2_1_1_unit_a5c39436632bf6f82f1a47df3eedbed5d}{is\+\_\+alive}
+\begin{DoxyCompactList}\small\item\em Whether the unit is alive or not. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classsc2_1_1_unit_af49caa7da174260e424ab4d0c5ae6c78}\label{classsc2_1_1_unit_af49caa7da174260e424ab4d0c5ae6c78}} 
+uint32\+\_\+t \hyperlink{classsc2_1_1_unit_af49caa7da174260e424ab4d0c5ae6c78}{last\+\_\+seen\+\_\+game\+\_\+loop}
+\begin{DoxyCompactList}\small\item\em The last time the unit was seen. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['map_5fname',['map_name',['../structsc2_1_1_game_info.html#aac7b270ec70809ad1516d6eb232a6d50',1,'sc2::GameInfo']]],
   ['map_5fresolution_5fx',['map_resolution_x',['../structsc2_1_1_spatial_setup.html#a6b238b3ed5fd2d5d4f15dd096051d7ce',1,'sc2::SpatialSetup']]],
   ['map_5fresolution_5fy',['map_resolution_y',['../structsc2_1_1_spatial_setup.html#ae9e4415838b159f4a06a63af47fa148e',1,'sc2::SpatialSetup']]],
   ['map_5fx',['map_x',['../structsc2_1_1_render_settings.html#a330b0d96688b42703928e26e0feb305f',1,'sc2::RenderSettings::map_x()'],['../structsc2_1_1_feature_layer_settings.html#a621c94ea8be82e725ea0632126587067',1,'sc2::FeatureLayerSettings::map_x()']]],
