@@ -1,6 +1,7 @@
 var searchData=
 [
   ['ideal_5fharvesters',['ideal_harvesters',['../classsc2_1_1_unit.html#a59c9e7c9c14f50f11d33b58716f664fe',1,'sc2::Unit']]],
+  ['is_5falive',['is_alive',['../classsc2_1_1_unit.html#a5c39436632bf6f82f1a47df3eedbed5d',1,'sc2::Unit']]],
   ['is_5fblip',['is_blip',['../classsc2_1_1_unit.html#aa730ea2bf474d4422e6c6a1e267945d4',1,'sc2::Unit']]],
   ['is_5fbuilding',['is_building',['../structsc2_1_1_ability_data.html#a252839497c027c2278ca126405d53da9',1,'sc2::AbilityData']]],
   ['is_5fburrowed',['is_burrowed',['../classsc2_1_1_unit.html#af815cd5269616209d4a2bdf2e734decb',1,'sc2::Unit']]],

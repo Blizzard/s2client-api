@@ -89,6 +89,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7cea718f571effbe25b771315628c685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad906656238e13a8bab21c46f50aecc3d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#ad906656238e13a8bab21c46f50aecc3d">SetProcessPath</a> (const std::string &amp;path)</td></tr>
 <tr class="separator:ad906656238e13a8bab21c46f50aecc3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4071b2072ce3120b135c37c7e7587d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#ac4071b2072ce3120b135c37c7e7587d1">SetDataVersion</a> (const std::string &amp;version)</td></tr>
+<tr class="separator:ac4071b2072ce3120b135c37c7e7587d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadbfd927d66314a4eb949b2de2ae37b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#aadbfd927d66314a4eb949b2de2ae37b4">SetTimeoutMS</a> (uint32_t timeout_ms=kDefaultProtoInterfaceTimeout)</td></tr>
 <tr class="separator:aadbfd927d66314a4eb949b2de2ae37b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaad48921bac2f4f84471de5e9cff75d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#aaad48921bac2f4f84471de5e9cff75d5">SetPortStart</a> (int port_start)</td></tr>
@@ -101,6 +103,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9b0eca71a6f7575f35d1dd5c3e5d73cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e372788e11c3916fdf1982eb2e55511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#a6e372788e11c3916fdf1982eb2e55511">SetWindowLocation</a> (int x, int y)</td></tr>
 <tr class="separator:a6e372788e11c3916fdf1982eb2e55511"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aedd93ba1d7eb9e81b37b34ff76147c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#a8aedd93ba1d7eb9e81b37b34ff76147c">SetUseGeneralizedAbilityId</a> (bool value)</td></tr>
+<tr class="separator:a8aedd93ba1d7eb9e81b37b34ff76147c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa59950d8ccb9d010288df3e1e6045eb9"><td class="memItemLeft" align="right" valign="top"><a id="aa59950d8ccb9d010288df3e1e6045eb9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_coordinator.html#aa59950d8ccb9d010288df3e1e6045eb9">AddCommandLine</a> (const std::string &amp;option)</td></tr>
 <tr class="memdesc:aa59950d8ccb9d010288df3e1e6045eb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a command line argument to be fed to StarCraft II when starting. <br /></td></tr>
@@ -270,6 +274,30 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Saves a binary blob as a map to a remote location. </p>
 <p>&lt; </p><dl class="section return"><dt>Returns</dt><dd>Is true if the save is successful. </dd></dl>
+
+</div>
+</div>
+<a id="ac4071b2072ce3120b135c37c7e7587d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4071b2072ce3120b135c37c7e7587d1">&#9670;&nbsp;</a></span>SetDataVersion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sc2::Coordinator::SetDataVersion </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>version</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the correct data version of a replay to allow faster replay loading. Saves a few seconds if replay is not up to date. Works only in combination with correct process path set by "SetProcessPath". </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">version</td><td>Look in "protocol/buildinfo/versions.json" for the property "data-hash". Or read it from "ReplayInfo.data_version". </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -458,6 +486,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8aedd93ba1d7eb9e81b37b34ff76147c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aedd93ba1d7eb9e81b37b34ff76147c">&#9670;&nbsp;</a></span>SetUseGeneralizedAbilityId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sc2::Coordinator::SetUseGeneralizedAbilityId </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Uses generalized abilities where possible. Example: BUILD_TECHLAB_BARRACKS, BUILD_TECHLAB_FACTORY, BUILD_TECHLAB_STARPORT ability ids are generalized to BUILD_TECHLAB ability id in the observation. </p>
 
 </div>
 </div>

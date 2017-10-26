@@ -30,7 +30,7 @@ virtual void \hyperlink{classsc2_1_1_debug_interface_a9c4b50b0c3b07cd77c4b9c98af
 \item 
 virtual void \hyperlink{classsc2_1_1_debug_interface_a74f53226964fac1ff67f071b09497a8a}{Debug\+Create\+Unit} (\hyperlink{classsc2_1_1_s_c2_type}{Unit\+Type\+ID} unit\+\_\+type, const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&p, uint32\+\_\+t player\+\_\+id=1, uint32\+\_\+t count=1)=0
 \item 
-virtual void \hyperlink{classsc2_1_1_debug_interface_afc45d89e7cd2bc02c9be1808a0041be2}{Debug\+Kill\+Unit} (Tag tag)=0
+virtual void \hyperlink{classsc2_1_1_debug_interface_ac34014603086b4fd66a36500a63f2083}{Debug\+Kill\+Unit} (const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit)=0
 \item 
 \mbox{\Hypertarget{classsc2_1_1_debug_interface_ab25a7057a3e3ee4ce4895ffe6b9f665a}\label{classsc2_1_1_debug_interface_ab25a7057a3e3ee4ce4895ffe6b9f665a}} 
 virtual void \hyperlink{classsc2_1_1_debug_interface_ab25a7057a3e3ee4ce4895ffe6b9f665a}{Debug\+Show\+Map} ()=0
@@ -70,11 +70,11 @@ virtual void \hyperlink{classsc2_1_1_debug_interface_a0e14deec5d84d341f4f3aefc29
 \begin{DoxyCompactList}\small\item\em Sets the scripted \char`\"{}curriculum\char`\"{} score. \end{DoxyCompactList}\item 
 virtual void \hyperlink{classsc2_1_1_debug_interface_afba1e9cbd642833e0de4360aba7ff08e}{Debug\+End\+Game} (bool victory=false)=0
 \item 
-virtual void \hyperlink{classsc2_1_1_debug_interface_a3049f5181825a014b8f05c75af8c254b}{Debug\+Set\+Energy} (float value, Tag tag)=0
+virtual void \hyperlink{classsc2_1_1_debug_interface_ad9a0d12a1cb638e2c48ecbe5fb492d00}{Debug\+Set\+Energy} (float value, const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit)=0
 \item 
-virtual void \hyperlink{classsc2_1_1_debug_interface_aebec7aae013f15f2791dd17af6d9e320}{Debug\+Set\+Life} (float value, Tag tag)=0
+virtual void \hyperlink{classsc2_1_1_debug_interface_a30ea1ea267baf1a5a0ac8f0cf9a7d679}{Debug\+Set\+Life} (float value, const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit)=0
 \item 
-virtual void \hyperlink{classsc2_1_1_debug_interface_a003a4d12d81cfb02078623b255b16d17}{Debug\+Set\+Shields} (float value, Tag tag)=0
+virtual void \hyperlink{classsc2_1_1_debug_interface_abba240758a1312682ac502f254d66d0a}{Debug\+Set\+Shields} (float value, const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$unit)=0
 \item 
 virtual void \hyperlink{classsc2_1_1_debug_interface_aafe669615586b51805c6bf3e9cef7bf1}{Debug\+Move\+Camera} (const \hyperlink{structsc2_1_1_point2_d}{Point2D} \&pos)=0
 \item 
@@ -131,11 +131,11 @@ Ends a game.
 {\em victory} & If true, this player is victorious. If false, this player surrenders. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_debug_interface_afc45d89e7cd2bc02c9be1808a0041be2}\label{classsc2_1_1_debug_interface_afc45d89e7cd2bc02c9be1808a0041be2}} 
+\mbox{\Hypertarget{classsc2_1_1_debug_interface_ac34014603086b4fd66a36500a63f2083}\label{classsc2_1_1_debug_interface_ac34014603086b4fd66a36500a63f2083}} 
 \index{sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}!Debug\+Kill\+Unit@{Debug\+Kill\+Unit}}
 \index{Debug\+Kill\+Unit@{Debug\+Kill\+Unit}!sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}}
 \subsubsection{\texorpdfstring{Debug\+Kill\+Unit()}{DebugKillUnit()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Kill\+Unit (\begin{DoxyParamCaption}\item[{Tag}]{tag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Kill\+Unit (\begin{DoxyParamCaption}\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Destroy a unit. 
 \begin{DoxyParams}{Parameters}
@@ -168,11 +168,11 @@ Sets the position of the camera.
 {\em pos} & The camera position in world space. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_debug_interface_a3049f5181825a014b8f05c75af8c254b}\label{classsc2_1_1_debug_interface_a3049f5181825a014b8f05c75af8c254b}} 
+\mbox{\Hypertarget{classsc2_1_1_debug_interface_ad9a0d12a1cb638e2c48ecbe5fb492d00}\label{classsc2_1_1_debug_interface_ad9a0d12a1cb638e2c48ecbe5fb492d00}} 
 \index{sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}!Debug\+Set\+Energy@{Debug\+Set\+Energy}}
 \index{Debug\+Set\+Energy@{Debug\+Set\+Energy}!sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}}
 \subsubsection{\texorpdfstring{Debug\+Set\+Energy()}{DebugSetEnergy()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Set\+Energy (\begin{DoxyParamCaption}\item[{float}]{value,  }\item[{Tag}]{tag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Set\+Energy (\begin{DoxyParamCaption}\item[{float}]{value,  }\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Sets the energy level on a unit. 
 \begin{DoxyParams}{Parameters}
@@ -181,11 +181,11 @@ Sets the energy level on a unit.
 {\em tag} & The unit. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_debug_interface_aebec7aae013f15f2791dd17af6d9e320}\label{classsc2_1_1_debug_interface_aebec7aae013f15f2791dd17af6d9e320}} 
+\mbox{\Hypertarget{classsc2_1_1_debug_interface_a30ea1ea267baf1a5a0ac8f0cf9a7d679}\label{classsc2_1_1_debug_interface_a30ea1ea267baf1a5a0ac8f0cf9a7d679}} 
 \index{sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}!Debug\+Set\+Life@{Debug\+Set\+Life}}
 \index{Debug\+Set\+Life@{Debug\+Set\+Life}!sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}}
 \subsubsection{\texorpdfstring{Debug\+Set\+Life()}{DebugSetLife()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Set\+Life (\begin{DoxyParamCaption}\item[{float}]{value,  }\item[{Tag}]{tag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Set\+Life (\begin{DoxyParamCaption}\item[{float}]{value,  }\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Sets the life on a unit. 
 \begin{DoxyParams}{Parameters}
@@ -194,11 +194,11 @@ Sets the life on a unit.
 {\em tag} & The unit. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_debug_interface_a003a4d12d81cfb02078623b255b16d17}\label{classsc2_1_1_debug_interface_a003a4d12d81cfb02078623b255b16d17}} 
+\mbox{\Hypertarget{classsc2_1_1_debug_interface_abba240758a1312682ac502f254d66d0a}\label{classsc2_1_1_debug_interface_abba240758a1312682ac502f254d66d0a}} 
 \index{sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}!Debug\+Set\+Shields@{Debug\+Set\+Shields}}
 \index{Debug\+Set\+Shields@{Debug\+Set\+Shields}!sc2\+::\+Debug\+Interface@{sc2\+::\+Debug\+Interface}}
 \subsubsection{\texorpdfstring{Debug\+Set\+Shields()}{DebugSetShields()}}
-{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Set\+Shields (\begin{DoxyParamCaption}\item[{float}]{value,  }\item[{Tag}]{tag }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual void sc2\+::\+Debug\+Interface\+::\+Debug\+Set\+Shields (\begin{DoxyParamCaption}\item[{float}]{value,  }\item[{const \hyperlink{classsc2_1_1_unit}{Unit} $\ast$}]{unit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 Sets shields on a unit. 
 \begin{DoxyParams}{Parameters}

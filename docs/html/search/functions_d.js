@@ -6,6 +6,7 @@ var searchData=
   ['send',['Send',['../classsc2_1_1_connection.html#af6bd305434d9efd78a6868749e764749',1,'sc2::Connection']]],
   ['sendactions',['SendActions',['../classsc2_1_1_action_interface.html#af054d2a35e7eb740109f63011090ea50',1,'sc2::ActionInterface::SendActions()'],['../classsc2_1_1_action_feature_layer_interface.html#ab9f434ec52e62fac77dcb99f9cc81080',1,'sc2::ActionFeatureLayerInterface::SendActions()']]],
   ['senddebug',['SendDebug',['../classsc2_1_1_debug_interface.html#ae08bd0e07c9ed54c61a2f35225b2efb5',1,'sc2::DebugInterface']]],
+  ['setdataversion',['SetDataVersion',['../classsc2_1_1_coordinator.html#ac4071b2072ce3120b135c37c7e7587d1',1,'sc2::Coordinator']]],
   ['setfeaturelayers',['SetFeatureLayers',['../classsc2_1_1_coordinator.html#ab46aec5712f6ec8ef12b03854f6e0495',1,'sc2::Coordinator']]],
   ['setmultithreaded',['SetMultithreaded',['../classsc2_1_1_coordinator.html#a555587bc85ac437711d15b569c75181a',1,'sc2::Coordinator']]],
   ['setparticipants',['SetParticipants',['../classsc2_1_1_coordinator.html#aed4bf1a5cf1519fc0488bc5d4641a582',1,'sc2::Coordinator']]],
@@ -17,6 +18,7 @@ var searchData=
   ['setstepsize',['SetStepSize',['../classsc2_1_1_coordinator.html#a7cea718f571effbe25b771315628c685',1,'sc2::Coordinator']]],
   ['settimeoutcallback',['SetTimeoutCallback',['../classsc2_1_1_connection.html#a1a3d3c532703e0bf7a88f49ee22aa65e',1,'sc2::Connection']]],
   ['settimeoutms',['SetTimeoutMS',['../classsc2_1_1_coordinator.html#aadbfd927d66314a4eb949b2de2ae37b4',1,'sc2::Coordinator']]],
+  ['setusegeneralizedabilityid',['SetUseGeneralizedAbilityId',['../classsc2_1_1_coordinator.html#a8aedd93ba1d7eb9e81b37b34ff76147c',1,'sc2::Coordinator']]],
   ['setwindowlocation',['SetWindowLocation',['../classsc2_1_1_coordinator.html#a6e372788e11c3916fdf1982eb2e55511',1,'sc2::Coordinator']]],
   ['setwindowsize',['SetWindowSize',['../classsc2_1_1_coordinator.html#a9b0eca71a6f7575f35d1dd5c3e5d73cf',1,'sc2::Coordinator']]],
   ['startgame',['StartGame',['../classsc2_1_1_coordinator.html#a32ea6e639a39ec1fc813dffa2993d5b1',1,'sc2::Coordinator']]]

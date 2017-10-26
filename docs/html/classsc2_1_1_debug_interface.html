@@ -99,8 +99,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9c4b50b0c3b07cd77c4b9c98afc689b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74f53226964fac1ff67f071b09497a8a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#a74f53226964fac1ff67f071b09497a8a">DebugCreateUnit</a> (<a class="el" href="classsc2_1_1_s_c2_type.html">UnitTypeID</a> unit_type, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;p, uint32_t player_id=1, uint32_t count=1)=0</td></tr>
 <tr class="separator:a74f53226964fac1ff67f071b09497a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc45d89e7cd2bc02c9be1808a0041be2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#afc45d89e7cd2bc02c9be1808a0041be2">DebugKillUnit</a> (Tag tag)=0</td></tr>
-<tr class="separator:afc45d89e7cd2bc02c9be1808a0041be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac34014603086b4fd66a36500a63f2083"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#ac34014603086b4fd66a36500a63f2083">DebugKillUnit</a> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit)=0</td></tr>
+<tr class="separator:ac34014603086b4fd66a36500a63f2083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab25a7057a3e3ee4ce4895ffe6b9f665a"><td class="memItemLeft" align="right" valign="top"><a id="ab25a7057a3e3ee4ce4895ffe6b9f665a"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#ab25a7057a3e3ee4ce4895ffe6b9f665a">DebugShowMap</a> ()=0</td></tr>
 <tr class="memdesc:ab25a7057a3e3ee4ce4895ffe6b9f665a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes the entire map visible, i.e., removes the fog-of-war. <br /></td></tr>
@@ -151,12 +151,12 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr class="separator:a0e14deec5d84d341f4f3aefc29a198d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afba1e9cbd642833e0de4360aba7ff08e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#afba1e9cbd642833e0de4360aba7ff08e">DebugEndGame</a> (bool victory=false)=0</td></tr>
 <tr class="separator:afba1e9cbd642833e0de4360aba7ff08e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3049f5181825a014b8f05c75af8c254b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#a3049f5181825a014b8f05c75af8c254b">DebugSetEnergy</a> (float value, Tag tag)=0</td></tr>
-<tr class="separator:a3049f5181825a014b8f05c75af8c254b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebec7aae013f15f2791dd17af6d9e320"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#aebec7aae013f15f2791dd17af6d9e320">DebugSetLife</a> (float value, Tag tag)=0</td></tr>
-<tr class="separator:aebec7aae013f15f2791dd17af6d9e320"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a003a4d12d81cfb02078623b255b16d17"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#a003a4d12d81cfb02078623b255b16d17">DebugSetShields</a> (float value, Tag tag)=0</td></tr>
-<tr class="separator:a003a4d12d81cfb02078623b255b16d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9a0d12a1cb638e2c48ecbe5fb492d00"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#ad9a0d12a1cb638e2c48ecbe5fb492d00">DebugSetEnergy</a> (float value, const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit)=0</td></tr>
+<tr class="separator:ad9a0d12a1cb638e2c48ecbe5fb492d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30ea1ea267baf1a5a0ac8f0cf9a7d679"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#a30ea1ea267baf1a5a0ac8f0cf9a7d679">DebugSetLife</a> (float value, const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit)=0</td></tr>
+<tr class="separator:a30ea1ea267baf1a5a0ac8f0cf9a7d679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abba240758a1312682ac502f254d66d0a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#abba240758a1312682ac502f254d66d0a">DebugSetShields</a> (float value, const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit)=0</td></tr>
+<tr class="separator:abba240758a1312682ac502f254d66d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe669615586b51805c6bf3e9cef7bf1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#aafe669615586b51805c6bf3e9cef7bf1">DebugMoveCamera</a> (const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;pos)=0</td></tr>
 <tr class="separator:aafe669615586b51805c6bf3e9cef7bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a6fd0d4719dea83de3f5e374127a1da"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_debug_interface.html#a9a6fd0d4719dea83de3f5e374127a1da">DebugTestApp</a> (AppTest app_test, int delay_ms=0)=0</td></tr>
@@ -306,8 +306,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="afc45d89e7cd2bc02c9be1808a0041be2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc45d89e7cd2bc02c9be1808a0041be2">&#9670;&nbsp;</a></span>DebugKillUnit()</h2>
+<a id="ac34014603086b4fd66a36500a63f2083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac34014603086b4fd66a36500a63f2083">&#9670;&nbsp;</a></span>DebugKillUnit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,8 +318,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="memname">virtual void sc2::DebugInterface::DebugKillUnit </td>
           <td>(</td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>tag</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -420,8 +420,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="a3049f5181825a014b8f05c75af8c254b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3049f5181825a014b8f05c75af8c254b">&#9670;&nbsp;</a></span>DebugSetEnergy()</h2>
+<a id="ad9a0d12a1cb638e2c48ecbe5fb492d00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9a0d12a1cb638e2c48ecbe5fb492d00">&#9670;&nbsp;</a></span>DebugSetEnergy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -438,8 +438,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>tag</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -463,8 +463,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="aebec7aae013f15f2791dd17af6d9e320"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aebec7aae013f15f2791dd17af6d9e320">&#9670;&nbsp;</a></span>DebugSetLife()</h2>
+<a id="a30ea1ea267baf1a5a0ac8f0cf9a7d679"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30ea1ea267baf1a5a0ac8f0cf9a7d679">&#9670;&nbsp;</a></span>DebugSetLife()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -481,8 +481,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>tag</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -506,8 +506,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="a003a4d12d81cfb02078623b255b16d17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a003a4d12d81cfb02078623b255b16d17">&#9670;&nbsp;</a></span>DebugSetShields()</h2>
+<a id="abba240758a1312682ac502f254d66d0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abba240758a1312682ac502f254d66d0a">&#9670;&nbsp;</a></span>DebugSetShields()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -524,8 +524,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>tag</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

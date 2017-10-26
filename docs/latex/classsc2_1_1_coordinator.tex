@@ -22,6 +22,8 @@ void \hyperlink{classsc2_1_1_coordinator_a7cea718f571effbe25b771315628c685}{Set\
 \item 
 void \hyperlink{classsc2_1_1_coordinator_ad906656238e13a8bab21c46f50aecc3d}{Set\+Process\+Path} (const std\+::string \&path)
 \item 
+void \hyperlink{classsc2_1_1_coordinator_ac4071b2072ce3120b135c37c7e7587d1}{Set\+Data\+Version} (const std\+::string \&version)
+\item 
 void \hyperlink{classsc2_1_1_coordinator_aadbfd927d66314a4eb949b2de2ae37b4}{Set\+Timeout\+MS} (uint32\+\_\+t timeout\+\_\+ms=k\+Default\+Proto\+Interface\+Timeout)
 \item 
 void \hyperlink{classsc2_1_1_coordinator_aaad48921bac2f4f84471de5e9cff75d5}{Set\+Port\+Start} (int port\+\_\+start)
@@ -33,6 +35,8 @@ void \hyperlink{classsc2_1_1_coordinator_ace8a0630c6b61d28e81c94bbebad3d7d}{Set\
 void \hyperlink{classsc2_1_1_coordinator_a9b0eca71a6f7575f35d1dd5c3e5d73cf}{Set\+Window\+Size} (int width, int height)
 \item 
 void \hyperlink{classsc2_1_1_coordinator_a6e372788e11c3916fdf1982eb2e55511}{Set\+Window\+Location} (int x, int y)
+\item 
+void \hyperlink{classsc2_1_1_coordinator_a8aedd93ba1d7eb9e81b37b34ff76147c}{Set\+Use\+Generalized\+Ability\+Id} (bool value)
 \item 
 \mbox{\Hypertarget{classsc2_1_1_coordinator_aa59950d8ccb9d010288df3e1e6045eb9}\label{classsc2_1_1_coordinator_aa59950d8ccb9d010288df3e1e6045eb9}} 
 void \hyperlink{classsc2_1_1_coordinator_aa59950d8ccb9d010288df3e1e6045eb9}{Add\+Command\+Line} (const std\+::string \&option)
@@ -136,6 +140,17 @@ Saves a binary blob as a map to a remote location.
 $<$ \begin{DoxyReturn}{Returns}
 Is true if the save is successful. 
 \end{DoxyReturn}
+\mbox{\Hypertarget{classsc2_1_1_coordinator_ac4071b2072ce3120b135c37c7e7587d1}\label{classsc2_1_1_coordinator_ac4071b2072ce3120b135c37c7e7587d1}} 
+\index{sc2\+::\+Coordinator@{sc2\+::\+Coordinator}!Set\+Data\+Version@{Set\+Data\+Version}}
+\index{Set\+Data\+Version@{Set\+Data\+Version}!sc2\+::\+Coordinator@{sc2\+::\+Coordinator}}
+\subsubsection{\texorpdfstring{Set\+Data\+Version()}{SetDataVersion()}}
+{\footnotesize\ttfamily void sc2\+::\+Coordinator\+::\+Set\+Data\+Version (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{version }\end{DoxyParamCaption})}
+
+Set the correct data version of a replay to allow faster replay loading. Saves a few seconds if replay is not up to date. Works only in combination with correct process path set by \char`\"{}\+Set\+Process\+Path\char`\"{}. 
+\begin{DoxyParams}{Parameters}
+{\em version} & Look in \char`\"{}protocol/buildinfo/versions.\+json\char`\"{} for the property \char`\"{}data-\/hash\char`\"{}. Or read it from \char`\"{}\+Replay\+Info.\+data\+\_\+version\char`\"{}. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classsc2_1_1_coordinator_ab46aec5712f6ec8ef12b03854f6e0495}\label{classsc2_1_1_coordinator_ab46aec5712f6ec8ef12b03854f6e0495}} 
 \index{sc2\+::\+Coordinator@{sc2\+::\+Coordinator}!Set\+Feature\+Layers@{Set\+Feature\+Layers}}
 \index{Set\+Feature\+Layers@{Set\+Feature\+Layers}!sc2\+::\+Coordinator@{sc2\+::\+Coordinator}}
@@ -225,7 +240,13 @@ Sets the timeout for network operations.
 {\em value} & timeout\+\_\+ms in milliseconds. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classsc2_1_1_coordinator_a6e372788e11c3916fdf1982eb2e55511}\label{classsc2_1_1_coordinator_a6e372788e11c3916fdf1982eb2e55511}} 
+\mbox{\Hypertarget{classsc2_1_1_coordinator_a8aedd93ba1d7eb9e81b37b34ff76147c}\label{classsc2_1_1_coordinator_a8aedd93ba1d7eb9e81b37b34ff76147c}} 
+\index{sc2\+::\+Coordinator@{sc2\+::\+Coordinator}!Set\+Use\+Generalized\+Ability\+Id@{Set\+Use\+Generalized\+Ability\+Id}}
+\index{Set\+Use\+Generalized\+Ability\+Id@{Set\+Use\+Generalized\+Ability\+Id}!sc2\+::\+Coordinator@{sc2\+::\+Coordinator}}
+\subsubsection{\texorpdfstring{Set\+Use\+Generalized\+Ability\+Id()}{SetUseGeneralizedAbilityId()}}
+{\footnotesize\ttfamily void sc2\+::\+Coordinator\+::\+Set\+Use\+Generalized\+Ability\+Id (\begin{DoxyParamCaption}\item[{bool}]{value }\end{DoxyParamCaption})}
+
+Uses generalized abilities where possible. Example\+: B\+U\+I\+L\+D\+\_\+\+T\+E\+C\+H\+L\+A\+B\+\_\+\+B\+A\+R\+R\+A\+C\+KS, B\+U\+I\+L\+D\+\_\+\+T\+E\+C\+H\+L\+A\+B\+\_\+\+F\+A\+C\+T\+O\+RY, B\+U\+I\+L\+D\+\_\+\+T\+E\+C\+H\+L\+A\+B\+\_\+\+S\+T\+A\+R\+P\+O\+RT ability ids are generalized to B\+U\+I\+L\+D\+\_\+\+T\+E\+C\+H\+L\+AB ability id in the observation. \mbox{\Hypertarget{classsc2_1_1_coordinator_a6e372788e11c3916fdf1982eb2e55511}\label{classsc2_1_1_coordinator_a6e372788e11c3916fdf1982eb2e55511}} 
 \index{sc2\+::\+Coordinator@{sc2\+::\+Coordinator}!Set\+Window\+Location@{Set\+Window\+Location}}
 \index{Set\+Window\+Location@{Set\+Window\+Location}!sc2\+::\+Coordinator@{sc2\+::\+Coordinator}}
 \subsubsection{\texorpdfstring{Set\+Window\+Location()}{SetWindowLocation()}}

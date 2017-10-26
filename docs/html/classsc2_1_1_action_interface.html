@@ -76,24 +76,24 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad401d286fabc349133f27e0fc29099f2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#ad401d286fabc349133f27e0fc29099f2">UnitCommand</a> (Tag unit_tag, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability)=0</td></tr>
-<tr class="separator:ad401d286fabc349133f27e0fc29099f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89d51301c22e6c28672be771a3db47e2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a89d51301c22e6c28672be771a3db47e2">UnitCommand</a> (Tag unit_tag, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;point)=0</td></tr>
-<tr class="separator:a89d51301c22e6c28672be771a3db47e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5aacde49d90f8d6637ff0b69891448c4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a5aacde49d90f8d6637ff0b69891448c4">UnitCommand</a> (Tag unit_tag, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, Tag target_tag)=0</td></tr>
-<tr class="separator:a5aacde49d90f8d6637ff0b69891448c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23192496f856ac368d17da913cd97eac"><td class="memItemLeft" align="right" valign="top"><a id="a23192496f856ac368d17da913cd97eac"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a23192496f856ac368d17da913cd97eac">UnitCommand</a> (const std::vector&lt; Tag &gt; &amp;unit_tags, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability)=0</td></tr>
-<tr class="memdesc:a23192496f856ac368d17da913cd97eac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a command to multiple units (prefer this where possible). Same as <a class="el" href="classsc2_1_1_action_interface.html#ad401d286fabc349133f27e0fc29099f2">UnitCommand(Tag, AbilityID)</a>. <br /></td></tr>
-<tr class="separator:a23192496f856ac368d17da913cd97eac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c68a84725771092f731061797c0de5d"><td class="memItemLeft" align="right" valign="top"><a id="a9c68a84725771092f731061797c0de5d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a9c68a84725771092f731061797c0de5d">UnitCommand</a> (const std::vector&lt; Tag &gt; &amp;unit_tags, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;point)=0</td></tr>
-<tr class="memdesc:a9c68a84725771092f731061797c0de5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Tag, AbilityID, Point2D). <br /></td></tr>
-<tr class="separator:a9c68a84725771092f731061797c0de5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a5fd10e721f25ac756dd2fdb20ebd16"><td class="memItemLeft" align="right" valign="top"><a id="a3a5fd10e721f25ac756dd2fdb20ebd16"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a3a5fd10e721f25ac756dd2fdb20ebd16">UnitCommand</a> (const std::vector&lt; Tag &gt; &amp;unit_tags, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, Tag target_tag)=0</td></tr>
-<tr class="memdesc:a3a5fd10e721f25ac756dd2fdb20ebd16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a command to multiple units (prefer this where possible). Same as <a class="el" href="classsc2_1_1_action_interface.html#a5aacde49d90f8d6637ff0b69891448c4">UnitCommand(Tag, AbilityID, Tag)</a>. <br /></td></tr>
-<tr class="separator:a3a5fd10e721f25ac756dd2fdb20ebd16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add138c6ebe9b1fcbeae393c03b7fdeb9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#add138c6ebe9b1fcbeae393c03b7fdeb9">UnitCommand</a> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, bool queued_command=false)=0</td></tr>
+<tr class="separator:add138c6ebe9b1fcbeae393c03b7fdeb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7387d718d7d87c69b8476ca0d8a9f86a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a7387d718d7d87c69b8476ca0d8a9f86a">UnitCommand</a> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;point, bool queued_command=false)=0</td></tr>
+<tr class="separator:a7387d718d7d87c69b8476ca0d8a9f86a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63a3bb86851927cc58821afb0d21e1ab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a63a3bb86851927cc58821afb0d21e1ab">UnitCommand</a> (const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *unit, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *target, bool queued_command=false)=0</td></tr>
+<tr class="separator:a63a3bb86851927cc58821afb0d21e1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa647e739696bc228f44f7e1224d21733"><td class="memItemLeft" align="right" valign="top"><a id="aa647e739696bc228f44f7e1224d21733"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#aa647e739696bc228f44f7e1224d21733">UnitCommand</a> (const Units &amp;units, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, bool queued_move=false)=0</td></tr>
+<tr class="memdesc:aa647e739696bc228f44f7e1224d21733"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID). <br /></td></tr>
+<tr class="separator:aa647e739696bc228f44f7e1224d21733"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeea8f2ca32bfe3ee1835bddb9d1356f1"><td class="memItemLeft" align="right" valign="top"><a id="aeea8f2ca32bfe3ee1835bddb9d1356f1"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#aeea8f2ca32bfe3ee1835bddb9d1356f1">UnitCommand</a> (const Units &amp;units, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;point, bool queued_command=false)=0</td></tr>
+<tr class="memdesc:aeea8f2ca32bfe3ee1835bddb9d1356f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID, Point2D). <br /></td></tr>
+<tr class="separator:aeea8f2ca32bfe3ee1835bddb9d1356f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4999034a61ca0ebb95b722af8e305a21"><td class="memItemLeft" align="right" valign="top"><a id="a4999034a61ca0ebb95b722af8e305a21"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a4999034a61ca0ebb95b722af8e305a21">UnitCommand</a> (const Units &amp;units, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability, const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *target, bool queued_command=false)=0</td></tr>
+<tr class="memdesc:a4999034a61ca0ebb95b722af8e305a21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a command to multiple units (prefer this where possible). Same as UnitCommand(Unit, AbilityID, Unit). <br /></td></tr>
+<tr class="separator:a4999034a61ca0ebb95b722af8e305a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29a55f8dd4f9230864caa1deb228ae33"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; Tag &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a29a55f8dd4f9230864caa1deb228ae33">Commands</a> () const =0</td></tr>
 <tr class="separator:a29a55f8dd4f9230864caa1deb228ae33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f66f9b7eaf1d6a681694927b8605004"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsc2_1_1_action_interface.html#a5f66f9b7eaf1d6a681694927b8605004">ToggleAutocast</a> (Tag unit_tag, <a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a> ability)=0</td></tr>
@@ -244,8 +244,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="ad401d286fabc349133f27e0fc29099f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad401d286fabc349133f27e0fc29099f2">&#9670;&nbsp;</a></span>UnitCommand() <span class="overload">[1/3]</span></h2>
+<a id="add138c6ebe9b1fcbeae393c03b7fdeb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add138c6ebe9b1fcbeae393c03b7fdeb9">&#9670;&nbsp;</a></span>UnitCommand() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,14 +256,20 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="memname">virtual void sc2::ActionInterface::UnitCommand </td>
           <td>(</td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>unit_tag</em>, </td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classsc2_1_1_s_c2_type.html">AbilityID</a>&#160;</td>
-          <td class="paramname"><em>ability</em>&#160;</td>
+          <td class="paramname"><em>ability</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>queued_command</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -279,7 +285,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 <p>Issues a command to a unit. Self targeting. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unit_tag</td><td>The unit to send the command to. </td></tr>
+    <tr><td class="paramname">unit</td><td>The unit to send the command to. </td></tr>
     <tr><td class="paramname">ability</td><td>The ability id of the command. </td></tr>
   </table>
   </dd>
@@ -287,8 +293,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="a89d51301c22e6c28672be771a3db47e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89d51301c22e6c28672be771a3db47e2">&#9670;&nbsp;</a></span>UnitCommand() <span class="overload">[2/3]</span></h2>
+<a id="a7387d718d7d87c69b8476ca0d8a9f86a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7387d718d7d87c69b8476ca0d8a9f86a">&#9670;&nbsp;</a></span>UnitCommand() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,8 +305,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="memname">virtual void sc2::ActionInterface::UnitCommand </td>
           <td>(</td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>unit_tag</em>, </td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -312,7 +318,13 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="structsc2_1_1_point2_d.html">Point2D</a> &amp;&#160;</td>
-          <td class="paramname"><em>point</em>&#160;</td>
+          <td class="paramname"><em>point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>queued_command</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -328,7 +340,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 <p>Issues a command to a unit. Targets a point. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unit_tag</td><td>The unit to send the command to. </td></tr>
+    <tr><td class="paramname">unit</td><td>The unit to send the command to. </td></tr>
     <tr><td class="paramname">ability</td><td>The ability id of the command. </td></tr>
     <tr><td class="paramname">point</td><td>The 2D world position to target. </td></tr>
   </table>
@@ -337,8 +349,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 
 </div>
 </div>
-<a id="a5aacde49d90f8d6637ff0b69891448c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5aacde49d90f8d6637ff0b69891448c4">&#9670;&nbsp;</a></span>UnitCommand() <span class="overload">[3/3]</span></h2>
+<a id="a63a3bb86851927cc58821afb0d21e1ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63a3bb86851927cc58821afb0d21e1ab">&#9670;&nbsp;</a></span>UnitCommand() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -349,8 +361,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="memname">virtual void sc2::ActionInterface::UnitCommand </td>
           <td>(</td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>unit_tag</em>, </td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>unit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -361,8 +373,14 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Tag&#160;</td>
-          <td class="paramname"><em>target_tag</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classsc2_1_1_unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>queued_command</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -378,9 +396,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 <p>Issues a command to a unit. Targets another unit. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unit_tag</td><td>The unit to send the command to. </td></tr>
+    <tr><td class="paramname">unit</td><td>The unit to send the command to. </td></tr>
     <tr><td class="paramname">ability</td><td>The ability id of the command. </td></tr>
-    <tr><td class="paramname">target_tag</td><td>The unit that is a target of the unit getting the command. </td></tr>
+    <tr><td class="paramname">target</td><td>The unit that is a target of the unit getting the command. </td></tr>
   </table>
   </dd>
 </dl>
