@@ -411,6 +411,7 @@ void CoordinatorImp::StepReplayObservers() {
             // If multithreaded run everyones OnStep in parallel.
             if (process_settings_.multi_threaded) {
                 r->Control()->IssueEvents();
+                r->ObserverAction()->SendActions();
             }
 
             if (!r->Control()->IsInGame()) {
@@ -444,6 +445,7 @@ void CoordinatorImp::StepReplayObservers() {
             }
 
             r->Control()->IssueEvents();
+            r->ObserverAction()->SendActions();
         }
     }
 }

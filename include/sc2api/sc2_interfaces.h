@@ -383,6 +383,24 @@ public:
     virtual void SendActions() = 0;
 };
 
+//! The ObserverActionInterface corresponds to the actions available in the observer UI.
+class ObserverActionInterface {
+public:
+    virtual ~ObserverActionInterface () = default;
+
+    //! Moves the observer camera to a target location. Will cause the camera to stop following
+    //! the observed player's perspective.
+    //!< \param point The 2D world position to target.
+    //!< \param distance Distance between camera and terrain. Larger value zooms out camera. Defaults to standard camera distance if set to 0.
+    virtual void CameraMove(const Point2D& point, float distance = 0.0f) = 0;
+
+    //! Makes the observer camera follow the observed player's perspective.
+    virtual void CameraFollowPlayer() = 0;
+
+    //! This function sends out all batched commands. You DO NOT need to call this function.
+    //! it is automatically called when stepping the simulation forward.
+    virtual void SendActions() = 0;
+};
 
 //! DebugInterface draws debug text, lines and shapes. Available at any time after the game starts.
 //! Guaranteed to be valid when the OnStep event is called.
