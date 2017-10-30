@@ -36,6 +36,11 @@ enum class Visibility {
     FullHidden = 3
 };
 
+enum class ChatChannel {
+    All = 0,
+    Team = 1
+};
+
 //! Used to filter out units when querying. You can use this filter to get all full health units, for example.
 //!< \param unit The unit in question to filter.
 //!< \param observation The interface for querying game state to determine whether the unit should be filtered or not.
@@ -340,6 +345,11 @@ public:
     //!< \param unit_tags The units to toggle the ability on.
     //!< \param ability The ability to be toggled.
     virtual void ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID ability) = 0;
+
+    //! Sends a message to the game chat.
+    //!< \param message Text of message to send.
+    //!< \param channel Which players will see the message.
+    virtual void SendChat(const std::string& message, ChatChannel channel = ChatChannel::All) = 0;
 
     //! This function sends out all batched unit commands. You DO NOT need to call this function in non real time simulations since
     //! it is automatically called when stepping the simulation forward. You only need to call this function in a real time simulation.
