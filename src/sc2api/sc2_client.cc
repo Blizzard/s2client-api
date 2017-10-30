@@ -573,7 +573,7 @@ bool ObservationImp::UpdateObservation() {
 
     chat_.clear();
     for (auto& message : response_->chat()) {
-        chat_.push_back({(uint32_t)message.player_id(), message.message()});
+        chat_.push_back({message.player_id(), message.message()});
     }
 
     ObservationRawPtr observation_raw;
