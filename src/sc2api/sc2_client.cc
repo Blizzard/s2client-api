@@ -78,6 +78,8 @@ public:
     mutable bool buffs_cached_;
     mutable bool effects_cached_;
 
+    std::vector<PlayerResult> player_results_;
+
     ObservationImp(ProtoInterface& proto, ObservationPtr& observation, ResponseObservationPtr& response, ControlInterface& control);
     void ClearFlags();
 
@@ -116,6 +118,7 @@ public:
     int32_t GetWarpGateCount() const final { return warp_gate_count_; }
     Point2D GetCameraPos() const final { return camera_pos_; }
     Point3D GetStartLocation() const final { return start_location_; }
+    const std::vector<PlayerResult>& GetResults() const final { return player_results_; }
 
     const SC2APIProtocol::Observation* GetRawObservation() const final;
 
@@ -617,6 +620,11 @@ bool ObservationImp::UpdateObservation() {
     upgrades_.clear();
     for (int i = 0; i < player_raw.upgrade_ids_size(); ++i) {
         upgrades_.push_back(player_raw.upgrade_ids(i));
+    }
+
+    player_results_.clear();
+    for (const auto& player_result : response_->player_result()) {
+        player_results_.push_back(PlayerResult(player_result.player_id(), ConvertGameResultFromProto(player_result.result())));
     }
 
     return true;
