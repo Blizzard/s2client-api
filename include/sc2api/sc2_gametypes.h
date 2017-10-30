@@ -192,4 +192,11 @@ struct ReplayInfo {
     }
 };
 
+struct PlayerResult {
+    PlayerResult(uint32_t player_id, GameResult result) : player_id(player_id), result(result) {};
+
+    uint32_t player_id;
+    GameResult result;
+};
+
 }

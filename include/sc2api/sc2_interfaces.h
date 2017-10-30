@@ -179,6 +179,10 @@ public:
     //!< \return Player start position.
     virtual Point3D GetStartLocation() const = 0;
 
+    //! Gets the results of the game.
+    //!< \return Player results if the game ended, an empty vector otherwise.
+    virtual const std::vector<PlayerResult>& GetResults() const = 0;
+
     //! Returns 'true' if the given point has creep.
     //!< \param point Position to sample.
     //!< \return Creep.
@@ -213,6 +217,7 @@ public:
     //!< \return A const pointer to the Observation.
     //!< \sa Observation GetObservation()
     virtual const SC2APIProtocol::Observation* GetRawObservation() const = 0;
+
 };
 
 
