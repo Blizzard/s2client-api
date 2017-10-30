@@ -42,6 +42,7 @@ public:
     std::vector<Effect> effects_;
     std::vector<UpgradeID> upgrades_;
     std::vector<UpgradeID> upgrades_previous_;
+    std::vector<ChatMessage> chat_;
 
     // Game info.
     mutable GameInfo game_info_;
@@ -91,6 +92,7 @@ public:
     const RawActions& GetRawActions() const final { return raw_actions_; }
     const SpatialActions& GetFeatureLayerActions() const final { return feature_layer_actions_; };
     const SpatialActions& GetRenderedActions() const final { return rendered_actions_; }
+    const std::vector<ChatMessage>& GetChatMessages() const final { return chat_; }
     const std::vector<PowerSource>& GetPowerSources() const final { return power_sources_; }
     const std::vector<Effect>& GetEffects() const final { return effects_; }
     const std::vector<UpgradeID>& GetUpgrades() const final { return upgrades_; }
@@ -567,6 +569,11 @@ bool ObservationImp::UpdateObservation() {
         for (SpatialUnitCommand& spatial_action : rendered_actions_.unit_commands) {
             spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
         }
+    }
+
+    chat_.clear();
+    for (auto& message : response_->chat()) {
+        chat_.push_back({(uint32_t)message.player_id(), message.message()});
     }
 
     ObservationRawPtr observation_raw;

@@ -36,11 +36,6 @@ enum class Visibility {
     FullHidden = 3
 };
 
-enum class ChatChannel {
-    All = 0,
-    Team = 1
-};
-
 //! Used to filter out units when querying. You can use this filter to get all full health units, for example.
 //!< \param unit The unit in question to filter.
 //!< \param observation The interface for querying game state to determine whether the unit should be filtered or not.
@@ -94,6 +89,10 @@ public:
     //! Gets a list of actions performed. For use with the rendered options.
     //!< \return List of actions.
     virtual const SpatialActions& GetRenderedActions() const = 0;
+
+    //! Gets new chat messages.
+    //!< \return List of chat messages.
+    virtual const std::vector<ChatMessage>& GetChatMessages() const = 0;
 
     //! Gets all power sources associated with the current player.
     //!< \return List of power sources.
