@@ -21,7 +21,7 @@ public:
     ReplayControlImp(ControlInterface* control_interface, ReplayObserver* replay_observer);
 
     virtual bool GatherReplayInfo(const std::string& path, bool download_data) override;
-    virtual bool LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id) override;
+    virtual bool LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id, bool realtime=false) override;
     virtual bool WaitForReplay() override;
     virtual void UseGeneralizedAbility(bool value) override;
 
@@ -128,12 +128,13 @@ bool ReplayControlImp::GatherReplayInfo(const std::string& path, bool download_d
     return true;
 }
 
-bool ReplayControlImp::LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id) {
+bool ReplayControlImp::LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id, bool realtime) {
     // Send the request.
     GameRequestPtr request = control_interface_->Proto().MakeRequest();
     SC2APIProtocol::RequestStartReplay* start_replay_request = request->mutable_start_replay();
     start_replay_request->set_replay_path(replay_path);
     start_replay_request->set_observed_player_id(player_id);
+    start_replay_request->set_realtime(realtime);
 
     SC2APIProtocol::InterfaceOptions* options = start_replay_request->mutable_options();
     options->set_raw(true);
@@ -160,7 +161,7 @@ bool ReplayControlImp::LoadReplay(const std::string& replay_path, const Interfac
 
     if (!control_interface_->Proto().SendRequest(request)) {
         std::cerr << "LoadReplay: load replay request failed." << std::endl;
-        assert(0);
+        assert(0); 
         return false;
     }
 
