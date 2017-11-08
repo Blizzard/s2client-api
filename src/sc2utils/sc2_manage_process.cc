@@ -52,7 +52,6 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <termios.h>
-#include <stropts.h>
 #include <linux/limits.h>
 
 #else
