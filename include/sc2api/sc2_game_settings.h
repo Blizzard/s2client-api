@@ -9,6 +9,12 @@ namespace sc2 {
 
 //! Information about a running process.
 struct ProcessInfo {
+    ProcessInfo() = default;
+    ProcessInfo(const std::string& path, uint64_t id, int port) :
+        process_path(path),
+        process_id(id),
+        port(port) {};
+
     std::string process_path;
     uint64_t process_id;
     int port;
@@ -16,6 +22,7 @@ struct ProcessInfo {
 
 //! Settings to run the game process.
 struct ProcessSettings {
+    ProcessSettings() = default;
     ProcessSettings(bool in_real_time,
         int in_step_size,
         const std::string& in_process_path,

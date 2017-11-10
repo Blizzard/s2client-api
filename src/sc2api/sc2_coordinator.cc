@@ -82,6 +82,21 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     return pi.port;
 }
 
+bool AttachClients(ProcessSettings& process_settings, std::vector<Client*> clients) {
+    bool connected = false;
+
+    // Since connect is blocking do it after the processes are launched.
+    for (std::size_t i = 0; i < clients.size(); ++i) {
+        const ProcessInfo& pi = process_settings.process_info[i];
+        Client* c = clients[i];
+
+        connected = c->Control()->Connect(process_settings.net_address, pi.port, process_settings.timeout_ms);
+        assert(connected);
+    }
+
+    return connected;
+}
+
 int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clients, int window_width, int window_height, int window_start_x, int window_start_y) {
     int last_port = 0;
     // Start an sc2 process for each bot.
@@ -97,19 +112,10 @@ int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clie
             clientIndex++);
     }
 
-    // Since connect is blocking do it after the processes are launched.
-    for (std::size_t i = 0; i < clients.size(); ++i) {
-        const ProcessInfo& pi = process_settings.process_info[i];
-        Client* c = clients[i];
-
-        assert(pi.process_id && IsProcessRunning(pi.process_id));
-        bool connected = c->Control()->Connect(process_settings.net_address, pi.port, process_settings.timeout_ms);
-        assert(connected);
-    }
+    AttachClients(process_settings, clients);
 
     return last_port;
 }
-
 
 void SetupPorts(GameSettings& game_settings, std::vector<Agent*>& agents, int port_start) {
     // Join the game if there are two human participants.
@@ -663,6 +669,22 @@ void Coordinator::LaunchStarcraft() {
 
     imp_->starcraft_started_ = true;
     imp_->last_port_ = port_start;
+}
+
+void Coordinator::Connect(int port) {
+    while (imp_->process_settings_.process_info.size() < imp_->agents_.size()) {
+        imp_->process_settings_.process_info.push_back(
+            ProcessInfo(imp_->process_settings_.net_address, 0, port)
+        );
+    }
+
+    if (!AttachClients(imp_->process_settings_, std::vector<sc2::Client*>(imp_->agents_.begin(), imp_->agents_.end()))) {
+        std::cerr << "Failed to attach to starcraft." << std::endl;
+        exit(1);
+    }
+
+    // Assume starcraft has started after succesfully attaching to a server.
+    imp_->starcraft_started_ = true;
 }
 
 void Coordinator::LeaveGame() {
