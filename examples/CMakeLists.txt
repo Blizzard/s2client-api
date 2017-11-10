@@ -57,3 +57,8 @@ target_link_libraries(intermediate_bot sc2api sc2lib sc2utils)
 add_executable(annoying_helper "annoying_helper.cc")
 set_target_properties(annoying_helper PROPERTIES FOLDER examples)
 target_link_libraries(annoying_helper sc2api sc2lib sc2utils)
+
+#proxy
+add_executable(proxy "proxy.cc")
+set_target_properties(proxy PROPERTIES FOLDER examples)
+target_link_libraries(proxy sc2api sc2lib sc2utils)

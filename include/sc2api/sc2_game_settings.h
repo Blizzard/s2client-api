@@ -16,6 +16,7 @@ struct ProcessInfo {
 
 //! Settings to run the game process.
 struct ProcessSettings {
+    ProcessSettings() = default;
     ProcessSettings(bool in_real_time,
         int in_step_size,
         const std::string& in_process_path,
