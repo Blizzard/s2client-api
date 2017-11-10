@@ -111,6 +111,9 @@ public:
     //! Uses settings gathered from LoadSettings, specifically the path to the executable, to run StarCraft II.
     void LaunchStarcraft();
 
+    //! Attaches to a running Starcraft.
+    void Connect(int port);
+
     //! Starts a game on a certain map. There are multiple ways to specify a map:
     //! Absolute path: Any .SC2Map file.
     //! Relative path: Any .SC2Map file relative to either the library or installation maps folder.

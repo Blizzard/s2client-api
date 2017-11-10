@@ -9,6 +9,8 @@
 
 namespace sc2 {
 
+bool VERBOSE = false;
+
 bool GetServerData(const mg_connection* conn, void* data, Server*& out) {
     if (!conn) {
         return false;
@@ -23,7 +25,7 @@ bool GetServerData(const mg_connection* conn, void* data, Server*& out) {
 }
 
 static int WebSocketConnectHandler(const mg_connection* conn, void* websocket_server) {
-    std::cout << "Client connected (" << conn << ")" << std::endl;
+    if (VERBOSE) std::cout << "Client connected (" << conn << ")" << std::endl;
     Server* server;
     if (!GetServerData(conn, websocket_server, server)) {
         return 0;
@@ -45,7 +47,7 @@ static int WebSocketDataHandler(
         return 0;
     }
 
-    std::cout << "Client data (" << conn << ")" << std::endl;
+    if (VERBOSE) std::cout << "Client data (" << conn << ")" << std::endl;
 
     SC2APIProtocol::Request* request = new SC2APIProtocol::Request();
     if (!request->ParseFromArray(data, static_cast<int>(len))) {
@@ -80,7 +82,7 @@ static void SendMessage(mg_connection* conn, std::queue<T>& message_queue) {
         return;
     }
 
-    std::cout << "SendMessage (" << conn << ")" << std::endl;
+    if (VERBOSE) std::cout << "SendMessage (" << conn << ")" << std::endl;
 
     google::protobuf::Message* message = message_queue.front().second;
     size_t size = message->ByteSize();
