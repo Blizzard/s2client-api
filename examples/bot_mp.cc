@@ -5,9 +5,10 @@
 
 #include <iostream>
 
-
+#define PORT_START 5690
 // Set this flag to true if you want to play against your bot.
 static bool PlayerOneIsHuman = false;
+
 
 class Human : public sc2::Agent {
 public:
@@ -44,6 +45,8 @@ int main(int argc, char* argv[]) {
 
     // Start the game.
     coordinator.LaunchStarcraft();
+//    coordinator.SetupPorts(2, PORT_START, false);
+//    coordinator.Connect(5678);
 
     bool do_break = false;
     while (!do_break) {
