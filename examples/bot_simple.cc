@@ -45,6 +45,11 @@ int main(int argc, char* argv[]) {
     if (!coordinator.LoadSettings(argc, argv)) {
         return 1;
     }
+    int proxy_port = 5678;
+    if (argc > 1 && strcmp(argv[1], "1") == 0)
+    {
+        proxy_port = 5677;
+    }
 
     // Add the custom bot, it will control the players.
     FooBot bot;
@@ -56,7 +61,8 @@ int main(int argc, char* argv[]) {
 
     // Start the game.
 //   coordinator.LaunchStarcraft();
-    coordinator.Connect(5678);
+    std::cout << "Connecting to port " << proxy_port << std::endl;
+    coordinator.Connect(proxy_port);
     coordinator.SetupPorts(2, PORT_START, false);
     // Step forward the game simulation.
     bool do_break = false;
