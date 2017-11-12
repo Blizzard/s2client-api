@@ -117,28 +117,6 @@ int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clie
     return last_port;
 }
 
-void SetupPorts(GameSettings& game_settings, std::vector<Agent*>& agents, int port_start) {
-    // Join the game if there are two human participants.
-    int humans = 0;
-    for (const auto& p_setup : game_settings.player_setup) {
-        if (p_setup.type == sc2::PlayerType::Participant) {
-            ++humans;
-        }
-    }
-
-    if (humans > 1) {
-        game_settings.ports.shared_port = ++port_start;
-        game_settings.ports.server_ports.game_port = ++port_start;
-        game_settings.ports.server_ports.base_port = ++port_start;
-        for (size_t i = 1; i < agents.size(); ++i) {
-            PortSet port_set;
-            port_set.game_port = ++port_start;
-            port_set.base_port = ++port_start;
-            game_settings.ports.client_ports.push_back(port_set);
-        }
-    }
-}
-
 static void CallOnStep(Agent* a) {
     ControlInterface* control = a->Control();
     if (!control->IsInGame()) {
@@ -177,6 +155,8 @@ public:
     ~CoordinatorImp();
 
     bool StartGame();
+    bool CreateGame();
+    bool JoinGame();
     void StartReplay();
     bool ShouldIgnore(ReplayObserver* r, const std::string& file);
     bool ShouldRelaunch(ReplayObserver* r);
@@ -507,15 +487,15 @@ bool CoordinatorImp::WaitForAllResponses() {
 
     return true;
 }
-
-bool CoordinatorImp::StartGame() {
-    assert(starcraft_started_);
-
+bool CoordinatorImp::CreateGame()
+{
     // Create the game with the first client.
     Agent* firstClient = agents_.front();
-    bool is_game_created = firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
-    assert(is_game_created);
+    return firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
+}
 
+bool CoordinatorImp::JoinGame()
+{
     int i = 0;
     for (auto c : agents_) {
         bool game_join_request = c->Control()->RequestJoinGame(game_settings_.player_setup[i++],
@@ -564,6 +544,13 @@ bool CoordinatorImp::StartGame() {
     return true;
 }
 
+bool CoordinatorImp::StartGame() {
+    assert(starcraft_started_);
+    bool is_game_created = CreateGame();
+    assert(is_game_created);
+    return JoinGame();
+}
+
 bool CoordinatorImp::Relaunch(ReplayObserver* replay_observer) {
     ControlInterface* control = replay_observer->Control();
     const ProcessInfo& pi = control->GetProcessInfo();
@@ -602,6 +589,16 @@ Coordinator::Coordinator() {
 
 Coordinator::~Coordinator() {
     delete imp_;
+}
+
+bool Coordinator::JoinGame()
+{
+    return imp_->JoinGame();
+}
+bool Coordinator::CreateGame(const std::string& map_path)
+{
+    imp_->game_settings_.map_name = map_path;
+    return imp_->CreateGame();
 }
 
 bool Coordinator::StartGame(const std::string& map_path) {
@@ -665,7 +662,7 @@ void Coordinator::LaunchStarcraft() {
             std::vector<sc2::Client*>(imp_->agents_.begin(), imp_->agents_.end()), imp_->window_width_, imp_->window_height_, imp_->window_start_x_, imp_->window_start_y_);
     }
 
-    SetupPorts(imp_->game_settings_, imp_->agents_, port_start);
+    SetupPorts(imp_->agents_.size(), port_start);
 
     imp_->starcraft_started_ = true;
     imp_->last_port_ = port_start;
@@ -916,4 +913,31 @@ std::string Coordinator::GetExePath() const {
     return imp_->process_settings_.process_path;
 }
 
+void Coordinator::SetupPorts(size_t num_agents, int port_start, bool check_single) {
+    // Join the game if there are two human participants.
+    size_t humans = 0;
+    if (check_single)
+    {
+        for (const auto& p_setup : imp_->game_settings_.player_setup) {
+            if (p_setup.type == sc2::PlayerType::Participant) {
+                ++humans;
+            }
+        }
+    }
+    else
+    {
+        humans = num_agents;
+    }
+    if (humans > 1 ) {
+        imp_->game_settings_.ports.shared_port = ++port_start;
+        imp_->game_settings_.ports.server_ports.game_port = ++port_start;
+        imp_->game_settings_.ports.server_ports.base_port = ++port_start;
+        for (size_t i = 1; i < num_agents; ++i) {
+            PortSet port_set;
+            port_set.game_port = ++port_start;
+            port_set.base_port = ++port_start;
+            imp_->game_settings_.ports.client_ports.push_back(port_set);
+        }
+    }
+}
 }

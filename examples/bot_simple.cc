@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#define PORT_START 5690
+
 class FooBot : public sc2::Agent {
 public:
     uint32_t restarts_;
@@ -43,22 +45,30 @@ int main(int argc, char* argv[]) {
     if (!coordinator.LoadSettings(argc, argv)) {
         return 1;
     }
+    int proxy_port = 5678;
+    if (argc > 1 && strcmp(argv[1], "1") == 0)
+    {
+        proxy_port = 5677;
+    }
 
     // Add the custom bot, it will control the players.
     FooBot bot;
 
     coordinator.SetParticipants({
         CreateParticipant(sc2::Race::Terran, &bot),
-        CreateComputer(sc2::Race::Terran)
+//        CreateComputer(sc2::Race::Terran)
     });
 
     // Start the game.
-    coordinator.LaunchStarcraft();
-
+//   coordinator.LaunchStarcraft();
+    std::cout << "Connecting to port " << proxy_port << std::endl;
+    coordinator.Connect(proxy_port);
+    coordinator.SetupPorts(2, PORT_START, false);
     // Step forward the game simulation.
     bool do_break = false;
     while (!do_break) {
-        coordinator.StartGame(sc2::kMapBelShirVestigeLE);
+        coordinator.JoinGame();
+        std::cout << " Successfully joined game" <<std::endl;
         while (coordinator.Update() && !do_break) {
             if (sc2::PollKeyPress()) {
                 do_break = true;
