@@ -514,7 +514,10 @@ bool CoordinatorImp::StartGame() {
     // Create the game with the first client.
     Agent* firstClient = agents_.front();
     bool is_game_created = firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
-    assert(is_game_created);
+    if (!is_game_created) {
+        std::cerr << "Failed to create game." << std::endl;
+        exit(1);
+    }
 
     int i = 0;
     for (auto c : agents_) {
@@ -522,7 +525,10 @@ bool CoordinatorImp::StartGame() {
             interface_settings_,
             game_settings_.ports);
 
-        assert(game_join_request);
+        if (!game_join_request) {
+            std::cerr << "Unable to join game." << std::endl;
+            exit(1);
+        }
     }
 
     for (auto c : agents_) {
