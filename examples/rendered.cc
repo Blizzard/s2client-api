@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#define LINUX_USE_SOFTWARE_RENDER 0
+
 const int kMapX = 800;
 const int kMapY = 600;
 const int kMiniMapX = 300;
@@ -44,7 +46,11 @@ int main(int argc, char* argv[]) {
     coordinator.SetRender(settings);
 
 #if defined(__linux__)
-    coordinator.AddCommandLine("-eglpath /usr/lib/nvidia-367/libEGL.so");
+#if LINUX_USE_SOFTWARE_RENDER
+    coordinator.AddCommandLine("-osmesapath /usr/lib/x86_64-linux-gnu/libOSMesa.so");
+#else
+    coordinator.AddCommandLine("-eglpath /usr/lib/nvidia-384/libEGL.so");
+#endif
 #endif
 
     RenderAgent bot;
