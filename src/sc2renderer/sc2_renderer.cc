@@ -25,7 +25,10 @@ namespace renderer {
 
 void Initialize(const char* title, int x, int y, int w, int h, unsigned int flags) {
     int init_result = SDL_Init(SDL_INIT_VIDEO);
-    assert(!init_result);
+    if (!init_result) {
+        std::cerr << "SDL_Init failed" << std::endl;
+        exit(1);
+    }
 
     window_ = SDL_CreateWindow(title, x, y, w, h, flags == 0 ? SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE : flags);
     assert(window_);
