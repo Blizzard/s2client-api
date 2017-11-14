@@ -11,6 +11,8 @@ namespace sc2 {
 
 class ReplayControlImp;
 class ReplayControlInterface;
+class ObserverActionImp;
+class ObserverActionInterface;
 class ControlInterface;
 struct ReplayInfo;
 
@@ -24,6 +26,10 @@ public:
     //!< \return The replay control interface.
     ReplayControlInterface* ReplayControl();
 
+    //! Obtains the observer action interface.
+    //!< \return The observer action interface.
+    ObserverActionInterface* ObserverAction();
+
     //! Determines if the replay should be filtered out.
     //! \param replay_info Replay information used to decide if the replay should be filtered.
     //!< \return If 'true', the replay will be rejected and not analyzed.
@@ -33,6 +39,7 @@ public:
 
 private:
     ReplayControlImp* replay_control_imp_;
+    ObserverActionImp* observer_action_imp_;
 };
 
 }

@@ -184,6 +184,7 @@ public:
     void StepAgents();
     void StepAgentsRealtime();
     void StepReplayObservers();
+    void StepReplayObserversRealtime();
 
     bool AnyObserverAvailable() const;
 
@@ -291,7 +292,7 @@ void CoordinatorImp::StartReplay() {
                 break;
             }
 
-            bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
+            bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id, process_settings_.realtime);
             replays.pop_back();
             if (launched)
                 break;
@@ -413,6 +414,68 @@ void CoordinatorImp::StepReplayObservers() {
         if (r->Control()->IsInGame()) {
             r->Control()->Step(process_settings_.step_size);
             r->Control()->WaitStep();
+
+            // If multithreaded run everyones OnStep in parallel.
+            if (process_settings_.multi_threaded) {
+                r->Control()->IssueEvents();
+                r->ObserverAction()->SendActions();
+            }
+
+            if (!r->Control()->IsInGame()) {
+                r->OnGameEnd();
+            }
+        }
+    };
+
+    if (replay_observers_.size() == 1) {
+        run_replay(replay_observers_.front());
+    }
+    else {
+        // Run all steps in parallel.
+        std::vector<std::thread> threads;
+        threads.reserve(replay_observers_.size());
+        for (auto r : replay_observers_) {
+            threads.emplace_back(run_replay, r);
+        }
+
+        // Join all threads.
+        for (auto& t : threads) {
+            t.join();
+        }
+    }
+
+    // Do everyones OnStep, if not multi threaded, in single threaded mode.
+    if (!process_settings_.multi_threaded) {
+        for (auto r : replay_observers_) {
+            if (r->Control()->GetAppState() != AppState::normal) {
+                continue;
+            }
+
+            r->Control()->IssueEvents();
+            r->ObserverAction()->SendActions();
+        }
+    }
+}
+
+
+void CoordinatorImp::StepReplayObserversRealtime() {
+    // Run all replay observers.
+    auto run_replay = [this](ReplayObserver* r) {
+        if (r->Control()->GetAppState() != AppState::normal) {
+            return;
+        }
+
+        // If the replay is loading wait for it to finish loading before performing a step.
+        if (r->Control()->HasResponsePending()) {
+            // Don't consume a response if there isn't one in the queue.
+            if (replay_observers_.size() > 1 && !r->Control()->PollResponse()) {
+                return;
+            }
+            r->ReplayControl()->WaitForReplay();
+        }
+
+        if (r->Control()->IsInGame()) {
+            r->Control()->GetObservation();
 
             // If multithreaded run everyones OnStep in parallel.
             if (process_settings_.multi_threaded) {
@@ -715,8 +778,7 @@ bool Coordinator::Update() {
 
     if (imp_->replay_observers_.size() > 0 && imp_->starcraft_started_) {
         if (imp_->process_settings_.realtime) {
-            // TODO
-            assert(0);
+            imp_->StepReplayObserversRealtime();
         }
         else {
             imp_->StepReplayObservers();

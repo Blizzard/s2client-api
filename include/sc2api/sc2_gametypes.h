@@ -46,6 +46,11 @@ enum PlayerType {
     Observer = 3
 };
 
+enum class ChatChannel {
+    All = 0,
+    Team = 1
+};
+
 class Agent;
 
 //! Setup for a player in a game.
@@ -197,6 +202,11 @@ struct PlayerResult {
 
     uint32_t player_id;
     GameResult result;
+};
+
+struct ChatMessage {
+    uint32_t player_id;
+    std::string message;
 };
 
 }

@@ -291,6 +291,8 @@ void UnitTypeData::ReadFromProto(const SC2APIProtocol::UnitTypeData& unit_data) 
 
     has_vespene = unit_data.has_vespene();
 
+    sight_range = unit_data.sight_range();
+
     for (int i = 0; i < unit_data.tech_alias_size(); ++i) {
         tech_alias.push_back(unit_data.tech_alias(i));
     }
