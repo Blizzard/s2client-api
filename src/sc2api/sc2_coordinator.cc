@@ -551,15 +551,13 @@ bool CoordinatorImp::WaitForAllResponses() {
     return true;
 }
 
-bool CoordinatorImp::CreateGame()
-{
+bool CoordinatorImp::CreateGame() {
     // Create the game with the first client.
     Agent* firstClient = agents_.front();
     return firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
 }
 
-bool CoordinatorImp::JoinGame()
-{
+bool CoordinatorImp::JoinGame() {
     int i = 0;
     for (auto c : agents_) {
         bool game_join_request = c->Control()->RequestJoinGame(game_settings_.player_setup[i++],
@@ -666,13 +664,11 @@ bool Coordinator::StartGame(const std::string& map_path) {
     return imp_->StartGame();
 }
 
-bool Coordinator::JoinGame()
-{
+bool Coordinator::JoinGame() {
     return imp_->JoinGame();
 }
 
-bool Coordinator::CreateGame(const std::string& map_path)
-{
+bool Coordinator::CreateGame(const std::string& map_path) {
     imp_->game_settings_.map_name = map_path;
     return imp_->CreateGame();
 }
