@@ -39,13 +39,17 @@ add_executable(bot_mp "bot_mp.cc" ${common_sources})
 set_target_properties(bot_mp PROPERTIES FOLDER examples)
 target_link_libraries(bot_mp sc2api sc2lib sc2utils)
 
-
 # Exclude SDL and related projects to work around linker issue.
 if (NOT APPLE)
 	#feature layers
 	add_executable(feature_layers "feature_layers.cc")
 	set_target_properties(feature_layers PROPERTIES FOLDER examples)
 	target_link_libraries(feature_layers sc2api sc2utils sc2renderer)
+
+    #rendered
+    add_executable(rendered "rendered.cc")
+    set_target_properties(rendered PROPERTIES FOLDER examples)
+    target_link_libraries(rendered sc2api sc2utils sc2renderer)
 endif ()
 
 #Intermediate bot

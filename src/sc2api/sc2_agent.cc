@@ -27,13 +27,14 @@ public:
     void UnitCommand(const Units& unit_tags, AbilityID ability, const Point2D& point, bool queued_command = false) override;
     void UnitCommand(const Units& unit_tags, AbilityID ability, const Unit* target, bool queued_command = false) override;
 
+    void ToggleAutocast(Tag unit_tag, AbilityID ability) override;
+    void ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID ability) override;
+
+    void SendChat(const std::string& message, ChatChannel channel) override;
 
     const std::vector<Tag>& Commands() const override;
 
     void SendActions() override;
-
-    void ToggleAutocast(Tag unit_tag, AbilityID ability) override;
-    void ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID ability) override;
 
     std::vector<Tag> commands_;
 };
@@ -93,6 +94,30 @@ void ActionImp::ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID abil
         autocast->add_unit_tags(u);
     }
     autocast->set_ability_id(ability);
+}
+
+bool Convert(ChatChannel channel, SC2APIProtocol::ActionChat::Channel& channel_proto) {
+    switch (channel) {
+        case ChatChannel::All:
+            channel_proto = SC2APIProtocol::ActionChat_Channel_Broadcast;
+            return true;
+        case ChatChannel::Team:
+            channel_proto = SC2APIProtocol::ActionChat_Channel_Team;
+            return true;
+    }
+    return false;
+}
+
+void ActionImp::SendChat(const std::string& message, ChatChannel channel) {
+    SC2APIProtocol::RequestAction* request_action = GetRequestAction();
+    SC2APIProtocol::Action* action = request_action->add_actions();
+    SC2APIProtocol::ActionChat* action_chat = action->mutable_action_chat();
+    action_chat->set_message(message);
+
+    SC2APIProtocol::ActionChat::Channel channel_proto;
+    if (Convert(channel, channel_proto)) {
+        action_chat->set_channel(channel_proto);
+    }
 }
 
 void ActionImp::UnitCommand(const Unit* unit, AbilityID ability, bool queued_command) {
