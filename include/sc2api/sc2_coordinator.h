@@ -122,6 +122,21 @@ public:
     //! \return True if the game started, false if there was errors or the game didn't start, override OnError callback to see the exact errors.
     bool StartGame(const std::string& map_path = std::string());
 
+    //! Creates a game but does not join the agents to the game
+    //! \param map_path Path to the map to run.
+    //! Returns true if the game was successfully created
+    bool CreateGame(const std::string& map_path = std::string());
+
+    //! Joins agents to the game
+    //! Returns true if the agents were successfully connected to the game
+    bool JoinGame();
+
+    //! Sets up the sc2 game ports to use
+    //! param num_agents Number of agents in the game
+    //! param port_start Starting port number
+    //! param check_single  Checks if the game is a single player or multiplayer game
+    void SetupPorts(size_t num_agents, int port_start, bool check_single = true);
+
     // Run.
 
     //! Helper function used to actually run a bot. This function will behave differently in real-time compared to
