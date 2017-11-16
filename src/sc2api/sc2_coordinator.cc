@@ -982,16 +982,14 @@ std::string Coordinator::GetExePath() const {
 void Coordinator::SetupPorts(size_t num_agents, int port_start, bool check_single) {
     // Join the game if there are two human participants.
     size_t humans = 0;
-    if (check_single)
-    {
+    if (check_single) {
         for (const auto& p_setup : imp_->game_settings_.player_setup) {
             if (p_setup.type == sc2::PlayerType::Participant) {
                 ++humans;
             }
         }
     }
-    else
-    {
+    else {
         humans = num_agents;
     }
     if (humans > 1 ) {
