@@ -1,7 +1,7 @@
 s2client-api
 ============
 
-[![Build Status](https://travis-ci.org/blizzard/s2client-api.png?branch=master)](https://travis-ci.org/blizzard/s2client-api)
+[![Build Status](https://travis-ci.org/Blizzard/s2client-api.png?branch=master)](https://travis-ci.org/blizzard/s2client-api)
 
 The StarCraft II API provides access to in-game state observation and unit control. The API is a wrapper around protobuf defined protocol over a websocket connection.
 
