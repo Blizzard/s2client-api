@@ -1,0 +1,34 @@
+# This will run on Travis' 'new' container-based infrastructure
+sudo: false
+
+# Blacklist
+branches:
+  except:
+    - gh-pages
+
+# Environment variables
+env:
+  global:
+    - GH_REPO_NAME: s2client-api
+    - DOXYFILE: $TRAVIS_BUILD_DIR
+    - GH_REPO_REF: github.com/Blizzard/s2client-api.git
+
+# Install dependencies
+addons:
+  apt:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
+
+# Build your code e.g. by calling make
+script:
+  - make
+
+# Generate and deploy documentation
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - chmod +x ./generate_and_deploy_doxygen.sh
+  - ./generate_and_deploy_doxygen.sh
