@@ -20,6 +20,7 @@
 *.app
 
 build/
+build_vs*/
 
 *.swp
 
@@ -56,5 +57,4 @@ project/lib
 
 docs/html
 docs/latex
-
 doxygen.log

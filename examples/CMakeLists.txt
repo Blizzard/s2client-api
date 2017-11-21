@@ -1,68 +1,50 @@
 include_directories("../include")
 include_directories("common")
 
-file(GLOB common_sources "common/*.h" "common/*.cc")
-
-include_directories(SYSTEM "${PROJECT_BINARY_DIR}/generated")
-include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/contrib/SDL-mirror/include")
-
 # Setup MSVC parallelized builds
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-#bot_simple
-add_executable(bot_simple "bot_simple.cc")
-set_target_properties(bot_simple PROPERTIES FOLDER examples)
-target_link_libraries(bot_simple sc2api sc2lib sc2utils)
+# Included for all examples
+include_directories(SYSTEM "${PROJECT_BINARY_DIR}/generated")
+include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/contrib/SDL-mirror/include")
 
-#echo_actions
-add_executable(echo_actions "echo_actions.cc")
-set_target_properties(echo_actions PROPERTIES FOLDER examples)
-target_link_libraries(echo_actions sc2api sc2utils)
+# Function to generate an example project with extra libraries
+function (example_project_extra project_name source_code extra_libs)
+    message("Adding new example project ${project_name}, sources: ${source_code}, extra_libs: ${extra_libs}")
+    file (GLOB example_project_sources ${source_code} "common/*.h" "common/*.cc")
+    add_executable(${project_name} ${example_project_sources})
 
-#bot_micro
-add_executable(bot_micro "bot_micro.cc" ${common_sources})
-set_target_properties(bot_micro PROPERTIES FOLDER examples)
-target_link_libraries(bot_micro sc2api sc2lib sc2utils)
+    set_target_properties(${project_name} PROPERTIES FOLDER examples)
 
-#replay
-add_executable(replay "replay.cc")
-set_target_properties(replay PROPERTIES FOLDER examples)
-target_link_libraries(replay sc2api sc2utils)
+	if (MSVC)
+		# set_target_properties(${project_name} PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libcmt;libconcrt")
+	endif ()
 
-#Tutorial
-add_executable(tutorial "tutorial.cc")
-set_target_properties(tutorial PROPERTIES FOLDER examples)
-target_link_libraries(tutorial sc2api sc2utils)
+	if (MSVC_VERSION GREATER_EQUAL 1910)
+		target_link_libraries(${project_name} legacy_stdio_definitions)
+	endif ()
 
-#bot_mp
-add_executable(bot_mp "bot_mp.cc" ${common_sources})
-set_target_properties(bot_mp PROPERTIES FOLDER examples)
-target_link_libraries(bot_mp sc2api sc2lib sc2utils)
+    target_link_libraries(${project_name} sc2api sc2lib sc2utils ${extra_libs})
+endfunction ()
 
-# Exclude SDL and related projects to work around linker issue.
+# Function to generate a simple example project
+function (example_project project_name source_code)
+    example_project_extra(${project_name} ${source_code} "")
+endfunction ()
+
+example_project(bot_simple "bot_simple.cc")
+example_project(echo_actions "echo_actions.cc")
+example_project(replay "replay.cc")
+example_project(tutorial "tutorial.cc")
+example_project(bot_micro "bot_micro.cc")
+example_project(bot_mp "bot_mp.cc")
+example_project(intermediate_bot "intermediate_bot.cc")
+example_project(annoying_helper "annoying_helper.cc")
+# example_project(bot_mp_ipv6 "bot_mp_ipv6.cc")
+
 if (NOT APPLE)
-	#feature layers
-	add_executable(feature_layers "feature_layers.cc")
-	set_target_properties(feature_layers PROPERTIES FOLDER examples)
-	target_link_libraries(feature_layers sc2api sc2utils sc2renderer)
-
-    #rendered
-    add_executable(rendered "rendered.cc")
-    set_target_properties(rendered PROPERTIES FOLDER examples)
-    target_link_libraries(rendered sc2api sc2utils sc2renderer)
+    example_project_extra(feature_layers "feature_layers.cc" sc2renderer)
+    example_project_extra(rendered "rendered.cc" sc2renderer)
 endif ()
 
-#Intermediate bot
-add_executable(intermediate_bot "intermediate_bot.cc" ${common_sources})
-set_target_properties(intermediate_bot PROPERTIES FOLDER examples)
-target_link_libraries(intermediate_bot sc2api sc2lib sc2utils)
 
-#annoying_helper
-add_executable(annoying_helper "annoying_helper.cc")
-set_target_properties(annoying_helper PROPERTIES FOLDER examples)
-target_link_libraries(annoying_helper sc2api sc2lib sc2utils)
-
-#proxy
-add_executable(proxy "proxy.cc")
-set_target_properties(proxy PROPERTIES FOLDER examples)
-target_link_libraries(proxy sc2api sc2lib sc2utils)

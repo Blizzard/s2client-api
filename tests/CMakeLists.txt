@@ -13,4 +13,13 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 #all_tests
 add_executable(all_tests ${test_SRC})
 set_target_properties(all_tests PROPERTIES FOLDER tests)
+
+if (MSVC)
+	# set_target_properties(all_tests PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libcmt")
+endif ()
+
+if (MSVC_VERSION GREATER_EQUAL 1910)
+	target_link_libraries(all_tests legacy_stdio_definitions)
+endif ()
+
 target_link_libraries(all_tests sc2api sc2lib sc2utils)

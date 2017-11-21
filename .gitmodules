@@ -1,12 +1,15 @@
+[submodule "contrib/civetweb"]
+	path = contrib/civetweb
+	url = https://github.com/Blizzard/civetweb
 [submodule "contrib/protobuf"]
 	path = contrib/protobuf
 	url = https://github.com/google/protobuf
 [submodule "contrib/SDL-mirror"]
 	path = contrib/SDL-mirror
 	url = https://github.com/spurious/SDL-mirror
-[submodule "contrib/civetweb"]
-	path = contrib/civetweb
-	url = https://github.com/KevinCalderone/civetweb
 [submodule "protocol"]
 	path = protocol
 	url = https://github.com/Blizzard/s2client-proto
+[submodule "contrib/ipv6-parse"]
+	path = contrib/ipv6-parse
+	url = https://github.com/jrepp/ipv6-parse

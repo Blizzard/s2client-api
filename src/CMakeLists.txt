@@ -9,6 +9,10 @@ file(GLOB proto_files
     "../protocol/s2clientprotocol/*.proto"
 )
 
+if ("${proto_files}" STREQUAL "")
+	message(FATAL_ERROR "Missing root protocol submodule.\nRemove your protocol directory and run:\ngit submodule update --recursive --init")
+endif ()
+
 # Create the output directory for generated protos.
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated/s2clientprotocol)
 
@@ -50,6 +54,8 @@ endif ()
 
 # It requires includes to civetweb and our own headers.
 include_directories("../contrib/civetweb/include")
+include_directories("../contrib/SDL-mirror/include")
+include_directories("../contrib/ipv6-parse")
 include_directories("../include")
 
 if(COMMAND cmake_policy)
@@ -60,7 +66,7 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd /ZI /Od" CACHE STRING "" FORCE)
     set(CMAKE_CXX_FLAGS_RELEASE "/MT" CACHE STRING "" FORCE)
 
-    set_target_properties(c-library PROPERTIES COMPILE_FLAGS "/MT")
+    set_target_properties(civetweb-c-library PROPERTIES COMPILE_FLAGS "/MT")
 else()
     set(CMAKE_CXX_FLAGS "-fpermissive")  
 endif()
@@ -82,13 +88,13 @@ foreach (proto ${proto_files})
 endforeach()
 
 
-if (WIN32)
+if (MSVC)
     set_target_properties(sc2api PROPERTIES COMPILE_FLAGS "/W4 /WX")
     set_target_properties(sc2lib PROPERTIES COMPILE_FLAGS "/W4 /WX")
     set_target_properties(sc2renderer PROPERTIES COMPILE_FLAGS "/W4 /WX")
     set_target_properties(sc2utils PROPERTIES COMPILE_FLAGS "/W3 /WX")
     set_target_properties(sc2protocol PROPERTIES COMPILE_FLAGS "/W0")
-endif (WIN32)
+endif (MSVC)
 
-target_link_libraries(sc2api sc2protocol c-library)
+target_link_libraries(sc2api sc2protocol civetweb-c-library ipv6-parse)
 target_link_libraries(sc2lib sc2api)
