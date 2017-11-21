@@ -1,10 +1,11 @@
 # This will run on Travis' 'new' container-based infrastructure
 sudo: false
 
-# Blacklist
+# Allow all branches
 branches:
-  except:
-    - gh-pages
+  only:
+  - gh-pages
+  - /.*/
 
 # Environment variables
 env:
