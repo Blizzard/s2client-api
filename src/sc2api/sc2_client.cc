@@ -2291,4 +2291,8 @@ bool IsCarryingVespene(const Unit& unit) {
     return std::find_if(unit.buffs.begin(), unit.buffs.end(), is_vespene) != unit.buffs.end();
 }
 
+bool IsVisible::operator()(const Unit& unit) {
+    return unit.display_type == Unit::Visible;
+};
+
 }

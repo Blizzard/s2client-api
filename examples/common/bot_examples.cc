@@ -14,9 +14,6 @@ namespace sc2 {
     
 static int TargetSCVCount = 15;
 
-struct IsVisible {
-    bool operator()(const Unit& unit) { return unit.display_type == Unit::Visible; };
-};
 struct IsAttackable {
     bool operator()(const Unit& unit) {
         switch (unit.unit_type.ToType()) {
