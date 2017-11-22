@@ -18,7 +18,7 @@ if (MSVC)
 	# set_target_properties(all_tests PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libcmt")
 endif ()
 
-if (NOT (MSVC_VERSION LESS 1910))
+if (MSVC AND (NOT (MSVC_VERSION LESS 1910)))
 	target_link_libraries(all_tests legacy_stdio_definitions)
 endif ()
 

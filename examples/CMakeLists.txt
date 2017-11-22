@@ -20,7 +20,7 @@ function (example_project_extra project_name source_code extra_libs)
 		# set_target_properties(${project_name} PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libcmt;libconcrt")
 	endif ()
 
-	if (NOT (MSVC_VERSION LESS 1910))
+	if (MSCV AND (NOT (MSVC_VERSION LESS 1910)))
 		target_link_libraries(${project_name} legacy_stdio_definitions)
 	endif ()
 
