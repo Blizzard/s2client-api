@@ -10,19 +10,17 @@ branches:
   except:
   - gh-pages
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r/test # For C++14
-    packages:
-      - doxygen
-      - doxygen-doc
-      - doxygen-latex
-      - doxygen-gui
-      - graphviz
-      - g++-5
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test # For C++14
+  - sudo apt-get -qq update
 
 install:
+  - sudo apt-get install -y g++-5
+  - sudo apt-get install doxygen
+  - sudo apt-get install doxygen-doc
+  - sudo apt-get install doxygen-latex
+  - sudo apt-get install doxygen-gui
+  - sudo apt-get install graphviz
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
 
