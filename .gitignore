@@ -20,7 +20,7 @@
 *.app
 
 build/
-build_vs*/
+build_*/
 
 *.swp
 
