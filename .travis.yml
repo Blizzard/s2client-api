@@ -3,10 +3,21 @@ language: cpp
 compiler: gcc
 dist: trusty
 
+addons:
+  apt:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
+
 branches:
   only:
+  - master
+  - /blizzard_internal.*/
+  except:
   - gh-pages
-  - /.*/
 
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test # For C++14
@@ -22,3 +33,8 @@ script:
   - cd build
   - cmake ../
   - make
+  - cd ..
+
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - ./generate_and_deploy_doxygen.sh

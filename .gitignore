@@ -53,3 +53,8 @@ project/include
 project/lib
 
 .DS_Store
+
+docs/html
+docs/latex
+
+doxygen.log
