@@ -16,6 +16,8 @@ branches:
   only:
   - master
   - /blizzard_internal.*/
+
+branches:
   except:
   - gh-pages
 
@@ -33,8 +35,6 @@ script:
   - cd build
   - cmake ../
   - make
-  - cd ..
 
 after_success:
-  - cd $TRAVIS_BUILD_DIR
-  - ./generate_and_deploy_doxygen.sh
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && cd $TRAVIS_BUILD_DIR && ./generate_and_deploy_doxygen.sh'
