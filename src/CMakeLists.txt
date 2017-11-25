@@ -61,8 +61,7 @@ install(
   TARGETS sc2protocol
   EXPORT SC2API_EXPORTS
   ARCHIVE DESTINATION "lib"
-  PUBLIC_HEADER DESTINATION "include" # These are expected to be included as
-                                      # "*.pb.h" not "dir/*.pb.h"
+  PUBLIC_HEADER DESTINATION "include/s2clientprotocol"
   COMPONENT protocol
 )
 install(
