@@ -1,12 +1,17 @@
 /**
 \mainpage SC2API Documentation
 
-Some quick start guides have been added:
+Some quick start guides can be accessed in the main repository:
 
-<p><a href="../building.md">How to Build</a> - How to git this project, and how to build a Visual Studio solution.</p>
-<p><a href="../getting_started.md">Getting Started with SC2API</a> - How to run examples.</p>
-<p><a href="../tutorial1.md">Tutorial 1</a> - Create a simple bot.</p>
-<p><a href="../tutorial2.md">Tutorial 2</a> - Make your bot build SCV's and Supply Depots.</p>
+<p><a href="https://github.com/Blizzard/s2client-api/blob/master/docs/building.md">How to Build</a> - How to get started building this project and how to build a Visual Studio solution.</p>
+<p><a href="https://github.com/Blizzard/s2client-api/blob/master/docs/getting_started.md">Getting Started with SC2API</a> - How to run examples.</p>
+<p><a href="https://github.com/Blizzard/s2client-api/blob/master/docs/tutorial1.md">Tutorial 1</a> - Create a simple bot.</p>
+<p><a href="https://github.com/Blizzard/s2client-api/blob/master/docs/tutorial2.md">Tutorial 2</a> - Make your bot build SCV's and Supply Depots.</p>
+<p><a href="https://github.com/Blizzard/s2client-api/blob/master/docs/tutorial3.md">Tutorial 3</a> - Building marines and scouting</p>
+
+If you're looking for the underlying protocol to communicate with the SC2 executable service see:
+
+<p><a href="https://github.com/Blizzard/s2client-proto">StarCraft II Client Protocol (s2client-proto)</a></p>
 
 <hr>
 

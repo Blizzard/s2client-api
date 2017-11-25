@@ -67,6 +67,10 @@ struct PlayerInfo {
 
 //! Initial data for a game and map.
 struct GameInfo {
+    //! Plain text name of a map. Note that this may be different from the filename of the map.
+    std::string map_name;
+    //! Filename of map. Includes the ".SC2Map" file extension.
+    std::string local_map_path;
     //! World width of a map.
     int width;
     //! World height of a map.
@@ -83,6 +87,7 @@ struct GameInfo {
     Point2D playable_max;
     //! Positions of possible enemy starting locations.
     std::vector<Point2D> enemy_start_locations;
+    std::vector<Point2D> start_locations;
 
     //! Types of data that will be in observations.
     //!< \sa InterfaceOptions

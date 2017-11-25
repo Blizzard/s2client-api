@@ -82,6 +82,21 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     return pi.port;
 }
 
+bool AttachClients(ProcessSettings& process_settings, std::vector<Client*> clients) {
+    bool connected = false;
+
+    // Since connect is blocking do it after the processes are launched.
+    for (std::size_t i = 0; i < clients.size(); ++i) {
+        const ProcessInfo& pi = process_settings.process_info[i];
+        Client* c = clients[i];
+
+        connected = c->Control()->Connect(process_settings.net_address, pi.port, process_settings.timeout_ms);
+        assert(connected);
+    }
+
+    return connected;
+}
+
 int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clients, int window_width, int window_height, int window_start_x, int window_start_y) {
     int last_port = 0;
     // Start an sc2 process for each bot.
@@ -97,40 +112,9 @@ int LaunchProcesses(ProcessSettings& process_settings, std::vector<Client*> clie
             clientIndex++);
     }
 
-    // Since connect is blocking do it after the processes are launched.
-    for (std::size_t i = 0; i < clients.size(); ++i) {
-        const ProcessInfo& pi = process_settings.process_info[i];
-        Client* c = clients[i];
-
-        assert(pi.process_id && IsProcessRunning(pi.process_id));
-        bool connected = c->Control()->Connect(process_settings.net_address, pi.port, process_settings.timeout_ms);
-        assert(connected);
-    }
+    AttachClients(process_settings, clients);
 
     return last_port;
-}
-
-
-void SetupPorts(GameSettings& game_settings, std::vector<Agent*>& agents, int port_start) {
-    // Join the game if there are two human participants.
-    int humans = 0;
-    for (const auto& p_setup : game_settings.player_setup) {
-        if (p_setup.type == sc2::PlayerType::Participant) {
-            ++humans;
-        }
-    }
-
-    if (humans > 1) {
-        game_settings.ports.shared_port = ++port_start;
-        game_settings.ports.server_ports.game_port = ++port_start;
-        game_settings.ports.server_ports.base_port = ++port_start;
-        for (size_t i = 1; i < agents.size(); ++i) {
-            PortSet port_set;
-            port_set.game_port = ++port_start;
-            port_set.base_port = ++port_start;
-            game_settings.ports.client_ports.push_back(port_set);
-        }
-    }
 }
 
 static void CallOnStep(Agent* a) {
@@ -171,6 +155,8 @@ public:
     ~CoordinatorImp();
 
     bool StartGame();
+    bool CreateGame();
+    bool JoinGame();
     void StartReplay();
     bool ShouldIgnore(ReplayObserver* r, const std::string& file);
     bool ShouldRelaunch(ReplayObserver* r);
@@ -178,6 +164,7 @@ public:
     void StepAgents();
     void StepAgentsRealtime();
     void StepReplayObservers();
+    void StepReplayObserversRealtime();
 
     bool AnyObserverAvailable() const;
 
@@ -274,10 +261,10 @@ void CoordinatorImp::StartReplay() {
 
         auto& replays = replay_settings_.replay_file;
         while (replays.size() != 0) {
-            const std::string& file = replay_settings_.replay_file.front();
+            const std::string& file = replay_settings_.replay_file.back();
 
             if (ShouldIgnore(r, file)) {
-                replays.erase(replays.begin());
+                replays.pop_back();
                 continue;
             }
 
@@ -285,8 +272,8 @@ void CoordinatorImp::StartReplay() {
                 break;
             }
 
-            bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id);
-            replays.erase(replays.begin());
+            bool launched = r->ReplayControl()->LoadReplay(file, interface_settings_, replay_settings_.player_id, process_settings_.realtime);
+            replays.pop_back();
             if (launched)
                 break;
         }
@@ -411,6 +398,68 @@ void CoordinatorImp::StepReplayObservers() {
             // If multithreaded run everyones OnStep in parallel.
             if (process_settings_.multi_threaded) {
                 r->Control()->IssueEvents();
+                r->ObserverAction()->SendActions();
+            }
+
+            if (!r->Control()->IsInGame()) {
+                r->OnGameEnd();
+            }
+        }
+    };
+
+    if (replay_observers_.size() == 1) {
+        run_replay(replay_observers_.front());
+    }
+    else {
+        // Run all steps in parallel.
+        std::vector<std::thread> threads;
+        threads.reserve(replay_observers_.size());
+        for (auto r : replay_observers_) {
+            threads.emplace_back(run_replay, r);
+        }
+
+        // Join all threads.
+        for (auto& t : threads) {
+            t.join();
+        }
+    }
+
+    // Do everyones OnStep, if not multi threaded, in single threaded mode.
+    if (!process_settings_.multi_threaded) {
+        for (auto r : replay_observers_) {
+            if (r->Control()->GetAppState() != AppState::normal) {
+                continue;
+            }
+
+            r->Control()->IssueEvents();
+            r->ObserverAction()->SendActions();
+        }
+    }
+}
+
+
+void CoordinatorImp::StepReplayObserversRealtime() {
+    // Run all replay observers.
+    auto run_replay = [this](ReplayObserver* r) {
+        if (r->Control()->GetAppState() != AppState::normal) {
+            return;
+        }
+
+        // If the replay is loading wait for it to finish loading before performing a step.
+        if (r->Control()->HasResponsePending()) {
+            // Don't consume a response if there isn't one in the queue.
+            if (replay_observers_.size() > 1 && !r->Control()->PollResponse()) {
+                return;
+            }
+            r->ReplayControl()->WaitForReplay();
+        }
+
+        if (r->Control()->IsInGame()) {
+            r->Control()->GetObservation();
+
+            // If multithreaded run everyones OnStep in parallel.
+            if (process_settings_.multi_threaded) {
+                r->Control()->IssueEvents();
             }
 
             if (!r->Control()->IsInGame()) {
@@ -502,21 +551,23 @@ bool CoordinatorImp::WaitForAllResponses() {
     return true;
 }
 
-bool CoordinatorImp::StartGame() {
-    assert(starcraft_started_);
-
+bool CoordinatorImp::CreateGame() {
     // Create the game with the first client.
     Agent* firstClient = agents_.front();
-    bool is_game_created = firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
-    assert(is_game_created);
+    return firstClient->Control()->CreateGame(game_settings_.map_name, game_settings_.player_setup, process_settings_.realtime);
+}
 
+bool CoordinatorImp::JoinGame() {
     int i = 0;
     for (auto c : agents_) {
         bool game_join_request = c->Control()->RequestJoinGame(game_settings_.player_setup[i++],
             interface_settings_,
             game_settings_.ports);
 
-        assert(game_join_request);
+        if (!game_join_request) {
+            std::cerr << "Unable to join game." << std::endl;
+            exit(1);
+        }
     }
 
     for (auto c : agents_) {
@@ -556,6 +607,16 @@ bool CoordinatorImp::StartGame() {
     }
 
     return true;
+}
+
+bool CoordinatorImp::StartGame() {
+    assert(starcraft_started_);
+    bool is_game_created = CreateGame();
+    if (!is_game_created) {
+        std::cerr << "Failed to create game." << std::endl;
+        exit(1);
+    }
+    return JoinGame();
 }
 
 bool CoordinatorImp::Relaunch(ReplayObserver* replay_observer) {
@@ -601,6 +662,15 @@ Coordinator::~Coordinator() {
 bool Coordinator::StartGame(const std::string& map_path) {
     imp_->game_settings_.map_name = map_path;
     return imp_->StartGame();
+}
+
+bool Coordinator::JoinGame() {
+    return imp_->JoinGame();
+}
+
+bool Coordinator::CreateGame(const std::string& map_path) {
+    imp_->game_settings_.map_name = map_path;
+    return imp_->CreateGame();
 }
 
 bool Coordinator::RemoteSaveMap(const void* data, int data_size, std::string remote_path) {
@@ -659,10 +729,26 @@ void Coordinator::LaunchStarcraft() {
             std::vector<sc2::Client*>(imp_->agents_.begin(), imp_->agents_.end()), imp_->window_width_, imp_->window_height_, imp_->window_start_x_, imp_->window_start_y_);
     }
 
-    SetupPorts(imp_->game_settings_, imp_->agents_, port_start);
+    SetupPorts( imp_->agents_.size(), port_start);
 
     imp_->starcraft_started_ = true;
     imp_->last_port_ = port_start;
+}
+
+void Coordinator::Connect(int port) {
+    while (imp_->process_settings_.process_info.size() < imp_->agents_.size()) {
+        imp_->process_settings_.process_info.push_back(
+            ProcessInfo(imp_->process_settings_.net_address, 0, port)
+        );
+    }
+
+    if (!AttachClients(imp_->process_settings_, std::vector<sc2::Client*>(imp_->agents_.begin(), imp_->agents_.end()))) {
+        std::cerr << "Failed to attach to starcraft." << std::endl;
+        exit(1);
+    }
+
+    // Assume starcraft has started after succesfully attaching to a server.
+    imp_->starcraft_started_ = true;
 }
 
 void Coordinator::LeaveGame() {
@@ -687,8 +773,7 @@ bool Coordinator::Update() {
 
     if (imp_->replay_observers_.size() > 0 && imp_->starcraft_started_) {
         if (imp_->process_settings_.realtime) {
-            // TODO
-            assert(0);
+            imp_->StepReplayObserversRealtime();
         }
         else {
             imp_->StepReplayObservers();
@@ -894,4 +979,29 @@ std::string Coordinator::GetExePath() const {
     return imp_->process_settings_.process_path;
 }
 
+void Coordinator::SetupPorts(size_t num_agents, int port_start, bool check_single) {
+    // Join the game if there are two human participants.
+    size_t humans = 0;
+    if (check_single) {
+        for (const auto& p_setup : imp_->game_settings_.player_setup) {
+            if (p_setup.type == sc2::PlayerType::Participant) {
+                ++humans;
+            }
+        }
+    }
+    else {
+        humans = num_agents;
+    }
+    if (humans > 1 ) {
+        imp_->game_settings_.ports.shared_port = ++port_start;
+        imp_->game_settings_.ports.server_ports.game_port = ++port_start;
+        imp_->game_settings_.ports.server_ports.base_port = ++port_start;
+        for (size_t i = 1; i < num_agents; ++i) {
+            PortSet port_set;
+            port_set.game_port = ++port_start;
+            port_set.base_port = ++port_start;
+            imp_->game_settings_.ports.client_ports.push_back(port_set);
+        }
+    }
+}
 }

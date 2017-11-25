@@ -82,13 +82,25 @@ public:
     //!< \return List of raw actions.
     virtual const RawActions& GetRawActions() const = 0;
 
-    //! Gets a list of actions performed as abilities applied to the current selection. For use with the feature layer or rendered options.
+    //! Gets a list of actions performed. For use with the feature layer options.
     //!< \return List of actions.
     virtual const SpatialActions& GetFeatureLayerActions() const = 0;
+
+    //! Gets a list of actions performed. For use with the rendered options.
+    //!< \return List of actions.
+    virtual const SpatialActions& GetRenderedActions() const = 0;
+
+    //! Gets new chat messages.
+    //!< \return List of chat messages.
+    virtual const std::vector<ChatMessage>& GetChatMessages() const = 0;
 
     //! Gets all power sources associated with the current player.
     //!< \return List of power sources.
     virtual const std::vector<PowerSource>& GetPowerSources() const = 0;
+
+    //! Gets all active effects in vision of the current player.
+    //!< \return List of effects.
+    virtual const std::vector<Effect>& GetEffects() const = 0;
 
     //! Gets all upgrades.
     //!< \return List of upgrades.
@@ -117,6 +129,11 @@ public:
     //!< \param force_refresh forces a full query from the game, may otherwise cache data from a previous call.
     //!< \return Data about all buffs possible for the current game session.
     virtual const Buffs& GetBuffData(bool force_refresh = false) const = 0;
+
+    //! Gets metadata of effects. Array can be indexed directly by EffectID.
+    //!< \param force_refresh forces a full query from the game, may otherwise cache data from a previous call.
+    //!< \return Data about all effects possible for the current game session.
+    virtual const Effects& GetEffectData(bool force_refresh = false) const = 0;
 
     //! Gets the GameInfo struct for the current map.
     //!< \return The current GameInfo struct.
@@ -170,6 +187,10 @@ public:
     //!< \return Player start position.
     virtual Point3D GetStartLocation() const = 0;
 
+    //! Gets the results of the game.
+    //!< \return Player results if the game ended, an empty vector otherwise.
+    virtual const std::vector<PlayerResult>& GetResults() const = 0;
+
     //! Returns 'true' if the given point has creep.
     //!< \param point Position to sample.
     //!< \return Creep.
@@ -204,6 +225,7 @@ public:
     //!< \return A const pointer to the Observation.
     //!< \sa Observation GetObservation()
     virtual const SC2APIProtocol::Observation* GetRawObservation() const = 0;
+
 };
 
 
@@ -328,6 +350,11 @@ public:
     //!< \param ability The ability to be toggled.
     virtual void ToggleAutocast(const std::vector<Tag>& unit_tags, AbilityID ability) = 0;
 
+    //! Sends a message to the game chat.
+    //!< \param message Text of message to send.
+    //!< \param channel Which players will see the message.
+    virtual void SendChat(const std::string& message, ChatChannel channel = ChatChannel::All) = 0;
+
     //! This function sends out all batched unit commands. You DO NOT need to call this function in non real time simulations since
     //! it is automatically called when stepping the simulation forward. You only need to call this function in a real time simulation.
     //! For example, if you wanted to move 20 marines to some position on the map you'd want to batch all of those unit commands and
@@ -370,6 +397,24 @@ public:
     virtual void SendActions() = 0;
 };
 
+//! The ObserverActionInterface corresponds to the actions available in the observer UI.
+class ObserverActionInterface {
+public:
+    virtual ~ObserverActionInterface () = default;
+
+    //! Moves the observer camera to a target location. Will cause the camera to stop following
+    //! the observed player's perspective.
+    //!< \param point The 2D world position to target.
+    //!< \param distance Distance between camera and terrain. Larger value zooms out camera. Defaults to standard camera distance if set to 0.
+    virtual void CameraMove(const Point2D& point, float distance = 0.0f) = 0;
+
+    //! Makes the observer camera follow the observed player's perspective.
+    virtual void CameraFollowPlayer() = 0;
+
+    //! This function sends out all batched commands. You DO NOT need to call this function.
+    //! it is automatically called when stepping the simulation forward.
+    virtual void SendActions() = 0;
+};
 
 //! DebugInterface draws debug text, lines and shapes. Available at any time after the game starts.
 //! Guaranteed to be valid when the OnStep event is called.
@@ -389,12 +434,14 @@ public:
     //!< \param out The string of text to display.
     //!< \param pt_virtual_2D The screen position to draw text at.
     //!< \param color (Optional) Color of the text.
-    virtual void DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color = Colors::White) = 0;
+    //!< \param size (Optional) Pixel height of the text.
+    virtual void DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color = Colors::White, uint32_t size = 8) = 0;
     //! Outputs text at any 3D point in the game world. Map coordinates are used.
     //!< \param out The string of text to display.
     //!< \param pt3D The world position to draw text at.
     //!< \param color (Optional) Color of the text.
-    virtual void DebugTextOut(const std::string& out, const Point3D& pt3D, Color color = Colors::White) = 0;
+    //!< \param size (Optional) Pixel height of the text.
+    virtual void DebugTextOut(const std::string& out, const Point3D& pt3D, Color color = Colors::White, uint32_t size = 8) = 0;
     //! Outputs a line between two 3D points in the game world. Map coordinates are used.
     //!< \param p0 The starting position of the line.
     //!< \param p1 The ending position of the line.

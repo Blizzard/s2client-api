@@ -52,8 +52,8 @@ public:
     //! Called when a game has ended.
     virtual void OnGameEnd() {}
 
-    //! This event will only get called when stepping. It will not get called in a real time game.
-    //! In a real time game the user will be responsible for calling GetObservation() via the ObservationInterface.
+    //! In non realtime games this function gets called after each step as indicated by step size.
+    //! In realtime this function gets called as often as possible after request/responses are received from the game gathering observation state.
     virtual void OnStep() {}
 
     //! Called whenever one of the player's units has been destroyed.

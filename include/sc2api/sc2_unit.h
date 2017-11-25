@@ -44,8 +44,12 @@ struct PassengerUnit {
     float health_max;
     //! The shield of the unit in the transport.
     float shield;
+    //! The max possible shield of the unit in the transport.
+    float shield_max;
     //! The energy of the unit in the transport.
     float energy;
+    //! The max possible energy of the unit in the transport.
+    float energy_max;
     //! The type of unit in the transport.
     UnitTypeID unit_type;
 
@@ -54,7 +58,9 @@ struct PassengerUnit {
         health(0.0f),
         health_max(0.0f),
         shield(0.0f),
+        shield_max(0.0f),
         energy(0.0f),
+        energy_max(0.0f),
         unit_type(0) {
     }
 };
@@ -141,8 +147,12 @@ public:
     float health_max;
     //! Shield of the unit. Not set for snapshots.
     float shield;
+    //! Max shield of the unit. Not set for snapshots.
+    float shield_max;
     //! Energy of the unit. Not set for snapshots.
     float energy;
+    //! Max energy of the unit. Not set for snapshots.
+    float energy_max;
     //! Amount of minerals if the unit is a mineral field. Not set for snapshots.
     int mineral_contents;
     //! Amount of vespene if the unit is a geyser. Not set for snapshots.

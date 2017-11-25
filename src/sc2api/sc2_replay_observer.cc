@@ -1,4 +1,5 @@
 #include "sc2api/sc2_replay_observer.h"
+#include "sc2api/sc2_interfaces.h"
 #include "sc2api/sc2_control_interfaces.h"
 #include "sc2api/sc2_proto_to_pods.h"
 #include "sc2api/sc2_game_settings.h"
@@ -20,7 +21,7 @@ public:
     ReplayControlImp(ControlInterface* control_interface, ReplayObserver* replay_observer);
 
     virtual bool GatherReplayInfo(const std::string& path, bool download_data) override;
-    virtual bool LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id) override;
+    virtual bool LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id, bool realtime=false) override;
     virtual bool WaitForReplay() override;
     virtual void UseGeneralizedAbility(bool value) override;
 
@@ -127,12 +128,13 @@ bool ReplayControlImp::GatherReplayInfo(const std::string& path, bool download_d
     return true;
 }
 
-bool ReplayControlImp::LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id) {
+bool ReplayControlImp::LoadReplay(const std::string& replay_path, const InterfaceSettings& settings, uint32_t player_id, bool realtime) {
     // Send the request.
     GameRequestPtr request = control_interface_->Proto().MakeRequest();
     SC2APIProtocol::RequestStartReplay* start_replay_request = request->mutable_start_replay();
     start_replay_request->set_replay_path(replay_path);
     start_replay_request->set_observed_player_id(player_id);
+    start_replay_request->set_realtime(realtime);
 
     SC2APIProtocol::InterfaceOptions* options = start_replay_request->mutable_options();
     options->set_raw(true);
@@ -159,7 +161,7 @@ bool ReplayControlImp::LoadReplay(const std::string& replay_path, const Interfac
 
     if (!control_interface_->Proto().SendRequest(request)) {
         std::cerr << "LoadReplay: load replay request failed." << std::endl;
-        assert(0);
+        assert(0); 
         return false;
     }
 
@@ -219,20 +221,85 @@ const ReplayInfo& ReplayControlImp::GetReplayInfo() const {
 }
 
 //-------------------------------------------------------------------------------------------------
+// ObserverActionImp: an implementation of an ObserverActionInterface.
+//-------------------------------------------------------------------------------------------------
+
+class ObserverActionImp : public ObserverActionInterface {
+public:
+    ControlInterface& control_;
+    GameRequestPtr request_;
+
+    ObserverActionImp(ControlInterface& control);
+
+    SC2APIProtocol::RequestObserverAction* GetRequest();
+
+    void CameraMove(const Point2D& point, float distance = 0.0f) final;
+
+    void CameraFollowPlayer() final;
+
+    void SendActions() final;
+};
+
+ObserverActionImp::ObserverActionImp(ControlInterface& control) :
+    control_(control) {
+}
+
+SC2APIProtocol::RequestObserverAction* ObserverActionImp::GetRequest() {
+    if (request_ == nullptr) {
+        request_ = control_.Proto().MakeRequest();
+    }
+    return request_->mutable_obs_action();
+}
+
+void ObserverActionImp::CameraMove(const Point2D& point, float distance) {
+    SC2APIProtocol::RequestObserverAction* request = GetRequest();
+    SC2APIProtocol::ObserverAction* action = request->add_actions();
+    SC2APIProtocol::ActionObserverCameraMove* camera_move = action->mutable_camera_move();
+    camera_move->set_distance(distance);
+    camera_move->mutable_world_pos()->set_x(point.x);
+    camera_move->mutable_world_pos()->set_y(point.y);
+}
+
+void ObserverActionImp::CameraFollowPlayer() {
+    SC2APIProtocol::RequestObserverAction* request = GetRequest();
+    SC2APIProtocol::ObserverAction* action = request->add_actions();
+    action->mutable_camera_follow_player();
+}
+
+void ObserverActionImp::SendActions() {
+    if (request_ == nullptr) {
+        return;
+    }
+
+    if (!control_.Proto().SendRequest(request_)) {
+        return;
+    }
+
+    request_ = nullptr;
+    control_.WaitForResponse();
+}
+
+//-------------------------------------------------------------------------------------------------
 // ReplayObserver.
 //-------------------------------------------------------------------------------------------------
 
 ReplayObserver::ReplayObserver() :
     replay_control_imp_(nullptr) {
     replay_control_imp_ = new ReplayControlImp(Control(), this);
+    observer_action_imp_ = new ObserverActionImp(*Control());
 }
 
 ReplayObserver::~ReplayObserver() {
     delete replay_control_imp_;
+    delete observer_action_imp_;
 }
 
 ReplayControlInterface* ReplayObserver::ReplayControl() {
     return replay_control_imp_;
+}
+
+ObserverActionInterface* ReplayObserver::ObserverAction() {
+    return observer_action_imp_;
 }
 
 bool ReplayObserver::IgnoreReplay(const ReplayInfo& replay_info, uint32_t& /*player_id*/) {

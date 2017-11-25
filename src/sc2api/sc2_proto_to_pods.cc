@@ -202,7 +202,9 @@ bool Convert(const ObservationRawPtr& observation_raw, UnitPool& unit_pool, uint
         unit->health = observation_unit.health();
         unit->health_max = observation_unit.health_max();
         unit->shield = observation_unit.shield();
+        unit->shield_max = observation_unit.shield_max();
         unit->energy = observation_unit.energy();
+        unit->energy_max = observation_unit.energy_max();
 
         unit->mineral_contents = observation_unit.mineral_contents();
         unit->vespene_contents = observation_unit.vespene_contents();
@@ -238,8 +240,12 @@ bool Convert(const ObservationRawPtr& observation_raw, UnitPool& unit_pool, uint
                 passengerUnit.health_max = passengerProto.health_max();
             if (passengerProto.has_shield())
                 passengerUnit.shield = passengerProto.shield();
+            if (passengerProto.has_shield_max())
+                passengerUnit.shield_max = passengerProto.shield_max();
             if (passengerProto.has_energy())
                 passengerUnit.energy = passengerProto.energy();
+            if (passengerProto.has_energy_max())
+                passengerUnit.energy_max = passengerProto.energy_max();
             if (passengerProto.has_unit_type())
                 passengerUnit.unit_type = passengerProto.unit_type();
             unit->passengers.push_back(passengerUnit);
@@ -250,6 +256,7 @@ bool Convert(const ObservationRawPtr& observation_raw, UnitPool& unit_pool, uint
         unit->assigned_harvesters = observation_unit.assigned_harvesters();
         unit->ideal_harvesters = observation_unit.ideal_harvesters();
 
+        unit->buffs.clear();
         for (int buff_index = 0; buff_index < observation_unit.buff_ids_size(); ++buff_index) {
             unit->buffs.push_back(observation_unit.buff_ids(buff_index));
         }
@@ -298,7 +305,7 @@ bool Convert(const ObservationPtr& observation_ptr, RenderedFrame& render) {
     return true;
 }
 
-bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions& actions) {
+void ConvertRawActions(const ResponseObservationPtr& response_observation_ptr, RawActions& actions) {
     for (int i = 0; i < response_observation_ptr->actions_size(); ++i) {
         const SC2APIProtocol::Action& proto_action = response_observation_ptr->actions(i);
         if (!proto_action.has_action_raw()) {
@@ -335,8 +342,6 @@ bool Convert(const ResponseObservationPtr& response_observation_ptr, RawActions&
 
         actions.push_back(action);
     }
-
-    return true;
 }
 
 bool Convert(const SC2APIProtocol::ActionSpatialUnitSelectionPoint::Type& type_proto, PointSelectionType& type) {
@@ -349,74 +354,87 @@ bool Convert(const SC2APIProtocol::ActionSpatialUnitSelectionPoint::Type& type_p
     return false;
 }
 
-bool Convert(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions) {
+static void ConvertSpatialAction (const SC2APIProtocol::ActionSpatial& action_proto, SpatialActions& actions) {
+    if (action_proto.has_unit_command()) {
+        const SC2APIProtocol::ActionSpatialUnitCommand& action_command = action_proto.unit_command();
+
+        SpatialUnitCommand command;
+        command.ability_id = AbilityID(action_command.ability_id());
+        if (action_command.has_target_screen_coord()) {
+            command.target_type = SpatialUnitCommand::TargetScreen;
+            command.target.x = action_command.target_screen_coord().x();
+            command.target.y = action_command.target_screen_coord().y();
+        }
+        else if (action_command.has_target_minimap_coord()) {
+            command.target_type = SpatialUnitCommand::TargetMinimap;
+            command.target.x = action_command.target_minimap_coord().x();
+            command.target.y = action_command.target_minimap_coord().y();
+        }
+        command.queued = action_command.queue_command();
+
+        actions.unit_commands.push_back(command);
+    }
+    else if (action_proto.has_camera_move()) {
+        const SC2APIProtocol::ActionSpatialCameraMove& action_camera = action_proto.camera_move();
+
+        SpatialCameraMove camera;
+        camera.center_minimap.x = action_camera.center_minimap().x();
+        camera.center_minimap.y = action_camera.center_minimap().y();
+
+        actions.camera_moves.push_back(camera);
+    }
+    else if (action_proto.has_unit_selection_point()) {
+        const SC2APIProtocol::ActionSpatialUnitSelectionPoint& action_select = action_proto.unit_selection_point();
+
+        SpatialSelectPoint select;
+        select.select_screen.x = action_select.selection_screen_coord().x();
+        select.select_screen.y = action_select.selection_screen_coord().y();
+        if (!Convert(action_select.type(), select.type))
+            return;
+
+        actions.select_points.push_back(select);
+    }
+    else if (action_proto.has_unit_selection_rect()) {
+        const SC2APIProtocol::ActionSpatialUnitSelectionRect& action_select = action_proto.unit_selection_rect();
+
+        SpatialSelectRect select;
+        for (int j = 0; j < action_select.selection_screen_coord_size(); ++j) {
+            const SC2APIProtocol::RectangleI& rect_proto = action_select.selection_screen_coord(j);
+
+            Rect2DI rect;
+            rect.from.x = rect_proto.p0().x();
+            rect.from.y = rect_proto.p0().y();
+            rect.to.x = rect_proto.p1().x();
+            rect.to.y = rect_proto.p1().y();
+            select.select_screen.push_back(rect);
+        }
+        select.select_add = action_select.selection_add();
+
+        actions.select_rects.push_back(select);
+    }
+}
+
+void ConvertFeatureLayerActions(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions) {
     for (int i = 0; i < response_observation_ptr->actions_size(); ++i) {
         const SC2APIProtocol::Action& proto_action = response_observation_ptr->actions(i);
         if (!proto_action.has_action_feature_layer()) {
             continue;
         }
         const SC2APIProtocol::ActionSpatial& action_FL = proto_action.action_feature_layer();
-
-        if (action_FL.has_unit_command()) {
-            const SC2APIProtocol::ActionSpatialUnitCommand& action_command = action_FL.unit_command();
-
-            SpatialUnitCommand command;
-            command.ability_id = AbilityID(action_command.ability_id());
-            if (action_command.has_target_screen_coord()) {
-                command.target_type = SpatialUnitCommand::TargetScreen;
-                command.target.x = action_command.target_screen_coord().x();
-                command.target.y = action_command.target_screen_coord().y();
-            }
-            else if (action_command.has_target_minimap_coord()) {
-                command.target_type = SpatialUnitCommand::TargetMinimap;
-                command.target.x = action_command.target_minimap_coord().x();
-                command.target.y = action_command.target_minimap_coord().y();
-            }
-            command.queued = action_command.queue_command();
-
-            actions.unit_commands.push_back(command);
-        }
-        else if (action_FL.has_camera_move()) {
-            const SC2APIProtocol::ActionSpatialCameraMove& action_camera = action_FL.camera_move();
-
-            SpatialCameraMove camera;
-            camera.center_minimap.x = action_camera.center_minimap().x();
-            camera.center_minimap.y = action_camera.center_minimap().y();
-
-            actions.camera_moves.push_back(camera);
-        }
-        else if (action_FL.has_unit_selection_point()) {
-            const SC2APIProtocol::ActionSpatialUnitSelectionPoint& action_select = action_FL.unit_selection_point();
-
-            SpatialSelectPoint select;
-            select.select_screen.x = action_select.selection_screen_coord().x();
-            select.select_screen.y = action_select.selection_screen_coord().y();
-            if (!Convert(action_select.type(), select.type))
-                continue;
-
-            actions.select_points.push_back(select);
-        }
-        else if (action_FL.has_unit_selection_rect()) {
-            const SC2APIProtocol::ActionSpatialUnitSelectionRect& action_select = action_FL.unit_selection_rect();
-
-            SpatialSelectRect select;
-            for (int j = 0; j < action_select.selection_screen_coord_size(); ++j) {
-                const SC2APIProtocol::RectangleI& rect_proto = action_select.selection_screen_coord(j);
-
-                Rect2DI rect;
-                rect.from.x = rect_proto.p0().x();
-                rect.from.y = rect_proto.p0().y();
-                rect.to.x = rect_proto.p1().x();
-                rect.to.y = rect_proto.p1().y();
-                select.select_screen.push_back(rect);
-            }
-            select.select_add = action_select.selection_add();
-
-            actions.select_rects.push_back(select);
-        }
+        ConvertSpatialAction(action_FL, actions);
     }
+}
 
-    return true;
+void ConvertRenderedActions(const ResponseObservationPtr& response_observation_ptr, SpatialActions& actions) {
+    for (int i = 0; i < response_observation_ptr->actions_size(); ++i) {
+        const SC2APIProtocol::Action& proto_action = response_observation_ptr->actions(i);
+        if (!proto_action.has_action_render()) {
+            continue;
+        }
+
+        const SC2APIProtocol::ActionSpatial& action_render = proto_action.action_render();
+        ConvertSpatialAction(action_render, actions);
+    }
 }
 
 void Convert(const SC2APIProtocol::SpatialCameraSetup& setup_proto, SpatialSetup& setup) {
@@ -450,6 +468,8 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
     if (!start_raw.has_map_size() || !start_raw.map_size().has_x() || !start_raw.map_size().has_y()) {
         return false;
     }
+    game_info.map_name = response_game_info_ptr->map_name();
+    game_info.local_map_path = response_game_info_ptr->local_map_path();
     game_info.width = static_cast<int>(start_raw.map_size().x());
     game_info.height = static_cast<int>(start_raw.map_size().y());
 
@@ -482,6 +502,11 @@ bool Convert(const ResponseGameInfoPtr& response_game_info_ptr, GameInfo& game_i
         const SC2APIProtocol::Point2D& pt = start_raw.start_locations(i);
         game_info.enemy_start_locations.push_back(sc2::Point2D(pt.x(), pt.y()));
     }
+
+    // Players start location is calculated in ControlImp::OnGameStart and start_locations vector is cleared there as well.
+    game_info.start_locations.insert(game_info.start_locations.begin(), 
+        game_info.enemy_start_locations.begin(),
+        game_info.enemy_start_locations.end());
 
     for (const auto& player_info : response_game_info_ptr->player_info()) {
         game_info.player_info.push_back(sc2::PlayerInfo(

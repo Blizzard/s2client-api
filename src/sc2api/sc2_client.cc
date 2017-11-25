@@ -37,9 +37,12 @@ public:
     uint32_t previous_game_loop;
     RawActions raw_actions_;
     SpatialActions feature_layer_actions_;
+    SpatialActions rendered_actions_;
     std::vector<PowerSource> power_sources_;
+    std::vector<Effect> effects_;
     std::vector<UpgradeID> upgrades_;
     std::vector<UpgradeID> upgrades_previous_;
+    std::vector<ChatMessage> chat_;
 
     // Game info.
     mutable GameInfo game_info_;
@@ -65,6 +68,7 @@ public:
     mutable UnitTypes unit_types_;
     mutable Upgrades upgrade_ids_;
     mutable Buffs buff_ids_;
+    mutable Effects effect_ids_;
 
     // Score.
     Score score_;
@@ -74,6 +78,9 @@ public:
     mutable bool unit_types_cached;
     mutable bool upgrades_cached_;
     mutable bool buffs_cached_;
+    mutable bool effects_cached_;
+
+    std::vector<PlayerResult> player_results_;
 
     ObservationImp(ProtoInterface& proto, ObservationPtr& observation, ResponseObservationPtr& response, ControlInterface& control);
     void ClearFlags();
@@ -86,13 +93,17 @@ public:
     const Unit* GetUnit(Tag tag) const final;
     const RawActions& GetRawActions() const final { return raw_actions_; }
     const SpatialActions& GetFeatureLayerActions() const final { return feature_layer_actions_; };
+    const SpatialActions& GetRenderedActions() const final { return rendered_actions_; }
+    const std::vector<ChatMessage>& GetChatMessages() const final { return chat_; }
     const std::vector<PowerSource>& GetPowerSources() const final { return power_sources_; }
+    const std::vector<Effect>& GetEffects() const final { return effects_; }
     const std::vector<UpgradeID>& GetUpgrades() const final { return upgrades_; }
     const Score& GetScore() const final { return score_; }
     const Abilities& GetAbilityData(bool force_refresh = false) const final;
     const UnitTypes& GetUnitTypeData(bool force_refresh = false) const final;
     const Upgrades& GetUpgradeData(bool force_refresh = false) const final;
     const Buffs& GetBuffData(bool force_refresh = false) const final;
+    const Effects& GetEffectData(bool force_refresh = false) const final;
     const GameInfo& GetGameInfo() const final;
     bool HasCreep(const Point2D& point) const final;
     Visibility GetVisibility(const Point2D& point) const final;
@@ -111,6 +122,7 @@ public:
     int32_t GetWarpGateCount() const final { return warp_gate_count_; }
     Point2D GetCameraPos() const final { return camera_pos_; }
     Point3D GetStartLocation() const final { return start_location_; }
+    const std::vector<PlayerResult>& GetResults() const final { return player_results_; }
 
     const SC2APIProtocol::Observation* GetRawObservation() const final;
 
@@ -132,6 +144,9 @@ void ObservationImp::ClearFlags() {
     game_info_cached_ = false;
     abilities_cached_ = false;
     unit_types_cached = false;
+    upgrades_cached_ = false;
+    buffs_cached_ = false;
+    effects_cached_ = false;
 }
 
 Units ObservationImp::GetUnits() const {
@@ -350,6 +365,45 @@ const Buffs& ObservationImp::GetBuffData(bool force_refresh) const {
     return buff_ids_;
 }
 
+const Effects& ObservationImp::GetEffectData(bool force_refresh) const {
+    if (force_refresh || effect_ids_.size() < 1) {
+        effects_cached_ = false;
+    }
+
+    if (effects_cached_) {
+        return effect_ids_;
+    }
+
+    effect_ids_.clear();
+
+    GameRequestPtr request = proto_.MakeRequest();
+    SC2APIProtocol::RequestData* request_data = request->mutable_data();
+    request_data->set_effect_id(true);
+
+    if (!proto_.SendRequest(request)) {
+        return effect_ids_;
+    }
+
+    GameResponsePtr response = control_.WaitForResponse();
+    ResponseDataPtr response_data;
+    SET_MESSAGE_RESPONSE(response_data, response, data);
+    if (response_data.HasErrors()) {
+        return effect_ids_;
+    }
+
+    if (response_data.HasErrors() || response_data->effects_size() == 0) {
+        return effect_ids_;
+    }
+
+    effect_ids_.resize(response_data->effects_size());
+    for (int i = 0; i < response_data->effects_size(); ++i) {
+        effect_ids_[i].ReadFromProto(response_data->effects(i));
+    }
+
+    effects_cached_ = true;
+    return effect_ids_;
+}
+
 const GameInfo& ObservationImp::GetGameInfo() const {
     if (game_info_cached_) {
         return game_info_;
@@ -500,21 +554,29 @@ bool ObservationImp::UpdateObservation() {
     if (is_new_frame) {
         raw_actions_.clear();
         feature_layer_actions_ = SpatialActions();
+        rendered_actions_ = SpatialActions();
     }
 
-    Convert(response_, raw_actions_);
-    Convert(response_, feature_layer_actions_);
+    ConvertRawActions(response_, raw_actions_);
+    ConvertFeatureLayerActions(response_, feature_layer_actions_);
+    ConvertRenderedActions(response_, rendered_actions_);
 
     // Remap ability ids.
     {
-        if (use_generalized_ability_) {
-            for (ActionRaw& action : raw_actions_) {
-                action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
-            }
-            for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
-                spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
-            }
+        for (ActionRaw& action : raw_actions_) {
+            action.ability_id = GetGeneralizedAbilityID(action.ability_id, *this);
         }
+        for (SpatialUnitCommand& spatial_action : feature_layer_actions_.unit_commands) {
+            spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+        }
+        for (SpatialUnitCommand& spatial_action : rendered_actions_.unit_commands) {
+            spatial_action.ability_id = GetGeneralizedAbilityID(spatial_action.ability_id, *this);
+        }
+    }
+
+    chat_.clear();
+    for (auto& message : response_->chat()) {
+        chat_.push_back({message.player_id(), message.message()});
     }
 
     ObservationRawPtr observation_raw;
@@ -541,6 +603,12 @@ bool ObservationImp::UpdateObservation() {
         }
     });
 
+    effects_.clear();
+    effects_.resize(observation_raw->effects_size());
+    for (int i = 0; i < observation_raw->effects_size(); ++i) {
+        effects_[i].ReadFromProto(observation_raw->effects(i));
+    }
+
     if (!observation_raw->has_player()) {
         return false;
     }
@@ -564,6 +632,11 @@ bool ObservationImp::UpdateObservation() {
     upgrades_.clear();
     for (int i = 0; i < player_raw.upgrade_ids_size(); ++i) {
         upgrades_.push_back(player_raw.upgrade_ids(i));
+    }
+
+    player_results_.clear();
+    for (const auto& player_result : response_->player_result()) {
+        player_results_.push_back(PlayerResult(player_result.player_id(), ConvertGameResultFromProto(player_result.result())));
     }
 
     return true;
@@ -809,6 +882,7 @@ public:
         bool is_3d;
         Point3D pt;
         Color color;
+        uint32_t size = 0;
     };
     std::vector<DebugText> debug_text_;
 
@@ -871,8 +945,8 @@ public:
     DebugImp(ProtoInterface& proto, ObservationInterface& observation, ControlInterface& control);
 
     void DebugTextOut(const std::string& out, Color color = Colors::White) override;
-    void DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color = Colors::White) override;
-    void DebugTextOut(const std::string& out, const Point3D& pt3D, Color color = Colors::White) override;
+    void DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color = Colors::White, uint32_t size = 8) override;
+    void DebugTextOut(const std::string& out, const Point3D& pt3D, Color color = Colors::White, uint32_t size = 8) override;
     void DebugLineOut(const Point3D& p0, const Point3D& p1, Color color = Colors::White) override;
     void DebugBoxOut(const Point3D& p_min, const Point3D& p_max, Color color = Colors::White) override;
     void DebugSphereOut(const Point3D& p, float r, Color color = Colors::White) override;
@@ -919,7 +993,7 @@ void DebugImp::DebugTextOut(const std::string& out, Color color) {
     debug_text_.push_back(debug_text);
 }
 
-void DebugImp::DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color) {
+void DebugImp::DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D, Color color, uint32_t size) {
     DebugText debug_text;
     debug_text.text = out;
     debug_text.has_coords = true;
@@ -927,10 +1001,11 @@ void DebugImp::DebugTextOut(const std::string& out, const Point2D& pt_virtual_2D
     debug_text.pt.x = pt_virtual_2D.x;
     debug_text.pt.y = pt_virtual_2D.y;
     debug_text.color = color;
+    debug_text.size = size;
     debug_text_.push_back(debug_text);
 }
 
-void DebugImp::DebugTextOut(const std::string& out, const Point3D& pt3D, Color color) {
+void DebugImp::DebugTextOut(const std::string& out, const Point3D& pt3D, Color color, uint32_t size) {
     DebugText debug_text;
     debug_text.text = out;
     debug_text.has_coords = true;
@@ -939,6 +1014,7 @@ void DebugImp::DebugTextOut(const std::string& out, const Point3D& pt3D, Color c
     debug_text.pt.y = pt3D.y;
     debug_text.pt.z = pt3D.z;
     debug_text.color = color;
+    debug_text.size = size;
     debug_text_.push_back(debug_text);
 }
 
@@ -1086,6 +1162,7 @@ void DebugImp::SendDebug() {
         SC2APIProtocol::DebugCommand* command = request_debug->add_debug();
         SC2APIProtocol::DebugText* debug_text = command->mutable_draw()->add_text();
         debug_text->set_text(entry.text);
+        debug_text->set_size(entry.size);
         if (entry.has_coords) {
             if (entry.is_3d) {
                 SC2APIProtocol::Point* pos = debug_text->mutable_world_pos();
@@ -1966,7 +2043,7 @@ void ControlImp::IssueUnitAddedEvents() {
         if (unit.alliance == Unit::Alliance::Enemy && unit.display_type == Unit::DisplayType::Visible) {
             client_.OnUnitEnterVision(&unit);
         }
-        else {
+        else if (unit.alliance == Unit::Alliance::Self) {
             client_.OnUnitCreated(&unit);
         }
     });
@@ -2095,6 +2172,10 @@ void ControlImp::OnGameStart() {
 
     // For now, until the api supports allies, the first (and only) building in this list should be the start location
     observation_imp_->start_location_ = units[0]->pos;
+
+    // Clear start locations here since ControlImp::OnGameStart is called before the clients OnGameStart.
+    observation_imp_->game_info_.start_locations.clear();
+    observation_imp_->game_info_.start_locations.push_back(observation_imp_->start_location_);
 }
 
 void ControlImp::Error(ClientError error, const std::vector<std::string>& errors) {
