@@ -20,6 +20,7 @@
 #include <string>
 #include <codecvt>
 #include <locale>
+#include <cstring>
 
 #elif defined(__APPLE__)
 

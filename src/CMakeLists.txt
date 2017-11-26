@@ -82,13 +82,13 @@ foreach (proto ${proto_files})
 endforeach()
 
 
-if (WIN32)
+if (MSVC)
     set_target_properties(sc2api PROPERTIES COMPILE_FLAGS "/W4 /WX")
     set_target_properties(sc2lib PROPERTIES COMPILE_FLAGS "/W4 /WX")
     set_target_properties(sc2renderer PROPERTIES COMPILE_FLAGS "/W4 /WX")
     set_target_properties(sc2utils PROPERTIES COMPILE_FLAGS "/W3 /WX")
     set_target_properties(sc2protocol PROPERTIES COMPILE_FLAGS "/W0")
-endif (WIN32)
+endif (MSVC)
 
 target_link_libraries(sc2api sc2protocol c-library)
 target_link_libraries(sc2lib sc2api)
