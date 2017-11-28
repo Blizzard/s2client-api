@@ -43,6 +43,18 @@ enum class Visibility {
 //!< \sa GetUnits()
 typedef std::function<bool(const Unit& unit)> Filter;
 
+//! Convenience filter for extracting units of a given type. For example, compare:
+//!   const auto &pylons = Observation()->GetUnits([](const auto &u) { return u.unit_type == UNIT_TYPEID::PROTOSS_PYLON; });
+//!     vs.
+//!   const auto &pylons = Observation()->GetUnits(OfType<UNIT_TYPEID::PROTOSS_PYLON>);
+//!< \param unit The unit in question to filter.
+//!< \return Whether or not to filter the unit in or out of the list. true will add the unit, false will leave it out of the list.
+//!< \sa GetUnits()
+template <sc2::UNIT_TYPEID type>
+bool OfType(const Unit &unit) {
+    return unit.unit_type == type;
+}
+
 //! The ObservationInterface reflects the current state of the game. Guaranteed to be valid when OnGameStart or OnStep is called.
 class ObservationInterface {
 public:
