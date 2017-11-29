@@ -117,7 +117,7 @@ bool TestRendered(int argc, char** argv) {
     coordinator.SetRender(settings);
 
 #if defined(__linux__)
-    coordinator.AddCommandLine("-eglpath /usr/lib/nvidia-367/libEGL.so");
+    coordinator.AddCommandLine("-eglpath libEGL.so");
 #endif
 
     // Add the custom bot, it will control the players.
