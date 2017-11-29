@@ -64,13 +64,13 @@ set_target_properties(libprotobuf-lite PROPERTIES FOLDER contrib)
 set_target_properties(libprotoc PROPERTIES FOLDER contrib)
 set_target_properties(protoc PROPERTIES FOLDER contrib)
 
-if (WIN32)
+if (MSVC)
     set_target_properties(libprotobuf libprotobuf-lite libprotoc protoc PROPERTIES COMPILE_FLAGS "/W0")
     set_source_files_properties(${libprotobuf_files} PROPERTIES COMPILE_FLAGS "/W0")
     set_source_files_properties(${protobuf_SHARED_OR_STATIC} PROPERTIES COMPILE_FLAGS "/W0")
     set_source_files_properties(${libprotobuf_lite_files} PROPERTIES COMPILE_FLAGS "/W0")
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
-endif (WIN32)
+endif (MSVC)
 
 # Exclude SDL and related projects to work around linker issue.
 if (NOT APPLE)
