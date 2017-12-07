@@ -134,5 +134,8 @@ bool IsCarryingMinerals(const Unit& unit);
 //!< \return Returns true if the unit is carrying vespene, false otherwise.
 bool IsCarryingVespene(const Unit& unit);
 
+struct IsVisible {
+    bool operator()(const Unit& unit);
+};
 
 }

@@ -66,3 +66,8 @@ target_link_libraries(annoying_helper sc2api sc2lib sc2utils)
 add_executable(proxy "proxy.cc")
 set_target_properties(proxy PROPERTIES FOLDER examples)
 target_link_libraries(proxy sc2api sc2lib sc2utils)
+
+#save/load
+add_executable(save_load "save_load.cc")
+set_target_properties(save_load PROPERTIES FOLDER examples)
+target_link_libraries(save_load sc2api sc2lib sc2utils)
