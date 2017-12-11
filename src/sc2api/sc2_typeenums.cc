@@ -67,6 +67,7 @@ namespace sc2 {
         case UNIT_TYPEID::PROTOSS_FLEETBEACON:              return "PROTOSS_FLEETBEACON"; // 337
         case UNIT_TYPEID::PROTOSS_TWILIGHTCOUNCIL:          return "PROTOSS_TWILIGHTCOUNCIL"; // 1677
         case UNIT_TYPEID::PROTOSS_PHOTONCANNON:             return "PROTOSS_PHOTONCANNON"; // 8601
+        case UNIT_TYPEID::PROTOSS_SHIELDBATTERY:            return "PROTOSS_SHIELDBATTERY"; // 8601
         case UNIT_TYPEID::PROTOSS_STARGATE:                 return "PROTOSS_STARGATE"; // 2286
         case UNIT_TYPEID::PROTOSS_TEMPLARARCHIVE:           return "PROTOSS_TEMPLARARCHIVE"; // 342
         case UNIT_TYPEID::PROTOSS_DARKSHRINE:               return "PROTOSS_DARKSHRINE"; // 408
@@ -391,6 +392,7 @@ namespace sc2 {
         case ABILITY_ID::BUILD_FLEETBEACON:                 return "BUILD_FLEETBEACON"; // 130
         case ABILITY_ID::BUILD_TWILIGHTCOUNCIL:             return "BUILD_TWILIGHTCOUNCIL"; // 486
         case ABILITY_ID::BUILD_PHOTONCANNON:                return "BUILD_PHOTONCANNON"; // 2895
+        case ABILITY_ID::BUILD_SHIELDBATTERY:               return "BUILD_SHIELDBATTERY";
         case ABILITY_ID::BUILD_STARGATE:                    return "BUILD_STARGATE"; // 791
         case ABILITY_ID::BUILD_TEMPLARARCHIVE:              return "BUILD_TEMPLARARCHIVE"; // 167
         case ABILITY_ID::BUILD_DARKSHRINE:                  return "BUILD_DARKSHRINE"; // 165
@@ -565,6 +567,7 @@ namespace sc2 {
         case ABILITY_ID::CANCEL_MORPHMOTHERSHIP:            return "CANCEL_MORPHMOTHERSHIP"; // 5
         case ABILITY_ID::TRAIN_MOTHERSHIPCORE:              return "TRAIN_MOTHERSHIPCORE"; // 869
         case ABILITY_ID::EFFECT_MASSRECALL_MOTHERSHIPCORE:  return "EFFECT_MASSRECALL_MOTHERSHIPCORE"; // 46
+        case ABILITY_ID::TRAIN_MOTHERSHIP:                  return "TRAIN_MOTHERSHIP"; 
         case ABILITY_ID::MORPH_HELLION:                     return "MORPH_HELLION"; // 31
         case ABILITY_ID::MORPH_HELLBAT:                     return "MORPH_HELLBAT"; // 325
         case ABILITY_ID::BURROWDOWN_SWARMHOST:              return "BURROWDOWN_SWARMHOST"; // 19
@@ -654,6 +657,7 @@ namespace sc2 {
         case ABILITY_ID::EFFECT_REPAIR:                     return "EFFECT_REPAIR"; // 1
         case ABILITY_ID::EFFECT_MASSRECALL:                 return "EFFECT_MASSRECALL"; // 1
         case ABILITY_ID::EFFECT_BLINK:                      return "EFFECT_BLINK"; // 1
+        case ABILITY_ID::EFFECT_RESTORE:                    return "EFFECT_RESTORE"; // 1
         case ABILITY_ID::BEHAVIOR_HOLDFIREON:               return "BEHAVIOR_HOLDFIREON"; // 1
         case ABILITY_ID::BEHAVIOR_HOLDFIREOFF:              return "BEHAVIOR_HOLDFIREOFF"; // 1
         case ABILITY_ID::RALLY_WORKERS:                     return "RALLY_WORKERS"; // 1
