@@ -430,7 +430,7 @@ namespace sc2 {
         EFFECT_REPAIR = 3685,  // Target: Unit.
         EFFECT_REPAIR_MULE = 78,    // Target: Unit.
         EFFECT_REPAIR_SCV = 316,   // Target: Unit.
-        EFFECT_RESTORE = 3665,      // Target: Unit.
+        EFFECT_RESTORE = 3765,      // Target: Unit.
         EFFECT_SALVAGE = 32,    // Target: None.
         EFFECT_SCAN = 399,   // Target: Point.
         EFFECT_SHADOWSTRIDE = 2700,  // Target: Point.
