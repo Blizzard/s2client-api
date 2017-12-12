@@ -1429,7 +1429,7 @@ public:
 
     void DumpProtoUsage() override;
 
-    void ResolveMap (const std::string& map_name, SC2APIProtocol::RequestCreateGame* request);
+    void ResolveMap(const std::string& map_name, SC2APIProtocol::RequestCreateGame* request);
 
     const std::vector<ClientError>& GetClientErrors() const final { return client_errors_; };
     const std::vector<std::string>& GetProtocolErrors() const final { return protocol_errors_; };
@@ -1437,6 +1437,9 @@ public:
     void ClearClientErrors() override { client_errors_.clear(); };
     void ClearProtocolErrors() override { protocol_errors_.clear(); };
     void UseGeneralizedAbility(bool value) override { observation_imp_->use_generalized_ability_ = value; };
+
+    virtual void Save();
+    virtual void Load();
 };
 
 ControlImp::ControlImp(Client& client) :
@@ -2213,6 +2216,24 @@ void ControlImp::DumpProtoUsage() {
     std::cout << "******************************************************" << std::endl;
 }
 
+void ControlImp::Save() {
+    GameRequestPtr request = Proto().MakeRequest();
+    request->mutable_quick_save();
+    if (!Proto().SendRequest(request)) {
+        return;
+    }
+    WaitForResponse();
+}
+
+void ControlImp::Load() {
+    GameRequestPtr request = Proto().MakeRequest();
+    request->mutable_quick_load();
+    if (!Proto().SendRequest(request)) {
+        return;
+    }
+    WaitForResponse();
+}
+
 //-------------------------------------------------------------------------------------------------
 // Client
 //-------------------------------------------------------------------------------------------------
@@ -2269,5 +2290,9 @@ bool IsCarryingVespene(const Unit& unit) {
     };
     return std::find_if(unit.buffs.begin(), unit.buffs.end(), is_vespene) != unit.buffs.end();
 }
+
+bool IsVisible::operator()(const Unit& unit) {
+    return unit.display_type == Unit::Visible;
+};
 
 }
