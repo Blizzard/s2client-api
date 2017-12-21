@@ -20,8 +20,7 @@ int main(int argc, char* argv[]) {
     sc2::GameSettings game_settings;
     sc2::ParseSettings(argc, argv, process_settings, game_settings);
     sc2::StartProcess(process_settings.process_path,
-        { "-listen", "127.0.0.1",
-          "-port", "5679",
+        { "-listen", "[::1]:5679",
           "-displayMode", "0",
           "-dataVersion", process_settings.data_version }
     );
@@ -30,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     // Connect to running sc2 process.
     sc2::Connection client;
-    client.Connect("127.0.0.1", 5679);
+    client.Connect("::1", 5679);
 
     while (!sc2::PollKeyPress()) {
         // If the proxy has messages forward them to sc2.

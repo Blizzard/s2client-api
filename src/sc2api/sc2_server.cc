@@ -90,7 +90,7 @@ static void SendMessage(mg_connection* conn, std::queue<T>& message_queue) {
     message->SerializeToArray(bytes, (int)size);
     mg_websocket_write(
         conn,
-        WEBSOCKET_OPCODE_BINARY,
+        MG_WEBSOCKET_OPCODE_BINARY,
         (const char*)bytes,
         size
     );
