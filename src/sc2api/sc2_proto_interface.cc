@@ -56,7 +56,7 @@ const char* RequestResponseIDToName(int type) {
 }
 
 ProtoInterface::ProtoInterface() :
-    address_("::1"),
+    address_("127.0.0.1"),
     port_(5000),
     default_timeout_ms_(kDefaultProtoInterfaceTimeout),
     latest_status_(SC2APIProtocol::Status::unknown),

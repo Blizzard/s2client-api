@@ -42,8 +42,7 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     // Command line arguments that will be passed to sc2.
     std::vector<std::string> cl = {
         "-listen", process_settings.net_address,
-        "-port", std::to_string(pi.port),
-        "-ipv6"
+		"-port", std::to_string(pi.port)
     };
 
     // DirectX will fail if multiple games try to launch in fullscreen mode. Force them into windowed mode.
@@ -193,7 +192,7 @@ CoordinatorImp::CoordinatorImp() :
     game_ended_(),
     starcraft_started_(false),
     game_settings_(),
-    process_settings_(false, 1, "", "::1", kDefaultProtoInterfaceTimeout, 8168, false) {
+    process_settings_(false, 1, "", "127.0.0.1", kDefaultProtoInterfaceTimeout, 8168, false) {
 }
 
 CoordinatorImp::~CoordinatorImp() {
