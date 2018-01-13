@@ -660,7 +660,8 @@ Coordinator::~Coordinator() {
 }
 
 bool Coordinator::StartGame(const std::string& map_path) {
-    imp_->game_settings_.map_name = map_path;
+    if (!map_path.empty())
+        imp_->game_settings_.map_name = map_path;
     return imp_->StartGame();
 }
 
@@ -669,7 +670,8 @@ bool Coordinator::JoinGame() {
 }
 
 bool Coordinator::CreateGame(const std::string& map_path) {
-    imp_->game_settings_.map_name = map_path;
+    if (!map_path.empty())
+        imp_->game_settings_.map_name = map_path;
     return imp_->CreateGame();
 }
 
