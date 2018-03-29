@@ -535,8 +535,8 @@ namespace sc2 {
         PATROL = 17,    // Target: Unit, Point.
         RALLY_BUILDING = 195,   // Target: Unit, Point.
         RALLY_COMMANDCENTER = 203,   // Target: Unit, Point.
-        RALLY_HATCHERY_UNITS = 212,   // Target: Unit, Point.
-        RALLY_HATCHERY_WORKERS = 211,   // Target: Unit, Point.
+        RALLY_HATCHERY_UNITS = 211,   // Target: Unit, Point.
+        RALLY_HATCHERY_WORKERS = 212,   // Target: Unit, Point.
         RALLY_MORPHING_UNIT = 199,   // Target: Unit, Point.
         RALLY_NEXUS = 207,   // Target: Unit, Point.
         RALLY_UNITS = 3673,  // Target: Unit, Point.
