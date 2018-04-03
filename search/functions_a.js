@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['observation',['Observation',['../classsc2_1_1_client.html#a4ef4f62c7bc4cc179a23d186f1d176bc',1,'sc2::Client']]],
+  ['observation',['Observation',['../classsc2_1_1_client.html#a9bde4735245a945f37c5505cde5d09c1',1,'sc2::Client']]],
   ['observeraction',['ObserverAction',['../classsc2_1_1_replay_observer.html#ae9e8c78af0e86c091bea8f03039e3d91',1,'sc2::ReplayObserver']]],
   ['onbuildingconstructioncomplete',['OnBuildingConstructionComplete',['../classsc2_1_1_client_events.html#ad920d34fe6c49487373800dd1ec45757',1,'sc2::ClientEvents']]],
   ['onerror',['OnError',['../classsc2_1_1_client_events.html#a35424cb2a0baa509f997149521ab2c52',1,'sc2::ClientEvents']]],
@@ -15,9 +15,9 @@ var searchData=
   ['onunitentervision',['OnUnitEnterVision',['../classsc2_1_1_client_events.html#a3d73b5a3462f757397ea5ac2f4aca8dc',1,'sc2::ClientEvents']]],
   ['onunitidle',['OnUnitIdle',['../classsc2_1_1_client_events.html#adce0fc98fa9c3cc092a5a8b3f2feef45',1,'sc2::ClientEvents']]],
   ['onupgradecompleted',['OnUpgradeCompleted',['../classsc2_1_1_client_events.html#a4cdc022420833b34fbcd1c9713096754',1,'sc2::ClientEvents']]],
-  ['operator_20t',['operator T',['../classsc2_1_1_s_c2_type.html#a6786c054c5f46215624ee0129e1a638b',1,'sc2::SC2Type']]],
-  ['operator_20uint32_5ft',['operator uint32_t',['../classsc2_1_1_s_c2_type.html#a156cde1b0f200d343c3b1864ff851c91',1,'sc2::SC2Type']]],
-  ['operator_21_3d',['operator!=',['../classsc2_1_1_s_c2_type.html#a187c5db7e80f59b0e2a07bd3ff3ed42c',1,'sc2::SC2Type']]],
-  ['operator_3c',['operator&lt;',['../classsc2_1_1_s_c2_type.html#add0771755c581c008cc45376ff706406',1,'sc2::SC2Type']]],
-  ['operator_3d_3d',['operator==',['../structsc2_1_1_action_raw.html#ae4e079154dd9329ab5dece2eadb56901',1,'sc2::ActionRaw::operator==()'],['../classsc2_1_1_s_c2_type.html#a183f9c1c4e2a348aa6ac34e6688bd69a',1,'sc2::SC2Type::operator==()']]]
+  ['operator_20t',['operator T',['../classsc2_1_1_s_c2_type.html#a16ef14791e484bcb2708d262fbfbc46f',1,'sc2::SC2Type']]],
+  ['operator_20uint32_5ft',['operator uint32_t',['../classsc2_1_1_s_c2_type.html#ab75e39605288070327604d10a5f720bf',1,'sc2::SC2Type']]],
+  ['operator_21_3d',['operator!=',['../classsc2_1_1_s_c2_type.html#a6e032550a699843364b52d9f30d7ddcc',1,'sc2::SC2Type']]],
+  ['operator_3c',['operator&lt;',['../classsc2_1_1_s_c2_type.html#a9ad0dc8b2a47eca60fa3a49c9c2e5de0',1,'sc2::SC2Type']]],
+  ['operator_3d_3d',['operator==',['../structsc2_1_1_action_raw.html#a9cf9e83ec9ebd6f9db4520ede7150aed',1,'sc2::ActionRaw::operator==()'],['../classsc2_1_1_s_c2_type.html#a499b06e107c0561ce3d2d80094fbdd94',1,'sc2::SC2Type::operator==()']]]
 ];

@@ -1,7 +1,10 @@
 var searchData=
 [
+  ['tutorial_201_3a_20getting_20started',['Tutorial 1: Getting Started',['../md_docs_tutorial1.html',1,'']]],
+  ['tutorial_202_3a_20scvs_20and_20supply_20depots',['Tutorial 2: SCVs and Supply Depots',['../md_docs_tutorial2.html',1,'']]],
+  ['tutorial_203_3a_20building_20marines_20and_20scouting',['Tutorial 3: Building Marines and Scouting',['../md_docs_tutorial3.html',1,'']]],
   ['tag',['tag',['../structsc2_1_1_power_source.html#a98e4c9965754bf09d2c9504ed84ccbe9',1,'sc2::PowerSource::tag()'],['../structsc2_1_1_passenger_unit.html#ab0fc9d12eb58790d3668876f48becb02',1,'sc2::PassengerUnit::tag()'],['../classsc2_1_1_unit.html#a1312ee20e783753ee8ddf054878f7d9f',1,'sc2::Unit::tag()']]],
-  ['target',['Target',['../structsc2_1_1_ability_data.html#a15aaa20bd058eeb35728e2eeff6518f6',1,'sc2::AbilityData::Target()'],['../structsc2_1_1_spatial_unit_command.html#aaf33b1b6790e5f5af4509a5c28ef1a9c',1,'sc2::SpatialUnitCommand::target()'],['../structsc2_1_1_ability_data.html#a2351270150739e40d945e21fb801bedf',1,'sc2::AbilityData::target()']]],
+  ['target',['target',['../structsc2_1_1_spatial_unit_command.html#aaf33b1b6790e5f5af4509a5c28ef1a9c',1,'sc2::SpatialUnitCommand::target()'],['../structsc2_1_1_ability_data.html#a2351270150739e40d945e21fb801bedf',1,'sc2::AbilityData::target()'],['../structsc2_1_1_ability_data.html#a15aaa20bd058eeb35728e2eeff6518f6',1,'sc2::AbilityData::Target()']]],
   ['target_5fpoint',['target_point',['../structsc2_1_1_action_raw.html#af35667a06a46069209f5f364c7530195',1,'sc2::ActionRaw']]],
   ['target_5fpos',['target_pos',['../structsc2_1_1_unit_order.html#ae4c062864ad55c38faaf1e1abcb74671',1,'sc2::UnitOrder']]],
   ['target_5ftag',['target_tag',['../structsc2_1_1_action_raw.html#acd2f5da93f22943c4c3b1bcbeb1e9a28',1,'sc2::ActionRaw']]],
@@ -18,8 +21,8 @@ var searchData=
   ['terrain_5fheight',['terrain_height',['../structsc2_1_1_game_info.html#af0b251e21f771f06ca1927c9dff2e43b',1,'sc2::GameInfo']]],
   ['terrainheight',['TerrainHeight',['../classsc2_1_1_observation_interface.html#a8e6d0c2bce48f675b3d4b99f925dfafb',1,'sc2::ObservationInterface']]],
   ['timeout_5fcallback_5f',['timeout_callback_',['../classsc2_1_1_connection.html#abab9f14cde0fe589fc3a1c9588c6607a',1,'sc2::Connection']]],
-  ['to_5fstring',['to_string',['../classsc2_1_1_s_c2_type.html#a175885c1c55f2f0e84643e89af47646b',1,'sc2::SC2Type']]],
+  ['to_5fstring',['to_string',['../classsc2_1_1_s_c2_type.html#a25533b72e301be4064d80a13c82dc506',1,'sc2::SC2Type']]],
   ['toggleautocast',['ToggleAutocast',['../classsc2_1_1_action_interface.html#a5f66f9b7eaf1d6a681694927b8605004',1,'sc2::ActionInterface::ToggleAutocast(Tag unit_tag, AbilityID ability)=0'],['../classsc2_1_1_action_interface.html#ab3990c306215b3cb8d5e62533f72db62',1,'sc2::ActionInterface::ToggleAutocast(const std::vector&lt; Tag &gt; &amp;unit_tags, AbilityID ability)=0']]],
-  ['totype',['ToType',['../classsc2_1_1_s_c2_type.html#a1e335202524d8ce8e4a37f2beebe976a',1,'sc2::SC2Type']]],
+  ['totype',['ToType',['../classsc2_1_1_s_c2_type.html#ada2d70972edaa615780f86165b7e87a3',1,'sc2::SC2Type']]],
   ['type',['type',['../structsc2_1_1_player_setup.html#a59ec60d77794e16f2325a4bdbc693d89',1,'sc2::PlayerSetup']]]
 ];

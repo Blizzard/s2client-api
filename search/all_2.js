@@ -26,5 +26,6 @@ var searchData=
   ['control',['Control',['../classsc2_1_1_client.html#a741b9dd091f11694dd814c9b01f86dd8',1,'sc2::Client']]],
   ['controlinterface',['ControlInterface',['../classsc2_1_1_control_interface.html',1,'sc2']]],
   ['coordinator',['Coordinator',['../classsc2_1_1_coordinator.html',1,'sc2']]],
-  ['creategame',['CreateGame',['../classsc2_1_1_coordinator.html#a120b5d5c759e9d37c4e30af65f94aa66',1,'sc2::Coordinator']]]
+  ['creategame',['CreateGame',['../classsc2_1_1_coordinator.html#a120b5d5c759e9d37c4e30af65f94aa66',1,'sc2::Coordinator']]],
+  ['cmake',['CMake',['../md_docs_building.html',1,'']]]
 ];

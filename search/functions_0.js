@@ -8,5 +8,5 @@ var searchData=
   ['addcommandline',['AddCommandLine',['../classsc2_1_1_coordinator.html#aa59950d8ccb9d010288df3e1e6045eb9',1,'sc2::Coordinator']]],
   ['addreplayobserver',['AddReplayObserver',['../classsc2_1_1_coordinator.html#a16ebfba44b1abbc303770e4958922d05',1,'sc2::Coordinator']]],
   ['agentcontrol',['AgentControl',['../classsc2_1_1_agent.html#ad47b7a7383489567360ce1697d5e1675',1,'sc2::Agent']]],
-  ['allgamesended',['AllGamesEnded',['../classsc2_1_1_coordinator.html#a08ea13570e1e618a660add03da069f73',1,'sc2::Coordinator']]]
+  ['allgamesended',['AllGamesEnded',['../classsc2_1_1_coordinator.html#a31058950f418aa5d488fbda684c02146',1,'sc2::Coordinator']]]
 ];
