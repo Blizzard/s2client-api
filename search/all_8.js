@@ -20,5 +20,6 @@ var searchData=
   ['isplacable',['IsPlacable',['../classsc2_1_1_observation_interface.html#aceb3be53ab7a68e268169e6f786e61f6',1,'sc2::ObservationInterface']]],
   ['isunit',['IsUnit',['../structsc2_1_1_is_unit.html',1,'sc2']]],
   ['isunits',['IsUnits',['../structsc2_1_1_is_units.html',1,'sc2']]],
-  ['isvalid',['IsValid',['../structsc2_1_1_available_abilities.html#a72b5053ea46d8c1072ef0c304c9e0840',1,'sc2::AvailableAbilities::IsValid()'],['../classsc2_1_1_s_c2_type.html#a9a897b3ca4d6639b9ab96e5ab274911d',1,'sc2::SC2Type::IsValid()']]]
+  ['isvalid',['IsValid',['../structsc2_1_1_available_abilities.html#a72b5053ea46d8c1072ef0c304c9e0840',1,'sc2::AvailableAbilities::IsValid()'],['../classsc2_1_1_s_c2_type.html#a9a897b3ca4d6639b9ab96e5ab274911d',1,'sc2::SC2Type::IsValid()']]],
+  ['isvisible',['IsVisible',['../structsc2_1_1_is_visible.html',1,'sc2']]]
 ];

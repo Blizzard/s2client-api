@@ -41,5 +41,6 @@ var searchData=
   ['getupgrades',['GetUpgrades',['../classsc2_1_1_observation_interface.html#a0a794661f0072921a75d4c5851cfb9e9',1,'sc2::ObservationInterface']]],
   ['getvespene',['GetVespene',['../classsc2_1_1_observation_interface.html#aa31de2f1b14a2306a282fef7314fbf37',1,'sc2::ObservationInterface']]],
   ['getvisibility',['GetVisibility',['../classsc2_1_1_observation_interface.html#ab17337d7e05f1e9cf80252da10f01b04',1,'sc2::ObservationInterface']]],
-  ['getwarpgatecount',['GetWarpGateCount',['../classsc2_1_1_observation_interface.html#ade7028b262089975621a18c54d4cddb3',1,'sc2::ObservationInterface']]]
+  ['getwarpgatecount',['GetWarpGateCount',['../classsc2_1_1_observation_interface.html#ade7028b262089975621a18c54d4cddb3',1,'sc2::ObservationInterface']]],
+  ['getting_20started',['Getting Started',['../md_docs_getting_started.html',1,'']]]
 ];
