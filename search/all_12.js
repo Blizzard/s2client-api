@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['tutorial_201_3a_20getting_20started',['Tutorial 1: Getting Started',['../md_docs_tutorial1.html',1,'']]],
+  ['tutorial_202_3a_20scvs_20and_20supply_20depots',['Tutorial 2: SCVs and Supply Depots',['../md_docs_tutorial2.html',1,'']]],
+  ['tutorial_203_3a_20building_20marines_20and_20scouting',['Tutorial 3: Building Marines and Scouting',['../md_docs_tutorial3.html',1,'']]],
   ['tag',['tag',['../structsc2_1_1_power_source.html#a98e4c9965754bf09d2c9504ed84ccbe9',1,'sc2::PowerSource::tag()'],['../structsc2_1_1_passenger_unit.html#ab0fc9d12eb58790d3668876f48becb02',1,'sc2::PassengerUnit::tag()'],['../classsc2_1_1_unit.html#a1312ee20e783753ee8ddf054878f7d9f',1,'sc2::Unit::tag()']]],
   ['target',['target',['../structsc2_1_1_spatial_unit_command.html#aaf33b1b6790e5f5af4509a5c28ef1a9c',1,'sc2::SpatialUnitCommand::target()'],['../structsc2_1_1_ability_data.html#a2351270150739e40d945e21fb801bedf',1,'sc2::AbilityData::target()'],['../structsc2_1_1_ability_data.html#a15aaa20bd058eeb35728e2eeff6518f6',1,'sc2::AbilityData::Target()']]],
   ['target_5fpoint',['target_point',['../structsc2_1_1_action_raw.html#af35667a06a46069209f5f364c7530195',1,'sc2::ActionRaw']]],

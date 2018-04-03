@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sc2api_20documentation',['SC2API Documentation',['../index.html',1,'']]]
+  ['cmake',['CMake',['../md_docs_building.html',1,'']]]
 ];
