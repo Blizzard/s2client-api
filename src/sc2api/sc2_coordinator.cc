@@ -42,7 +42,7 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     // Command line arguments that will be passed to sc2.
     std::vector<std::string> cl = {
         "-listen", process_settings.net_address,
-        "-port", std::to_string(pi.port)
+		"-port", std::to_string(pi.port)
     };
 
     // DirectX will fail if multiple games try to launch in fullscreen mode. Force them into windowed mode.
@@ -660,7 +660,8 @@ Coordinator::~Coordinator() {
 }
 
 bool Coordinator::StartGame(const std::string& map_path) {
-    imp_->game_settings_.map_name = map_path;
+    if (!map_path.empty())
+        imp_->game_settings_.map_name = map_path;
     return imp_->StartGame();
 }
 
@@ -669,7 +670,8 @@ bool Coordinator::JoinGame() {
 }
 
 bool Coordinator::CreateGame(const std::string& map_path) {
-    imp_->game_settings_.map_name = map_path;
+    if (!map_path.empty())
+        imp_->game_settings_.map_name = map_path;
     return imp_->CreateGame();
 }
 

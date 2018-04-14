@@ -68,6 +68,10 @@ public:
     virtual void ClearProtocolErrors() = 0;
 
     virtual void UseGeneralizedAbility(bool value) = 0;
+
+    // Save/Load.
+    virtual void Save() = 0;
+    virtual void Load() = 0;
 };
 
 class AgentControlInterface {

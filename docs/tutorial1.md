@@ -55,21 +55,24 @@ The sc2_coordinator is included from sc2_api.h, you will use it to start and man
 The coordinator requires some preliminary information to properly start and connect
 to the Starcraft executable.
 
-Add the following code inside the main function.
+Replace the `main` function with the following code:
 
 ```C++
-Coordinator coordinator;
-coordinator.LoadSettings(argc, argv);
+int main(int argc, char* argv[]) {
+    Coordinator coordinator;
+    coordinator.LoadSettings(argc, argv);
 
-Bot bot;
-coordinator.SetParticipants({
-    CreateParticipant(Race::Terran, &bot),
-    CreateComputer(Race::Zerg)
-});
+    Bot bot;
+    coordinator.SetParticipants({
+        CreateParticipant(Race::Terran, &bot),
+        CreateComputer(Race::Zerg)
+    });
 
-coordinator.LaunchStarcraft();
-coordinator.StartGame(sc2::kMapBelShirVestigeLE);
+    coordinator.LaunchStarcraft();
+    coordinator.StartGame(sc2::kMapBelShirVestigeLE);
 
+    return 0;
+}
 ```
 
 > If you have started the retail binary LoadSettings should automatically load necessary settings.
