@@ -137,7 +137,7 @@ public:
 
     //! Gets the GameInfo struct for the current map.
     //!< \return The current GameInfo struct.
-    virtual const GameInfo& GetGameInfo() const = 0;
+    virtual const GameInfo& GetGameInfo(bool force_refresh = false) const = 0;
 
     //! The mineral count of the player.
     //!< \return The mineral count.

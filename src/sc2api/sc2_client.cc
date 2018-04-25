@@ -104,7 +104,7 @@ public:
     const Upgrades& GetUpgradeData(bool force_refresh = false) const final;
     const Buffs& GetBuffData(bool force_refresh = false) const final;
     const Effects& GetEffectData(bool force_refresh = false) const final;
-    const GameInfo& GetGameInfo() const final;
+	const GameInfo& GetGameInfo(bool force_refresh = false) const final;
     bool HasCreep(const Point2D& point) const final;
     Visibility GetVisibility(const Point2D& point) const final;
     bool IsPathable(const Point2D& point) const final;
@@ -404,7 +404,11 @@ const Effects& ObservationImp::GetEffectData(bool force_refresh) const {
     return effect_ids_;
 }
 
-const GameInfo& ObservationImp::GetGameInfo() const {
+const GameInfo& ObservationImp::GetGameInfo(bool force_refresh) const {
+	if (force_refresh) {
+		game_info_cached_ = false;
+	}
+
     if (game_info_cached_) {
         return game_info_;
     }
