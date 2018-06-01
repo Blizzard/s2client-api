@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-You can find a detailed tutorial on what this code does in docs/tutorial1.md.
+You can find a detailed tutorial on what this code does in [docs/tutorial1.md](docs/tutorial1.md).
 
 Documentation
 -------------
