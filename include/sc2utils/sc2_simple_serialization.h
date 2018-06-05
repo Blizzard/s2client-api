@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <set>
+#include <typeinfo>
 
 namespace sc2 {
 

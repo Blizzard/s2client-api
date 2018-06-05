@@ -88,8 +88,7 @@ void AbilityData::ReadFromProto(const SC2APIProtocol::AbilityData& ability_data)
                 target = Target::PointOrNone;
                 break;
             }
-            case SC2APIProtocol::AbilityData_Target_None: {
-            }
+            case SC2APIProtocol::AbilityData_Target_None:
             default: {
                 target = Target::None;
                 break;
@@ -159,8 +158,7 @@ std::string AbilityData::Log() const {
             str_out += "  Target: Point or unit\n";
             break;
         }
-        case Target::None: {
-        }
+        case Target::None:
         default: {
             str_out += "  Target: None\n";
             break;
