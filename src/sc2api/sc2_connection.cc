@@ -92,8 +92,8 @@ static void ConnectionClosedHandler(const struct mg_connection* conn, void *) {
 }
 
 Connection::Connection() :
-    verbose_(false),
     connection_(nullptr),
+    verbose_(false),
     queue_(),
     mutex_(),
     condition_(),

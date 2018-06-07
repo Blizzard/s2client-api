@@ -43,6 +43,8 @@ enum class ClientError {
 //! A set of common events a user can override in their derived bot or replay observer class.
 class ClientEvents {
 public:
+    virtual ~ClientEvents() {}
+
     //! Called when a game is started after a load. Fast restarting will not call this.
     virtual void OnGameFullStart() {}
 

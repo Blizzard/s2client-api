@@ -86,7 +86,7 @@ static void SendMessage(mg_connection* conn, std::queue<T>& message_queue) {
 
     google::protobuf::Message* message = message_queue.front().second;
     size_t size = message->ByteSize();
-    void* bytes = new char[size];
+    char* bytes = new char[size];
     message->SerializeToArray(bytes, (int)size);
     mg_websocket_write(
         conn,
@@ -95,7 +95,7 @@ static void SendMessage(mg_connection* conn, std::queue<T>& message_queue) {
         size
     );
     message_queue.pop();
-    delete bytes;
+    delete [] bytes;
     delete message;
 }
 
