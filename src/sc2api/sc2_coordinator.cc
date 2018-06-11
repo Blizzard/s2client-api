@@ -922,9 +922,12 @@ void Coordinator::SetUseGeneralizedAbilityId(bool value) {
     imp_->use_generalized_ability_id = value;
 }
 
+void Coordinator::SetReplayPerspective(int perspective) {
+    imp_->replay_settings_.player_id = perspective;
+}
+
 bool Coordinator::SetReplayPath(const std::string& path) {
     imp_->replay_settings_.replay_file.clear();
-
     if (HasExtension(path, ".SC2Replay")) {
         imp_->replay_settings_.replay_file.push_back(path);
     }

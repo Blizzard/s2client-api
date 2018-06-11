@@ -90,6 +90,9 @@ public:
     //! ability ids are generalized to BUILD_TECHLAB ability id in the observation.
     void SetUseGeneralizedAbilityId(bool value);
 
+    //! Sets the replay perspective. 0 to observe "Everyone"
+    void SetReplayPerspective(int perspective=1);
+
     //! Appends a command line argument to be fed to StarCraft II when starting.
     // \param option The string to be appended to the executable invoke.
     void AddCommandLine(const std::string& option);
