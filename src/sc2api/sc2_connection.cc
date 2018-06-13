@@ -14,36 +14,6 @@
 
 namespace sc2 {
 
-void StartCivetweb() {
-    static bool is_initialized = false;
-    static const char* REQUEST_TIMEOUT_MS = "5000";
-    static const char* WEBSOCKET_TIMEOUT_MS = "1200000";
-    static const char* NUM_THREADS = "4";
-    static const char* NO_DELAY = "1";
-
-    if (is_initialized) {
-        return;
-    }
-
-    const char* options[] = {
-        "request_timeout_ms",
-        REQUEST_TIMEOUT_MS,
-        "websocket_timeout_ms",
-        WEBSOCKET_TIMEOUT_MS,
-        "num_threads",
-        NUM_THREADS,
-        "tcp_nodelay",
-        NO_DELAY,
-        0
-    };
-
-    mg_callbacks callbacks;
-    memset(&callbacks, 0, sizeof(callbacks));
-    mg_start(&callbacks, nullptr, options);
-
-    is_initialized = true;
-}
-
 bool GetClientData(const mg_connection* connection, sc2::Connection*& out) {
     if (!connection) {
         return false;
@@ -101,7 +71,6 @@ Connection::Connection() :
 
 
 bool Connection::Connect(const std::string& address, int port, bool verbose) {
-    StartCivetweb();
     verbose_ = verbose;
 
     char ebuff[100] = { 0 };
