@@ -136,8 +136,9 @@ public:
     virtual const Effects& GetEffectData(bool force_refresh = false) const = 0;
 
     //! Gets the GameInfo struct for the current map.
+	//!< \param force_refresh forces a full query from the game, may otherwise cache data from a previous call.
     //!< \return The current GameInfo struct.
-    virtual const GameInfo& GetGameInfo() const = 0;
+    virtual const GameInfo& GetGameInfo(bool force_refresh = false) const = 0;
 
     //! The mineral count of the player.
     //!< \return The mineral count.
