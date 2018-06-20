@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
     coordinator.SetRealtime(false);
     // Start the game.
     coordinator.LaunchStarcraft();
-
+    std::cout << "TU MA BYT KOD PRE BOTA ZEALOTA, PUSTA sA MINIHRA JAMA" << std::endl;
     // Step forward the game simulation.
     bool do_break = false;
     while (!do_break) {
