@@ -136,6 +136,10 @@ if (NOT APPLE)
     set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
 endif ()
 
+include_directories("${PROEJCT_SOURCE_DIR}/ql")
+include_directories("${PROEJCT_SOURCE_DIR}/include/ql")
+add_subdirectory("ql")
+
 if (BUILD_API_EXAMPLES)
     add_subdirectory("examples")
 endif ()
