@@ -3,14 +3,9 @@
 #include "sc2utils/sc2_manage_process.h"
 
 #include <iostream>
-//#include "qlbot/bot_zealot.h"
-//#include "qlbot/bot_marine.h"
-#include "qlbot/bot_ql_test.h"
+#include "../build/examples/bot_zealot.h"
+#include "../build/examples/bot_marine.h"
 
-class Human : public sc2::Agent {
-
-
-};
 
 class FooBot : public sc2::Agent {
 public:
@@ -22,7 +17,6 @@ public:
 
     virtual void OnGameStart() final {
         std::cout << "Starting a new game (" << restarts_ << " restarts)" << std::endl;
-
     };
 
     virtual void OnStep() final {
@@ -58,22 +52,21 @@ int main(int argc, char* argv[]) {
     }
     coordinator.SetMultithreaded(true);
     // Add the custom bot, it will control the players.
-    //ZealotBot zealot;
-    QlBot* tester = new QlBot(7, 7, 2.0);
-    //MarineBot marine;
-    Human human;
+    ZealotBot zealot;
+    MarineBot marine;
 
     coordinator.SetParticipants({
-        CreateParticipant(sc2::Race::Protoss, tester)
+        CreateParticipant(sc2::Race::Terran, &marine),
+        CreateParticipant(sc2::Race::Protoss, &zealot)
         });
-    coordinator.SetRealtime(false);
+    //coordinator.SetRealtime(true);
     // Start the game.
     coordinator.LaunchStarcraft();
 
     // Step forward the game simulation.
     bool do_break = false;
     while (!do_break) {
-        coordinator.StartGame(sc2::kMapEmptyLong);
+        coordinator.StartGame(sc2::kMapTest3);
         while (coordinator.Update() && !do_break) {
             if (sc2::PollKeyPress()) {
                 std::cout << "Koncim cyklus" << std::endl;
