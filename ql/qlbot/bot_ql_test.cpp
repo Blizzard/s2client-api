@@ -9,9 +9,10 @@
 #include "qlbot/bot_ql_test.h"
 
 
-QlBot::QlBot(int width, int height, float square_size) : 
+QlBot::QlBot(int width, int height, float square_size) :
     restarts_(0), pi(atan(1) * 4)
 {
+    //todo: parametricke prepinanie ucenia a cesta k csv s q hodnotami
     srand(time(NULL));
     stepNum = 0;
     GAMMA = 0.9;
@@ -24,17 +25,17 @@ QlBot::QlBot(int width, int height, float square_size) :
     this->square_size = square_size;
     zstav_ = new TestState();
     state_ = new Stav(new vector<int>(2, 0));//TODO zatial napevno .. asi odstranim z parametra take a nejako to oriesim v kniznici
-    ql_ = new QL(state_, 2,4, new QInitZealot());
+    ql_ = new QL(state_, 2, 4, new QInitZealot());
     ql_->SetHyperparemeters(ALPHA, GAMMA, EPSILON);
-        try
-        {
-            ql_->Load("minihraJamy.csv");
-            printf("NACITANE");
-        }
-        catch (const std::exception& e)
-        {
-            printf("NENACITANE -> uci sa od zaciatku");
-        }
+    try
+    {
+        ql_->Load("minihraJamy.csv");
+        printf("NACITANE");
+    }
+    catch (const std::exception& e)
+    {
+        printf("NENACITANE -> uci sa od zaciatku");
+    }
 }
 
 
@@ -79,12 +80,12 @@ void QlBot::OnStep()
     //cout << units.size();
     if (!draw)
     {
-        float x =  units[0]->pos.x - square_size / 2;
+        float x = units[0]->pos.x - square_size / 2;
         float y = units[0]->pos.y + square_size / 2;
         float z = units[0]->pos.z;
         for (int i = width - 1; i >= 0; i--)
         {
-            for (int j = height - 1; j >= 0; j --)
+            for (int j = height - 1; j >= 0; j--)
             {
                 auto upper_left = new sc2::Point3D(x + i * square_size, y - j * square_size, z);
                 auto lower_right = new sc2::Point3D(x + (i + 1)* square_size, y - (j + 1) * square_size, z + 0.01);
@@ -93,25 +94,26 @@ void QlBot::OnStep()
                     if (i == width - 1)
                     {
                         Debug()->DebugBoxOut(*upper_left, *lower_right, sc2::Colors::Green);
-                    } else if (i > 0)
+                    }
+                    else if (i > 0)
                     {
                         Debug()->DebugBoxOut(*upper_left, *lower_right, sc2::Colors::Red);
-                    } 
+                    }
                     else
                     {
                         Debug()->DebugBoxOut(*upper_left, *lower_right, sc2::Colors::White);
                     }
 
-                } 
+                }
                 else
                 {
                     Debug()->DebugBoxOut(*upper_left, *lower_right, sc2::Colors::White);
                 }
-                
-                
+
+
             }
         }
-        Debug()->DebugMoveCamera(*new sc2::Point2D(x + width * square_size /2, y - (height + 3) * square_size / 2));
+        Debug()->DebugMoveCamera(*new sc2::Point2D(x + width * square_size / 2, y - (height + 3) * square_size / 2));
         Debug()->SendDebug();
         draw = true;
     }
@@ -122,7 +124,7 @@ void QlBot::OnStep()
     }
     if (units[0]->orders.empty())
     {
-        
+
         if (y == 0 && x != 0)
         {
             if (x == width - 1)
@@ -134,13 +136,14 @@ void QlBot::OnStep()
                 reward = -10;
             }
             global_reward += reward;
+            reward_now += reward - 0.001*reward_now;
             x = 0;
             y = 0;
             zstav_->set_x(y);
             zstav_->set_y(x);
             Debug()->DebugKillUnit(units[0]);
             Debug()->SendDebug();
-            
+
             Debug()->DebugCreateUnit(sc2::UNIT_TYPEID::PROTOSS_ZEALOT, *start_point, Observation()->GetPlayerID());
             Debug()->SendDebug();
             ql_->Learn(reward, new Stav(zstav_->to_array()), lastAction, false);
@@ -154,18 +157,19 @@ void QlBot::OnStep()
             //this->Vypis(" Nemame jednotky.");
             return;//ak nemame vojakov step sa nedeje (padlo)
         }
-        
-        int akcia = ql_->ChooseAction(true, new Stav(zstav_->to_array()));
+
+        int akcia = ql_->ChooseAction(false, new Stav(zstav_->to_array()));
         sc2::Units jednotkyNepriatelov = Observation()->GetUnits(sc2::Unit::Enemy);
         /*cout << "x:" << zstav_->get_x() << " y: " << zstav_->get_y() << endl;*/
         int x_new = x, y_new = y;
+        //cout << akcia << endl;
         switch (akcia)
         {
         case 0: y_new = y - 1; /*cout << "hore" << endl;*/  break; //hore
         case 1: x_new = x + 1; /*cout << "doprava" << endl;*/ break; //doprava
         case 2: y_new = y + 1; /*cout << "dole" << endl; */break; //dole
         case 3: x_new = x - 1; /*cout << "dolava" << endl; */break; //dolava
-        
+
         default: break;
         }
         lastAction = akcia;
@@ -185,14 +189,14 @@ void QlBot::OnStep()
         y = y_new;
         zstav_->set_x(y);
         zstav_->set_y(x);
-        
-        Actions()->UnitCommand(units[0], sc2::ABILITY_ID::MOVE, *new sc2::Point2D(start_point->x + x*square_size, start_point->y - y*square_size), false);
-        //cout << "x: " << x << " y: " << y << endl;
-        
-        
+
+        Actions()->UnitCommand(units[0], sc2::ABILITY_ID::MOVE, *new sc2::Point2D(start_point->x + x * square_size, start_point->y - y * square_size), false);
+        printf("\nscore %6.3f %6.3f\n", global_reward, reward_now);
+
+
     }
 
-    
+
 }
 
 void QlBot::UlozNaucene()
@@ -213,7 +217,7 @@ void QlBot::OnGameEnd()
     }
     //cout << Observation()->GetUnitTypeData().at(static_cast<int>(sc2::UNIT_TYPEID::PROTOSS_ZEALOT)).l;
 
-   
+
     std::cout << "Game ended after: " << Observation()->GetGameLoop() << " loops " << std::endl;
 }
 
@@ -232,7 +236,7 @@ string QlBot::ReportNaKonciHry()
     {
         enemy_hp += unit->health;
     }
-     string ret_string = "Replikacia: " + to_string(restarts_) + " Pocet uceni: " + to_string(ql_->DajPocetUceni()) + "\n";
+    string ret_string = "Replikacia: " + to_string(restarts_) + " Pocet uceni: " + to_string(ql_->DajPocetUceni()) + "\n";
     ret_string += "Ziskana odmena: " + to_string(global_reward) + "\n";
     return ret_string;
 }
@@ -299,6 +303,7 @@ void QlBot::Triangulate(float speed, float degree, float& x, float& y)
     x = cos(degree * pi / 180) * speed;
     y = sin(degree * pi / 180) * speed;
 }
+
 
 
 

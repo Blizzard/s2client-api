@@ -30,6 +30,7 @@ class QlBot : public sc2::Agent
     const double pi;
     int lastAction = 0;
     float reward = 0;
+    float reward_now = 0;
     float global_reward = 0;
     int x = 0;
     int y = 0;
