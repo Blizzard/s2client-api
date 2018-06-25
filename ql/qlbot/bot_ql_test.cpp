@@ -36,6 +36,8 @@ QlBot::QlBot(int width, int height, float square_size) :
     {
         printf("NENACITANE -> uci sa od zaciatku");
     }
+
+    time(&lastUpdate);
 }
 
 
@@ -75,6 +77,13 @@ void QlBot::OnStep()
     {
         this->ql_->Save("minihraJamy.csv");
         printf("ulozene\n");
+
+        //meranie casu medzi ulozeniami
+        time_t actualTime;
+        time(&actualTime);
+        actualTime = actualTime - lastUpdate;
+        std::cout << "Cas od posledneho ulozenia: " << actualTime << std::endl;
+        time(&lastUpdate);
     }
     sc2::Units units = Observation()->GetUnits(sc2::Unit::Alliance::Self);
     //cout << units.size();

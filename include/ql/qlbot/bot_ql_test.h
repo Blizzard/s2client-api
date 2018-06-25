@@ -21,6 +21,8 @@ class QlBot : public sc2::Agent
         vector<int>* to_array();
     };
 
+    time_t lastUpdate;
+
     int stepNum;
     double ALPHA;
     double GAMMA;
