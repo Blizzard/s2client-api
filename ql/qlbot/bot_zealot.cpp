@@ -23,8 +23,8 @@ ZealotBot::ZealotBot() :
     ALPHA = 0.05;
     EPSILON = 0.75;
     zstav_ = new ZealotState();
-    state_ = new Stav(new vector<int>(2, 0));///TODO NATVRDO nasraaaaaat com to tu ide
-    ql_ = new QL(state_, 2,3, new QInitZealot());
+    state_ = new Stav(new vector<int>(8, 0));///TODO NATVRDO nasraaaaaat com to tu ide
+    ql_ = new QL(state_, 8,3, new QInitZealot());
     ql_->SetHyperparemeters(ALPHA, GAMMA, EPSILON);
 }
 
