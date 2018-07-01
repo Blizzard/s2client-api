@@ -154,6 +154,9 @@ void QlBot::OnStep()
             Debug()->DebugCreateUnit(sc2::UNIT_TYPEID::PROTOSS_ZEALOT, *start_point, Observation()->GetPlayerID());
             Debug()->SendDebug();
             ql_->Learn(reward, new Stav(zstav_->to_array()), lastAction, false);
+            global_reward += reward;
+            reward_now += reward - 0.001*reward_now;
+            printf("\nscore %6.3f %6.3f\n", global_reward, reward_now);
             return;
         }
         ql_->Learn(reward, new Stav(zstav_->to_array()), lastAction, false);
