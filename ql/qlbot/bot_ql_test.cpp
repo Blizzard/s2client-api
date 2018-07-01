@@ -144,8 +144,6 @@ void QlBot::OnStep()
             {
                 reward = -10;
             }
-            global_reward += reward;
-            reward_now += reward - 0.001*reward_now;
             x = 0;
             y = 0;
             zstav_->set_x(y);
@@ -198,7 +196,8 @@ void QlBot::OnStep()
         y = y_new;
         zstav_->set_x(y);
         zstav_->set_y(x);
-
+        global_reward += reward;
+        reward_now += reward - 0.001*reward_now;
         Actions()->UnitCommand(units[0], sc2::ABILITY_ID::MOVE, *new sc2::Point2D(start_point->x + x * square_size, start_point->y - y * square_size), false);
         printf("\nscore %6.3f %6.3f\n", global_reward, reward_now);
 
