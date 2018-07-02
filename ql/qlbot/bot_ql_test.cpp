@@ -197,7 +197,7 @@ void QlBot::OnStep()
             (*buffer_pointer).game_count = game_count;
             (*buffer_pointer).win_count = win_count;
             (*buffer_pointer).win_percentage = win_percentage;
-            cout << "game" << game_count << endl;
+            //cout << "game" << game_count << endl;
             buffer_pointer++;
             buffer_size++;
             if (buffer_size > 19)
@@ -207,7 +207,7 @@ void QlBot::OnStep()
                 buffer_pointer = buffer;
             }
 
-            printf("\nscore %6.3f %6.3f\n", global_reward, reward_now);
+            printf("score %6.3f %6.3f\n", global_reward, reward_now);
             return;
         }
         ql_->Learn(reward, new Stav(zstav_->to_array()), lastAction, false);
