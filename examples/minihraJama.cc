@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     coordinator.SetMultithreaded(true);
     // Add the custom bot, it will control the players.
     //ZealotBot zealot;
-    QlBot* tester = new QlBot(7, 7, 2.0);
+    QlBot* tester = new QlBot(7, 7, 2.0, false);
     //MarineBot marine;
     Human human;
 
