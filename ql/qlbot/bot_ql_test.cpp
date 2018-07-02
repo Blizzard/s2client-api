@@ -373,56 +373,55 @@ void QlBot::Load()
     ifstream file;
     file.open(res_path);
     string line;
-    if (file.is_open()) {
-        file.seekg(EOF);                // go to one spot before the EOF
-
-        bool keepLooping = true;
-        while (keepLooping) {
-            char ch;
-            file.get(ch);                            // Get current byte's data
-
-            if ((int)file.tellg() <= 1) {             // If the data was at or before the 0th byte
-                file.seekg(0);                       // The first line is the last line
-                keepLooping = false;                // So stop there
-            }
-            else if (ch == '\n') {                   // If the data was a newline
-                if (prvyKoniec)
+    if (file.is_open())
+    {
+        //Got to the last character before EOF
+        file.seekg(-1, std::ios_base::end);
+        if (file.peek() == '\n')
+        {
+            //Start searching for \n occurrences
+            file.seekg(-1, std::ios_base::cur);
+            int i = file.tellg();
+            for (i; i > 0; i--)
+            {
+                if (file.peek() == '\n')
                 {
-                    keepLooping = false;                // Stop at the current position.
-                } else
-                {
-                    prvyKoniec = true;
+                    //Found
+                    file.get();
+                    break;
                 }
-            }
-            else {                                  // If the data was neither a newline nor at the 0 byte
-                file.seekg(-2, ios_base::cur);        // Move to the front of that data, then to the front of the data before it
+                //Move one character back
+                file.seekg(i, std::ios_base::beg);
             }
         }
-
-        string lastLine;
-        getline(file, lastLine);                      // Read the current line
-        cout << "ciara " << lastLine << endl;
+        std::string lastline;
+        getline(file, lastline);
+        
+        string buff{ "" };
         vector<string> tokens;
-        string token;
-        for_each(lastLine.begin(), lastLine.end(), [&](char c) {
-            if (c == ',')
-                token += c;
-            else
-            {
-                if (token.length()) tokens.push_back(token);
-                token.clear();
-            }
-        });
-        if (token.length()) tokens.push_back(token);
+
+        for (auto n : lastline)
+        {
+            if (n != ',') buff += n; else
+                if (n == ',' && buff != "") { tokens.push_back(buff); buff = ""; }
+        }
+        if (buff != "") tokens.push_back(buff);
+
 
         reward_now = stof(tokens.at(1));
         win_count = stoi(tokens.at(2));
         game_count = stoi(tokens.at(3));
         win_percentage = stod(tokens.at(4));
-        auto asd = 0;
-        file.close();
-    }
+       /* cout << reward_now << endl;
+        cout << win_count << endl;
+        cout << game_count << endl;
+        cout << win_percentage << endl;*/
+        
 
+        file.close();
+        
+
+    }
 }
 
 void QlBot::Save()
