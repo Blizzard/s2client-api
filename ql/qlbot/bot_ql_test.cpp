@@ -36,7 +36,7 @@ QlBot::QlBot(int width, int height, float square_size, bool is_learning) :
     ql_ = new QL(state_, 2, 4, new QInitZealot());
     ql_->SetHyperparemeters(ALPHA, GAMMA, EPSILON);
 
-    ql_path = "minihraJamy_ql_w_" + to_string(this->width) + "_h_" + to_string(this->height) + "_l_" + to_string(this->is_learning) +".csv";
+    ql_path = "minihraJamy_ql_w_" + to_string(this->width) + "_h_" + to_string(this->height) /*+ "_l_" + to_string(this->is_learning) */+".csv";
     res_path = "minihraJamy_res_w_" + to_string(this->width) + "_h_" + to_string(this->height) + "_l_" + to_string(this->is_learning) + ".csv";
     try
     {
