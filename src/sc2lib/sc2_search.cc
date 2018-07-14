@@ -114,6 +114,8 @@ std::vector<Point3D> CalculateExpansionLocations(const ObservationInterface* obs
         for (int i = 0; i < queries.size(); ++i) {
             if (DistanceSquared2D(cc->pos, queries[i].target_pos) < 1.0f) {
                 results[i] = true;
+                // we can safely break here, each query is at least one away
+                break;
             }
         }
     }
