@@ -120,9 +120,9 @@ std::vector<Point3D> CalculateExpansionLocations(const ObservationInterface* obs
             float d = 0;
             // avoid using the cog of the cluster, it might produce candidates that are one off
             // instead sum distances to all minerals/gas in the cluster
-            for (auto resource : cluster.second) {
+            for (const auto & resource : cluster.second) {
                 // distance squared is faster and does not change min/max results
-                d += DistanceSquared2D(p, resource);
+                d += DistanceSquared2D(p, resource.pos);
             }
             if (d < distance) {
                 distance = d;
