@@ -117,7 +117,13 @@ std::vector<Point3D> CalculateExpansionLocations(const ObservationInterface* obs
 
             Point2D& p = queries[j].target_pos;
 
-            float d = Distance2D(p, cluster.first);
+            float d = 0;
+            // avoid using the cog of the cluster, it might produce candidates that are one off
+            // instead sum distances to all minerals/gas in the cluster
+            for (const auto & resource : cluster.second) {
+                // distance squared is faster and does not change min/max results
+                d += DistanceSquared2D(p, resource.pos);
+            }
             if (d < distance) {
                 distance = d;
                 closest = p;
