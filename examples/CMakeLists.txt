@@ -1,5 +1,9 @@
 include_directories("../include")
 include_directories("common")
+include_directories("../include/ql")
+include_directories("../include/ql/qlbot")
+include_directories("../ql")
+
 
 # Setup MSVC parallelized builds
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
@@ -35,17 +39,21 @@ endfunction ()
 example_project(bot_simple "bot_simple.cc")
 example_project(echo_actions "echo_actions.cc")
 example_project(replay "replay.cc")
-example_project(tutorial "tutorial.cc")
+example_project(tutorial "tutorial.cc" qlbot)
+target_link_libraries(tutorial qlbot)
 example_project(bot_micro "bot_micro.cc")
 example_project(bot_mp "bot_mp.cc")
 example_project(intermediate_bot "intermediate_bot.cc")
 example_project(annoying_helper "annoying_helper.cc")
 example_project(proxy "proxy.cc")
 example_project(save_load "save_load.cc")
+example_project(minihraJama "minihraJama.cc" qlbot)
+target_link_libraries(minihraJama qlbot)
+example_project(bot_zealot "bot_zealot.cc" qlbot sc2lib)
+target_link_libraries(bot_zealot qlbot sc2lib)
 # example_project(bot_mp_ipv6 "bot_mp_ipv6.cc")
 
 if (NOT APPLE)
     example_project_extra(feature_layers "feature_layers.cc" sc2renderer)
     example_project_extra(rendered "rendered.cc" sc2renderer)
 endif ()
-
