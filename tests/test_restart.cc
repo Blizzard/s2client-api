@@ -7,7 +7,7 @@
 
 namespace sc2 {
 
-static const int NumRestartsToTest = 10;
+static const int NumRestartsToTest = 5;
 
 
 //

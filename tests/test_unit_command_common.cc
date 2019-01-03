@@ -108,7 +108,7 @@ namespace sc2 {
 
     void TestUnitCommand::VerifyUnitExistsAndComplete(UNIT_TYPEID unit_type, bool verify_complete) {
         bool unit_exists = false;
-        const Unit* test_unit;
+        const Unit* test_unit = nullptr;
 
         const ObservationInterface* obs = agent_->Observation();
         const Units& units = obs->GetUnits(Unit::Alliance::Self);
