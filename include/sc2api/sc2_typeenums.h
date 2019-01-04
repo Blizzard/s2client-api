@@ -564,7 +564,7 @@ namespace sc2 {
         RESEARCH_HISECAUTOTRACKING = 650,   // Target: None.
         RESEARCH_INFERNALPREIGNITER = 761,   // Target: None.
         RESEARCH_INTERCEPTORGRAVITONCATAPULT = 44,    // Target: None.
-        RESEARCH_MAGFIELDLAUNCHERS = 766,   // Target: None.
+        RESEARCH_MAGFIELDLAUNCHERS = 769,   // Target: None.
         RESEARCH_MUSCULARAUGMENTS = 1283,  // Target: None.
         RESEARCH_NEOSTEELFRAME = 655,   // Target: None.
         RESEARCH_NEURALPARASITE = 1455,  // Target: None.
