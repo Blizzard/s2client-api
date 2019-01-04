@@ -76,6 +76,12 @@ int LaunchProcess(ProcessSettings& process_settings, Client* client, int window_
     }
     else {
         std::cout << "Launched SC2 (" << process_settings.process_path << "), PID: " << std::to_string(pi.process_id) << std::endl;
+
+        for (std::string curarg: cl) {
+            std::cout << curarg << " ";
+        }
+
+        std::cout << std::endl;
     }
 
     client->Control()->SetProcessInfo(pi);
@@ -560,9 +566,23 @@ bool CoordinatorImp::CreateGame() {
 bool CoordinatorImp::JoinGame() {
     int i = 0;
     for (auto c : agents_) {
+
+        Ports curPorts;
+
+        if (i == 0) {
+            curPorts.shared_port = game_settings_.ports.shared_port;
+            curPorts.client_ports.push_back(game_settings_.ports.client_ports[0]);
+            curPorts.server_ports = game_settings_.ports.server_ports;
+        }
+        else {
+            curPorts.shared_port = game_settings_.ports.shared_port;
+            curPorts.client_ports.push_back(game_settings_.ports.client_ports[i-1]);
+            curPorts.server_ports = game_settings_.ports.server_ports;
+        }
+        
         bool game_join_request = c->Control()->RequestJoinGame(game_settings_.player_setup[i++],
             interface_settings_,
-            game_settings_.ports);
+            curPorts);
 
         if (!game_join_request) {
             std::cerr << "Unable to join game." << std::endl;

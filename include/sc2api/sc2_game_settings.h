@@ -119,7 +119,9 @@ enum class AppState {
 //! Known maps.
 //! These are the maps that come with the repo.
 //! See documentation for how to download and install additional map packs.
+extern const char* kMapStasisLE;
 extern const char* kMapBelShirVestigeLE;
+extern const char* kMapAridWastes;
 extern const char* kMapEmpty;
 extern const char* kMapEmptyLong;
 extern const char* kMapEmptyTall;

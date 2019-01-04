@@ -35,7 +35,9 @@ ReplaySettings::ReplaySettings() :
     player_id(1) {
 }
 
+const char* kMapStasisLE = "Melee/Void/2018Season4/(2)StasisLE.SC2Map";
 const char* kMapBelShirVestigeLE = "Ladder/(2)Bel'ShirVestigeLE (Void).SC2Map";
+const char* kMapAridWastes = "Melee/Liberty/(4)AridWastes.SC2Map";
 const char* kMapEmpty            = "Test/Empty.SC2Map";
 const char* kMapEmptyLong        = "Test/EmptyLong.SC2Map";
 const char* kMapEmptyTall        = "Test/EmptyTall.SC2Map";
