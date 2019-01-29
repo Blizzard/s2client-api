@@ -1658,7 +1658,14 @@ bool ControlImp::RequestJoinGame(PlayerSetup setup, const InterfaceSettings& set
     GameRequestPtr request = proto_.MakeRequest();
     SC2APIProtocol::RequestJoinGame* request_join_game = request->mutable_join_game();
 
-    request_join_game->set_race(SC2APIProtocol::Race(int(setup.race) + 1));
+//    request_join_game->set_race(SC2APIProtocol::Race(int(setup.race) + 1));
+    if (setup.type == SC2APIProtocol::Observer) {
+        request_join_game->set_observed_player_id(1);
+    }
+    else {
+        request_join_game->set_race(SC2APIProtocol::Race(int(setup.race) + 1));
+    }
+
     if (is_multiplayer_) {
         // Set shared port.
         request_join_game->set_shared_port(ports.shared_port);

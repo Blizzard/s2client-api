@@ -10,7 +10,7 @@ static inline sc2::PlayerSetup CreateObserver(sc2::Agent* agent) {
     return sc2::PlayerSetup(sc2::PlayerType::Observer, sc2::Race::Terran, agent);
 }
 
-class BoringBot : public sc2::Agent {
+class ObserverBot : public sc2::Agent {
 
 };
 
@@ -58,6 +58,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::cout << "Here" << std::endl;
+
+    std::cerr << "There" << std::endl;
+
     coordinator.SetMultithreaded(true);
 //    coordinator.SetRealtime(true);
     // Add the custom bot, it will control the players.
@@ -65,23 +69,16 @@ int main(int argc, char* argv[]) {
     sc2::ZergMultiplayerBot bot2;
     sc2::TerranMultiplayerBot bot3;
 
-    BoringBot boringBot;
-    BoringBot boringBot2;
-    BoringBot boringBot3;
-
-    Replay replay_observer;
+    ObserverBot observerBot;
 
     coordinator.SetParticipants({
         CreateParticipant(sc2::Race::Protoss, &bot1)
-//        , CreateParticipant(sc2::Race::Zerg, &bot2)
-//        , CreateComputer(sc2::Race::Terran, sc2::Difficulty::Hard)
-        ,CreateParticipant(sc2::Race::Zerg, &bot2)
-        , CreateParticipant(sc2::Race::Terran, &bot3)
-//        , CreateObserver(&boringBot2)
-     });
+        , CreateParticipant(sc2::Race::Zerg, &bot2)
+        , CreateObserver(&observerBot)
 
-    
-//    coordinator.AddReplayObserver(&replay_observer);
+//         , CreateComputer(sc2::Race::Terran, sc2::Difficulty::Hard)
+//        , CreateParticipant(sc2::Race::Terran, &bot3)
+     });
 
     // Start the game.
     coordinator.LaunchStarcraft();
