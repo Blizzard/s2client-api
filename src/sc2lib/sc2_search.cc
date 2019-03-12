@@ -1,5 +1,7 @@
 #include "sc2lib/sc2_search.h"
 
+#include <cmath>
+
 namespace sc2 {
 
 namespace search {
@@ -18,7 +20,7 @@ size_t CalculateQueries(float radius, float step_size, const Point2D& center, st
 
         QueryInterface::PlacementQuery query(ABILITY_ID::BUILD_COMMANDCENTER, point);
 
-        current_grid = Point2D(floor(point.x), floor(point.y));
+        current_grid = Point2D(std::floor(point.x), std::floor(point.y));
 
         if (previous_grid != current_grid) {
             queries.push_back(query);
