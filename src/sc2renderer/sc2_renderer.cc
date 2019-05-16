@@ -111,7 +111,7 @@ void Matrix8BPPPlayers(const char* bytes, int w_mat, int h_mat, int off_x, int o
                 SDL_SetRenderDrawColor(renderer_, 0, 255, 0, 255);
                 break;
             case 2:
-                // Enemy.
+                // Ally.
                 SDL_SetRenderDrawColor(renderer_, 255, 0, 0, 255);
                 break;
             case 3:
@@ -119,6 +119,7 @@ void Matrix8BPPPlayers(const char* bytes, int w_mat, int h_mat, int off_x, int o
                 SDL_SetRenderDrawColor(renderer_, 0, 0, 255, 255);
                 break;
             case 4:
+                // Enemy
                 SDL_SetRenderDrawColor(renderer_, 255, 255, 0, 255);
                 break;
             case 5:

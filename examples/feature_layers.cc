@@ -41,7 +41,7 @@ public:
         const SC2APIProtocol::Observation* observation = Observation()->GetRawObservation();
 
         const SC2APIProtocol::FeatureLayers& m = observation->feature_layer_data().renders();
-        DrawFeatureLayerUnits8BPP(m.unit_density(), 0, 0);
+        DrawFeatureLayerUnits8BPP(m.player_relative(), 0, 0);
         DrawFeatureLayer1BPP(m.selected(), kDrawSize, 0);
 
         const SC2APIProtocol::FeatureLayersMinimap& mi = observation->feature_layer_data().minimap_renders();
