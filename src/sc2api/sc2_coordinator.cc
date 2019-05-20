@@ -740,7 +740,7 @@ void Coordinator::LaunchStarcraft() {
 void Coordinator::Connect(int port) {
     while (imp_->process_settings_.process_info.size() < imp_->agents_.size()) {
         imp_->process_settings_.process_info.push_back(
-            ProcessInfo(imp_->process_settings_.net_address, 0, port)
+            ProcessInfo(imp_->process_settings_.net_address, 0, port++)
         );
     }
 
