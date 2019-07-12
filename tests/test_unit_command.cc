@@ -1637,7 +1637,7 @@ namespace sc2 {
         }
 
         void AdditionalTestSetup() override {
-            agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARAUDER, origin_pt_, agent_->Observation()->GetPlayerID(), 3);
+            agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARAUDER, origin_pt_, agent_->Observation()->GetPlayerID(), 2);
             agent_->Debug()->SendDebug();
         }
 
