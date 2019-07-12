@@ -153,6 +153,7 @@ bool Convert(const SC2APIProtocol::CloakState& cloak_proto, Unit::CloakState& cl
         case SC2APIProtocol::CloakState::Cloaked:         cloak = Unit::Cloaked; return true;
         case SC2APIProtocol::CloakState::CloakedDetected: cloak = Unit::CloakedDetected; return true;
         case SC2APIProtocol::CloakState::NotCloaked:      cloak = Unit::NotCloaked; return true;
+        case SC2APIProtocol::CloakState::CloakedAllied:    cloak = Unit::CloakedAllied; return true;
     }
     return false;
 }
@@ -190,7 +191,7 @@ bool Convert(const ObservationRawPtr& observation_raw, UnitPool& unit_pool, uint
             }
         }
         else {
-            unit->cloak = Unit::Unknown;
+            unit->cloak = Unit::CloakedUnknown;
         }
 
         unit->detect_range = observation_unit.detect_range();

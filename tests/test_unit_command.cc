@@ -39,7 +39,7 @@ namespace sc2 {
                 ReportError("Could not find the test unit.");
             }
 
-            if (test_unit_ && test_unit_->cloak != Unit::CloakState::Cloaked) {
+            if (test_unit_ && test_unit_->cloak != Unit::CloakState::CloakedAllied) {
                 ReportError("Unit is not cloaked as expected.");
             }
 
@@ -1254,9 +1254,6 @@ namespace sc2 {
 
             if (target_units.front()->is_blip != true) {
                 ReportError("Target unit is not a blip.");
-            }
-            if (target_units.front()->cloak != Unit::CloakState::Unknown) {
-                ReportError("Target unit cloak state is incorrect.");
             }
             if (target_units.front()->display_type != Unit::DisplayType::Hidden) {
                 ReportError("Target unit is not hidden.");
