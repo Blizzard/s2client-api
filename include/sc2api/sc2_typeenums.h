@@ -478,7 +478,8 @@ namespace sc2 {
         HARVEST_RETURN_MULE = 167,   // Target: None.
         HARVEST_RETURN_PROBE = 299,   // Target: None.
         HARVEST_RETURN_SCV = 296,   // Target: None.
-        HOLDPOSITION = 18,    // Target: None.
+//      HOLDPOSITION = 18,    // Target: None.
+        HOLDPOSITION = 3793,
         LAND = 3678,  // Target: Point.
         LAND_BARRACKS = 554,   // Target: Point.
         LAND_COMMANDCENTER = 419,   // Target: Point.
@@ -531,8 +532,10 @@ namespace sc2 {
         MORPH_WARPGATE = 1518,  // Target: None.
         MORPH_WARPPRISMPHASINGMODE = 1528,  // Target: None.
         MORPH_WARPPRISMTRANSPORTMODE = 1530,  // Target: None.
-        MOVE = 16,    // Target: Unit, Point.
-        PATROL = 17,    // Target: Unit, Point.
+        // MOVE = 16,    // Target: Unit, Point.
+        MOVE = 3794,
+        //  PATROL = 17,    // Target: Unit, Point.
+        PATROL = 3795,
         RALLY_BUILDING = 195,   // Target: Unit, Point.
         RALLY_COMMANDCENTER = 203,   // Target: Unit, Point.
         RALLY_HATCHERY_UNITS = 211,   // Target: Unit, Point.
