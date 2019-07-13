@@ -101,7 +101,7 @@ public:
         CloakedDetected = 2,
         //! No cloaking.
         NotCloaked = 3,
-        //! Cloaked ally, though not sure why this is necessary.
+        //! Cloaked ally unit.
         CloakedAllied = 4
     };
 
