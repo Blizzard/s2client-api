@@ -9,6 +9,10 @@ project(s2client-api)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+# Create our install directories. Necessary so that the install directives in
+# the src directory have the correct paths
+include("cmake/install_dirs.cmake")
+
 # Windows builds subdirectories Debug/Release.
 # These variables will overwrite that and put binaries in bin.
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${PROJECT_BINARY_DIR}/bin)
@@ -79,6 +83,9 @@ set(CIVETWEB_ENABLE_WEBSOCKETS ON CACHE BOOL "" FORCE)
 set(CIVETWEB_ENABLE_SERVER_EXECUTABLE OFF CACHE BOOL "" FORCE)
 set(CIVETWEB_ENABLE_IPV6 ON CACHE BOOL "" FORCE)
 
+# Disable installing the executable.
+set(CIVETWEB_INSTALL_EXECUTABLE OFF CACHE BOOL "" FORCE)
+
 # Don't build civetweb with sanitizers
 set(CIVETWEB_ENABLE_ASAN OFF CACHE BOOL "" FORCE)
 
@@ -92,8 +99,12 @@ set(protobuf_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # Don't build SDL dynamic lib.
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 
-# Run civetwebs cmake.
+# Run civetweb's cmake.
 add_subdirectory("contrib/civetweb")
+
+#set_target_properties(c-executable PROPERTIES FOLDER contrib)
+set_target_properties(c-executable PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
+set_target_properties(c-library c-executable PROPERTIES FOLDER contrib)
 
 # Enable IPv6 in civetweb
 target_compile_options(civetweb-c-library PUBLIC -DUSE_IPV6=1)
@@ -135,6 +146,9 @@ if (NOT APPLE)
     set_target_properties(sc2renderer PROPERTIES FOLDER utilities)
     set_target_properties(uninstall PROPERTIES FOLDER CMakePredefinedTargets)
 endif ()
+
+# Install the SC2API cmake package
+include("cmake/install.cmake")
 
 if (BUILD_API_EXAMPLES)
     add_subdirectory("examples")

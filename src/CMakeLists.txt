@@ -19,6 +19,8 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/generated/s2clientprotocol)
 foreach(proto ${proto_files})
     get_filename_component(proto_name ${proto} NAME_WE)
     list(APPEND proto_src ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.h ${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.cc)
+    # Get just headers for lib install
+    list(APPEND sc2protocol_headers "${PROJECT_BINARY_DIR}/generated/s2clientprotocol/${proto_name}.pb.h")
 endforeach()
 
 # Now include that directory
@@ -32,6 +34,47 @@ add_library(sc2api ${sources_sc2})
 add_library(sc2lib ${sources_sc2_lib})
 add_library(sc2protocol ${proto_src} ${proto_files})
 add_library(sc2utils ${sources_utils})
+
+# Glob header files together for install
+file(GLOB sc2api_headers "../include/sc2api/*.h")
+file(GLOB sc2lib_headers "../include/sc2lib/*.h")
+file(GLOB sc2utils_headers "../include/sc2utils/*.h")
+
+# Set the public headers for install
+set_target_properties(sc2api PROPERTIES PUBLIC_HEADER "${sc2api_headers}")
+set_target_properties(sc2lib PROPERTIES PUBLIC_HEADER "${sc2lib_headers}")
+set_target_properties(sc2protocol PROPERTIES PUBLIC_HEADER "${sc2protocol_headers}")
+set_target_properties(sc2utils PROPERTIES PUBLIC_HEADER "${sc2utils_headers}")
+
+# Install the libraries and their includes
+install(
+  TARGETS sc2api
+  EXPORT SC2API_EXPORTS
+  ARCHIVE DESTINATION "lib"
+  PUBLIC_HEADER DESTINATION "include/sc2api"
+  COMPONENT api
+)
+install(
+  TARGETS sc2lib
+  EXPORT SC2API_EXPORTS
+  ARCHIVE DESTINATION "lib"
+  PUBLIC_HEADER DESTINATION "include/sc2lib"
+  COMPONENT lib
+)
+install(
+  TARGETS sc2protocol
+  EXPORT SC2API_EXPORTS
+  ARCHIVE DESTINATION "lib"
+  PUBLIC_HEADER DESTINATION "include/s2clientprotocol"
+  COMPONENT protocol
+)
+install(
+  TARGETS sc2utils
+  EXPORT SC2API_EXPORTS
+  ARCHIVE DESTINATION "lib"
+  PUBLIC_HEADER DESTINATION "include/sc2utils"
+  COMPONENT utils
+)
 
 set_target_properties(sc2api PROPERTIES DEBUG_POSTFIX "d")
 set_target_properties(sc2lib PROPERTIES DEBUG_POSTFIX "d")
@@ -47,6 +90,15 @@ endif ()
 # Exclude SDL and related projects to work around linker issue.
 if (NOT APPLE)
     add_library(sc2renderer ${sources_renderer})
+    file(GLOB sc2renderer_headers "../include/sc2renderer/*.h")
+    set_target_properties(sc2renderer PROPERTIES PUBLIC_HEADER "${sc2renderer_headers}")
+    install(
+      TARGETS sc2renderer
+      EXPORT SC2API_EXPORTS
+      ARCHIVE DESTINATION "lib"
+      PUBLIC_HEADER DESTINATION "include/sc2renderer"
+      COMPONENT renderer
+    )
     set_target_properties(sc2renderer PROPERTIES DEBUG_POSTFIX "d")
     target_link_libraries(sc2renderer SDL2-static)
     include_directories("../contrib/SDL-mirror/include")
@@ -68,7 +120,7 @@ if (MSVC)
 
     set_target_properties(civetweb-c-library PROPERTIES COMPILE_FLAGS "/MT")
 else()
-    set(CMAKE_CXX_FLAGS "-fpermissive")  
+    set(CMAKE_CXX_FLAGS "-fpermissive")
 endif()
 
 add_dependencies(sc2protocol protoc)
@@ -86,7 +138,6 @@ foreach (proto ${proto_files})
     )
 
 endforeach()
-
 
 if (MSVC)
     set_target_properties(sc2api PROPERTIES COMPILE_FLAGS "/W4 /WX")
