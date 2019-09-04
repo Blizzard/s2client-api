@@ -197,7 +197,9 @@ CoordinatorImp::CoordinatorImp() :
 
 CoordinatorImp::~CoordinatorImp() {
     for (auto& p : process_settings_.process_info) {
-        TerminateProcess(p.process_id);
+        if (p.process_id > 0) {
+            TerminateProcess(p.process_id);
+        }
     }
 }
 
