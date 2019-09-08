@@ -39,7 +39,7 @@ namespace sc2 {
                 ReportError("Could not find the test unit.");
             }
 
-            if (test_unit_ && test_unit_->cloak != Unit::CloakState::Cloaked) {
+            if (test_unit_ && test_unit_->cloak != Unit::CloakState::CloakedAllied) {
                 ReportError("Unit is not cloaked as expected.");
             }
 
@@ -294,6 +294,9 @@ namespace sc2 {
     //
     // TestBuildGateway
     //
+    // Since 2018 revamp, new gateways autobuild as warpgates.
+    // Should test this on base tech level instead of debug tech level.
+    // Instead we'll just hack around for now.
 
     class TestBuildGateway : public TestUnitCommandTargetingPoint {
     public:
@@ -309,18 +312,18 @@ namespace sc2 {
 
         void AdditionalTestSetup() override {
             target_point_ = GetPointOffsetX(origin_pt_);
-
+            
             agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::PROTOSS_PYLON, origin_pt_, agent_->Observation()->GetPlayerID(), 1);
             agent_->Debug()->SendDebug();
         }
 
         void OnTestFinish() override {
-            VerifyUnitExistsAndComplete(UNIT_TYPEID::PROTOSS_GATEWAY);
+            VerifyUnitExistsAndComplete(UNIT_TYPEID::PROTOSS_WARPGATE);
             VerifyUnitIdleAfterOrder(test_unit_type_);
-            VerifyUnitIdleAfterOrder(UNIT_TYPEID::PROTOSS_GATEWAY);
+            VerifyUnitIdleAfterOrder(UNIT_TYPEID::PROTOSS_WARPGATE);
             const ObservationInterface* obs = agent_->Observation();
-            if (obs->GetWarpGateCount() != 0) {
-                ReportError("Gateway is being incorrectly identified as a Warp Gate.");
+            if (obs->GetWarpGateCount() != 1) {
+                ReportError("New gateway is not being identified as a Warp Gate.");
             }
             KillAllUnits();
         }
@@ -1255,9 +1258,6 @@ namespace sc2 {
             if (target_units.front()->is_blip != true) {
                 ReportError("Target unit is not a blip.");
             }
-            if (target_units.front()->cloak != Unit::CloakState::Unknown) {
-                ReportError("Target unit cloak state is incorrect.");
-            }
             if (target_units.front()->display_type != Unit::DisplayType::Hidden) {
                 ReportError("Target unit is not hidden.");
             }
@@ -1558,7 +1558,7 @@ namespace sc2 {
         TestTransportBunkerLoad() {
             test_unit_type_ = UNIT_TYPEID::TERRAN_BUNKER;
             target_unit_type_ = UNIT_TYPEID::TERRAN_MARAUDER;
-            test_ability_ = ABILITY_ID::LOAD;
+            test_ability_ = ABILITY_ID::LOAD_BUNKER;
             instant_cast_ = true;
         }
 
@@ -1604,7 +1604,7 @@ namespace sc2 {
             if (test_unit_ && test_unit_->passengers.size() != 1) {
                 ReportError("Unit count in bunker is not 1.");
             }
-            if (test_unit_ && test_unit_->cargo_space_max != 6) {
+            if (test_unit_ && test_unit_->cargo_space_max != 8) {
                 ReportError("Bunker cargo space max is not correct.");
             }
             if (test_unit_ && test_unit_->cargo_space_taken != 2) {
@@ -1628,7 +1628,7 @@ namespace sc2 {
         TestTransportBunkerUnloadAll() {
             test_unit_type_ = UNIT_TYPEID::TERRAN_BUNKER;
             target_unit_type_ = UNIT_TYPEID::TERRAN_MARAUDER;
-            test_ability_ = ABILITY_ID::UNLOADALL;
+            test_ability_ = ABILITY_ID::UNLOADALL_BUNKER;
             instant_cast_ = true;
         }
 
@@ -1637,7 +1637,7 @@ namespace sc2 {
         }
 
         void AdditionalTestSetup() override {
-            agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARAUDER, origin_pt_, agent_->Observation()->GetPlayerID(), 3);
+            agent_->Debug()->DebugCreateUnit(UNIT_TYPEID::TERRAN_MARAUDER, origin_pt_, agent_->Observation()->GetPlayerID(), 2);
             agent_->Debug()->SendDebug();
         }
 
@@ -1687,7 +1687,7 @@ namespace sc2 {
             if (test_unit_ && test_unit_->passengers.size() != 0) {
                 ReportError("Unit count in bunker is not 0.");
             }
-            if (test_unit_ && test_unit_->cargo_space_max != 6) {
+            if (test_unit_ && test_unit_->cargo_space_max != 8) {
                 ReportError("Bunker cargo space max is not correct.");
             }
             if (test_unit_ && test_unit_->cargo_space_taken != 0) {
