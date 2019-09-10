@@ -539,8 +539,8 @@ namespace sc2 {
         RALLY_HATCHERY_WORKERS = 212,   // Target: Unit, Point.
         RALLY_MORPHING_UNIT = 199,   // Target: Unit, Point.
         RALLY_NEXUS = 207,   // Target: Unit, Point.
-        RALLY_UNITS = 3673,  // Target: Unit, Point.
-        RALLY_WORKERS = 3690,  // Target: Unit, Point.
+        RALLY_UNITS = 3690,  // Target: Unit, Point.
+        RALLY_WORKERS = 3673,  // Target: Unit, Point.
         RESEARCH_ADEPTRESONATINGGLAIVES = 1594,  // Target: None.
         RESEARCH_ADVANCEDBALLISTICS = 805,   // Target: None.
         RESEARCH_BANSHEECLOAKINGFIELD = 790,   // Target: None.
