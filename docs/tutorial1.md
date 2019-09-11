@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 In a future tutorial we will cover how you can specify settings as arguments via command
 line.
 
-At this point you should be able to build and run. The game should start on BelShirVestigeLE with
+At this point you should be able to build `tutorial.cc` and run the output `tutorial.exe`. The game should start on BelShirVestigeLE with
 you controlling the Terran against an AI zerg. You should see 'Hello World' print in the
 console when the game starts and then it will instantly shut down. 
 
