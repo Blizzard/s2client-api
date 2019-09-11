@@ -19,7 +19,9 @@ Building
 Windows
 -------
 
-To build on windows generate a Visual Studio 2017 solution file with CMake.
+Install Visual Studio 2017 from https://visualstudio.microsoft.com/vs/older-downloads/. During installation, select the "Desktop development with C++" package.
+
+Then, generate a Visual Studio 2017 solution file with CMake.
 
 1. Make sure a recursive clone of the project is done to download all submodules.
 2. Enter the working directory.
@@ -33,7 +35,13 @@ cd s2client-api
 mkdir build
 cd build
 cmake ../ -G "Visual Studio 15 2017 Win64"
+```
+
+Finally, open the generated SLN file in Visual Studio, and build the solution:
+
+```bash
 start s2client-api.sln
+# Toolbar / Build / Build Solution
 ```
 
 Mac
