@@ -105,6 +105,23 @@ std::vector<Point3D> CalculateExpansionLocations(const ObservationInterface* obs
     }
 
     std::vector<bool> results = query->Placement(queries);
+    // Edit the results : allow to build in command structure existing location
+    Units commandStructures = observation->GetUnits(
+        [](const Unit& unit) {
+        return unit.unit_type == UNIT_TYPEID::TERRAN_COMMANDCENTER || unit.unit_type == UNIT_TYPEID::TERRAN_ORBITALCOMMAND || unit.unit_type == UNIT_TYPEID::TERRAN_PLANETARYFORTRESS ||
+            unit.unit_type == UNIT_TYPEID::PROTOSS_NEXUS ||
+            unit.unit_type == UNIT_TYPEID::ZERG_HATCHERY || unit.unit_type == UNIT_TYPEID::ZERG_LAIR || unit.unit_type == UNIT_TYPEID::ZERG_HIVE;
+    });
+    for (auto cc : commandStructures) {
+        for (int i = 0; i < queries.size(); ++i) {
+            if (DistanceSquared2D(cc->pos, queries[i].target_pos) < 1.0f) {
+                results[i] = true;
+                // we can safely break here, each query is at least one away
+                break;
+            }
+        }
+    }
+    
     size_t start_index = 0;
     for (int i = 0; i < clusters.size(); ++i) {
         std::pair<Point3D, std::vector<Unit> >& cluster = clusters[i];
