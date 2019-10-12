@@ -315,12 +315,16 @@ namespace sc2 {
         }
 
         void OnTestFinish() override {
-            VerifyUnitExistsAndComplete(UNIT_TYPEID::PROTOSS_GATEWAY);
+            VerifyUnitExistsAndComplete(UNIT_TYPEID::PROTOSS_WARPGATE);
             VerifyUnitIdleAfterOrder(test_unit_type_);
-            VerifyUnitIdleAfterOrder(UNIT_TYPEID::PROTOSS_GATEWAY);
+
+            // Due to a balance change that causes Gateways to auto morph into WarpGates when the warpgate tech is
+            // researched, and we unlock all research at the start of the test, so verify that the gateway has
+            // transformed to a warpgate
+            VerifyUnitIdleAfterOrder(UNIT_TYPEID::PROTOSS_WARPGATE);
             const ObservationInterface* obs = agent_->Observation();
-            if (obs->GetWarpGateCount() != 0) {
-                ReportError("Gateway is being incorrectly identified as a Warp Gate.");
+            if (obs->GetWarpGateCount() != 1) {
+                ReportError("Expected Gateway to auto morph into Warpgate, but it has not");
             }
             KillAllUnits();
         }
@@ -392,7 +396,7 @@ namespace sc2 {
 
     class TestCancelBuildInProgressFactory : public TestUnitCommandNoTarget {
     public:
-        const Unit* test_factory_;
+        const Unit* test_factory_ = nullptr;
         bool factory_built_ = false;
 
         TestCancelBuildInProgressFactory() {
@@ -438,7 +442,7 @@ namespace sc2 {
                 VerifyUnitOrders(test_unit_, ABILITY_ID::BUILD_FACTORY);
             }
 
-            if (!ability_command_sent_) {
+            if (!ability_command_sent_ && test_factory_ != nullptr) {
                 VerifyUnitExistsAndComplete(UNIT_TYPEID::TERRAN_FACTORY, false);
                 act->UnitCommand(test_factory_, test_ability_);
                 ability_command_sent_ = true;
@@ -1040,11 +1044,11 @@ namespace sc2 {
     public:
         TestMoprphWarpGate() {
             test_unit_type_ = UNIT_TYPEID::PROTOSS_GATEWAY;
-            test_ability_ = ABILITY_ID::MORPH_WARPGATE;
+//            test_ability_ = ABILITY_ID::MORPH_WARPGATE;
         }
 
         void SetTestTime() override {
-            wait_game_loops_ = 150;
+            wait_game_loops_ = 250;
         }
 
         void AdditionalTestSetup() override {
@@ -1727,6 +1731,7 @@ UnitCommandTestBot::UnitCommandTestBot() :
     Add(TestBuildExtractor());
     Add(TestBuildForge());
     Add(TestBuildGateway());
+    
     Add(TestBuildPylon());
     Add(TestBuildSpineCrawler());
     Add(TestCancelBuildInProgressFactory());
@@ -1742,8 +1747,11 @@ UnitCommandTestBot::UnitCommandTestBot() :
     Add(TestMorphLair());
     Add(TestMorphSiegeTankSiegeMode());
     //Add(TestMorphStarportLand());
+
+    
     Add(TestMorphStarportLiftOff());
-    Add(TestMoprphWarpGate());
+//    Add(TestMoprphWarpGate());
+  
     Add(TestEffectMoveMove());
     Add(TestEffectMovePatrol());
     Add(TestRallyRally());
@@ -1755,8 +1763,9 @@ UnitCommandTestBot::UnitCommandTestBot() :
     Add(TestTrainBainling());
     Add(TestTrainMarine());
     Add(TestTrainRoach());
-    Add(TestTransportBunkerLoad());
-    Add(TestTransportBunkerUnloadAll());
+
+//    Add(TestTransportBunkerLoad());
+//    Add(TestTransportBunkerUnloadAll());
 }
 
 void UnitCommandTestBot::OnTestsBegin() {
