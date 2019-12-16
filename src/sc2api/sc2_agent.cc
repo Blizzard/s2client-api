@@ -344,6 +344,7 @@ bool AgentControlImp::Restart() {
         return false;
     }
 
+    agent_->Control()->GetObservation();
     agent_->OnGameStart();
 
     return control_interface_->IsInGame();
